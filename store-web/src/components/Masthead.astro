@@ -1,0 +1,69 @@
+---
+const { data } = Astro.props;
+import { Image } from "astro:assets";
+import Link from "@components/Link.astro";
+---
+
+<header
+class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4 px-4 bg-hs"
+>
+  <nav
+  class="w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between"
+  >
+    <a
+    class="flex-none font-semibold text-xl text-black focus:outline-hidden focus:opacity-80 dark:text-white"
+    href="#"
+    aria-label="Brand"
+    >
+      <div class="flex">
+        <!-- <div class="i-mdi-menu mt-1 mr-4 ml-1" _="on click toggle .hidden on #aside on click call saveMenuState()"></div> -->
+        Music Store
+      </div>
+
+      <div
+      class="flex flex-row items-center gap-5 mt-5 sm:justify-end sm:mt-0 sm:ps-5"
+      >
+        <a class="nav-item" href="/" aria-current="page">Início</a>
+        <Link cl="nav-item" url="/products">Todos os Produtos</Link>
+        <Link cl="nav-item" url="/categories">Categorias</Link>
+        <Link cl="nav-item" url="/basket">Carrinho</Link>
+        <a class="nav-item" href="/app/orders">Pedidos</a>
+        <a class="nav-item" href="/app/profile">Perfil</a>
+
+        {
+        () => {
+        if (data.organizationId) {
+        return (
+        <button
+        class="font-sm border-b text-gray-600"
+        id="org-select-button"
+        hx-get="/partials/org-select"
+        hx-target="#org-select-area"
+        hx-trigger="click"
+        >
+          Organizacão {data.organizationName}
+        </button>
+        );
+        } else if (data.role == "AdminRole") {
+        return (
+        <button
+        class="font-sm border-b text-gray-600"
+        id="org-select-button"
+        hx-get="/partials/org-select"
+        hx-target="#org-select-area"
+        hx-trigger="click"
+        >
+          Selecionar Organizacão
+        </button>
+        );
+        }
+        }
+        }
+
+        <a class="nav-item" href="#">Sair</a>
+      </div>
+    </a>
+  </nav>
+
+  <div id="org-select-area"></div>
+</header>

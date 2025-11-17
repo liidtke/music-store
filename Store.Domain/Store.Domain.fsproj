@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="SharedKernel.fs"/>
+        <Compile Include="Interfaces.fs" />
+        <Compile Include="Access.fs" />
+        <Compile Include="UserService.fs" />
+        <Compile Include="UserVerificationService.fs" />
+        <Compile Include="FileStorage.fs" />
+        <Compile Include="FileStorageService.fs" />
+        <Compile Include="Email.fs" />
+        <Compile Include="EmailService.fs" />
+        <Compile Include="Store\Common.fs" />
+        <Compile Include="Store\Catalog.fs" />
+        <Compile Include="Store\Ordering.fs" />
+        <Compile Include="Store\PostOrdering.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Falco.Markup" Version="1.4.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
+        <PackageReference Include="WolverineFx.MemoryPack" Version="4.12.3" />
+    </ItemGroup>
+
+</Project>

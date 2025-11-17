@@ -1,0 +1,107 @@
+---
+
+export const prerender = false;
+import Link from '@components/Link.astro';
+import SubscriptionReminder from '@components/SubscriptionReminder.astro';
+import * as shared from '@utils/shared';
+import toaster from '@utils/toaster'
+import App from '@layouts/App.astro';
+
+let data = {};
+let isAdmin = false;
+let roles = [...shared.roles];
+
+if (Astro.request.method === "GET") {
+
+    const result = await Astro.locals.fetchWithResult("users/current");
+    if(result.success){
+      data = result.data;
+      isAdmin = result.isAdmin;
+    }
+    else {
+      return new Response("/app", { 
+        status: 307,
+        headers: { "Content-Type": "text/html", "Location": "/app" }
+      });
+  }
+}
+
+---
+
+<App>
+
+  <div class="page">
+    <div class="breadcrumbs text-sm">
+      <ul>
+        <li><a href="/app">Início</a></li>
+        <li>Meu Perfil</li>
+      </ul>
+    </div>
+
+    <h1 class="text-3xl font-semibold">Meu Perfil</h1>
+
+    <Link url=`/app/users/${data.userId}` cl="btn btn-primary mt-8">Editar</Link>
+
+    <div class="grid grid-cols-2 mt-8">
+
+      <div>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Nome</legend>
+        <input value={data.name} type="text" class="input readonly" name="name" readonly />
+      </fieldset>
+
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Email</legend>
+        <input value={data.email} type="text" class="input readonly" readonly />
+      </fieldset>
+
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Perfil</legend>
+        <select class="select" name="role" disabled id="role-select">
+          {
+            roles.map((i) => (
+            <option value={i.id} selected={data.customRole ? i.id === `${data.role}#${data.customRole.id}` : i.id === data.role } disabled={i.id == 'Anon'} >{i.name}</option>
+            ))
+          }
+
+        </select>
+
+      </fieldset>
+
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Plano</legend>
+        <select class="select" name="subscription" id="" disabled >
+          {
+            shared.subscriptions.map((i) => (
+            <option value={i.id} selected={i.id === data.subscription}
+          >{i.name}</option>
+            ))
+          }
+
+        </select>
+
+      </fieldset>
+      </div>
+
+      <div>
+
+        {
+() => {if(data.subscription = "Free"){
+        return (
+<SubscriptionReminder></SubscriptionReminder>
+
+        )
+        }
+        }}
+
+      </div>
+
+    </div>
+
+</App>
+
+

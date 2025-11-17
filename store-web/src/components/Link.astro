@@ -1,0 +1,22 @@
+---
+
+const { url, cl } = Astro.props; 
+
+let currentStyle = cl;
+if(!cl){
+  currentStyle = "btn btn-ghost"
+}
+---
+
+<button class={currentStyle} 
+  hx-get={url} 
+  hx-trigger="click"
+  hx-swap="outerHTML"
+  hx-push-url="true"
+  hx-target="main" 
+  hx-select="main">
+<slot />
+</button>
+
+
+

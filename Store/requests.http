@@ -1,0 +1,204 @@
+###
+
+@url =  http://localhost:5263
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiUm9sZSI6IkFkbWluUm9sZSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NjIzMDkyMjIsImlzcyI6IkFQSS1QVlZtdmZvdG9hIiwiYXVkIjoiQXBwLTlMYVh6VDA4WmoifQ.iLd4UJncOaMLJ0_UbIU2_Bj2kPgbjPZ1SauVmyeW80w
+
+POST {{url}}/login
+Content-Type: application/json
+
+{
+  "email": "admin@Store.com",
+  "password": "admin",
+  "grantType": "password"
+}
+
+###
+POST {{url}}/login
+Content-Type: application/json
+
+{
+  "email": "johndoe@example.com",
+  "password": "admin",
+  "grantType": "password"
+}
+
+
+
+###
+GET {{url}}/users/current
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+GET {{url}}/users
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### orgs
+GET {{url}}/organizations
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### orgs
+GET {{url}}/organizations/1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### orgs
+GET {{url}}/organizations/1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### custom
+GET {{url}}/custom-roles/4
+Content-Type: application/json
+Authorization: {{token}}
+
+### notes
+GET {{url}}/notes/?patientId=1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+
+### patients
+GET {{url}}/patients/
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### patients 1
+GET {{url}}/patients/1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### patients 1
+GET {{url}}/provided-services/?organizationId=1
+Content-Type: application/json
+Authorization: {{token}}
+
+
+### provided services
+POST {{url}}/provided-services/
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "id": 0,
+  "patientId": 1,
+  "organizationId": 456,
+  "value": 150.75,
+  "netValue": 135.50,
+  "serviceDate": "2024-01-15T10:30:00Z",
+  "status": "Pendente"
+}
+
+
+###
+POST {{url}}/login/password-reset
+Content-Type: application/json
+
+{
+  "email": "ratomil@gmail.com"
+}
+
+
+###
+POST {{url}}/login/password-confirm
+Content-Type: application/json
+
+{
+  "email": "ratomil@gmail.com",
+  "code": "Ylaa4uBKgf6KH4Wy9fwmk8mhrYjkOHsd/y26j1h2UGk=",
+  "password": "12345678910"
+}
+
+
+### Create Calendar Event
+POST {{url}}/calendar-events
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "id": 0,
+  "organizationId": 1,
+  "startDate": "2025-10-07T15:30:00Z",
+  "endDate": "2025-10-07T15:35:00Z",
+  "patientId": 1,
+  "description": "Consulta de rotina",
+  "isDeleted": false
+}
+
+### Update Calendar Event
+PUT {{url}}/calendar-events/1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "id": 1,
+  "organizationId": 456,
+  "startDate": "2025-10-08T14:30:00Z",
+  "endDate": "2025-10-08T14:35:00Z",
+  "patientId": 123,
+  "description": "Consulta de acompanhamento",
+  "isDeleted": false
+}
+
+### Get Calendar Event Details
+GET {{url}}/calendar-events/1
+Authorization: {{token}}
+
+### Search Calendar Events - Basic
+GET {{url}}/calendar-events?startDate=2025-10-06T00:00:00Z&endDate=2025-10-06T23:59:59Z
+Authorization: {{token}}
+
+### Search Calendar Events - With Organization ID
+GET {{url}}/calendar-events?startDate=2024-01-01T00:00:00Z&endDate=2024-01-31T23:59:59Z&organizationId=456
+Authorization: {{token}}
+
+### Search Calendar Events - With Created By Filter
+GET {{url}}/calendar-events?startDate=2024-01-01T00:00:00Z&endDate=2024-01-31T23:59:59Z&createdBy=1
+Authorization: {{token}}
+
+### Search Calendar Events - Current Month
+GET {{url}}/calendar-events?startDate=2024-10-01T00:00:00Z&endDate=2024-10-31T23:59:59Z
+Authorization: {{token}}
+
+### Create Calendar Event without Description (Optional Field)
+POST {{url}}/calendar-events
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "id": 0,
+  "organizationId": 456,
+  "startDate": "2024-01-16T09:00:00Z",
+  "endDate": "2024-01-16T10:30:00Z",
+  "patientId": 124,
+  "description": null,
+  "isDeleted": false
+}
+
+### Update Calendar Event - Mark as Deleted
+PUT {{url}}/calendar-events/2
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "id": 2,
+  "organizationId": 456,
+  "startDate": "2024-01-16T09:00:00Z",
+  "endDate": "2024-01-16T10:30:00Z",
+  "patientId": 124,
+  "description": "Evento cancelado",
+  "isDeleted": true
+}
+
+
+### test
+GET {{url}}/testing

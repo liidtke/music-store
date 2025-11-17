@@ -1,0 +1,218 @@
+---
+import Store from "@layouts/Store.astro"
+
+---
+
+
+
+<Store>
+
+        <div class="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 md:p-8 mt-4">
+          <div class="border-b border-gray-300 pb-4">
+            <div class="flex gap-4">
+              <div>
+                <h3 class="text-2xl font-semibold text-slate-900">Order History</h3>
+                <p class="text-[15px] text-slate-500 mt-3">Easily view and manage all your previous orders.</p>
+              </div>
+              <div class="ml-auto">
+                <select class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
+                  <option>All orders</option>
+                  <option>Completed</option>
+                  <option>Processing</option>
+                  <option>Cancelled</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <div class="bg-gray-100 p-6 rounded-md">
+              <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
+                <div class="max-md:flex max-md:justify-between max-md:gap-4">
+                  <h6 class="text-[15px] font-medium text-slate-900">Purchase Date</h6>
+                  <p class="text-sm text-slate-500 font-medium md:mt-2">May 05, 2025</p>
+                </div>
+                <div class="max-md:flex max-md:justify-between max-md:gap-4">
+                  <h6 class="text-[15px] font-medium text-slate-900">Order id</h6>
+                  <p class="text-sm text-slate-500 font-medium md:mt-2">OR981122</p>
+                </div>
+                <div class="max-md:flex max-md:justify-between max-md:gap-4">
+                  <h6 class="text-[15px] font-medium text-slate-900">Total Paid</h6>
+                  <p class="text-sm text-slate-500 font-medium md:mt-2">$78.00</p>
+                </div>
+                <div class="md:ml-auto">
+                  <button type="button" class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full">
+                    View Invoice
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="divide-y divide-gray-300 mt-4">
+              <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+                <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+                  <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+                    <img src='https://readymadeui.com/images/dark-green-tshirt-2.webp' class="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <h6 class="text-[15px] font-medium text-slate-900">Tshirt</h6>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">May 12, 2025</p>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+                  <p class="bg-green-100 text-[13px] font-medium text-green-600 mt-2 inline-block rounded-md py-1.5 px-3">Completed</p>
+                </div>
+                <div class="md:ml-auto">
+                  <h6 class="text-sm font-medium text-slate-500">Price</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">$24.00</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+                <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+                  <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+                    <img src='https://readymadeui.com/images/product14.webp' class="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <h6 class="text-[15px] font-medium text-slate-900">Echo Elegance</h6>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">April 22, 2025</p>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+                  <p class="bg-blue-100 text-[13px] font-medium text-blue-600 mt-2 inline-block rounded-md py-1.5 px-3">Processing</p>
+                </div>
+                <div class="md:ml-auto">
+                  <h6 class="text-sm font-medium text-slate-500">Price</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">$30.00</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+                <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+                  <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+                    <img src='https://readymadeui.com/images/watch5.webp' class="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <h6 class="text-[15px] font-medium text-slate-900">Smart Watch Timex</h6>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">May 7, 2025</p>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+                  <p class="bg-red-100 text-[13px] font-medium text-red-600 mt-2 inline-block rounded-md py-1.5 px-3">Cancelled</p>
+                </div>
+                <div class="md:ml-auto">
+                  <h6 class="text-sm font-medium text-slate-500">Price</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">$24.00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-10">
+            <div class="bg-gray-100 p-6 rounded-md">
+              <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
+                <div class="max-md:flex max-md:justify-between max-md:gap-4">
+                  <h6 class="text-[15px] font-medium text-slate-900">Purchase Date</h6>
+                  <p class="text-sm text-slate-500 font-medium md:mt-2">Jun 16, 2025</p>
+                </div>
+                <div class="max-md:flex max-md:justify-between max-md:gap-4">
+                  <h6 class="text-[15px] font-medium text-slate-900">Order id</h6>
+                  <p class="text-sm text-slate-500 font-medium md:mt-2">OR675915</p>
+                </div>
+                <div class="max-md:flex max-md:justify-between max-md:gap-4">
+                  <h6 class="text-[15px] font-medium text-slate-900">Total Paid</h6>
+                  <p class="text-sm text-slate-500 font-medium md:mt-2">$64.00</p>
+                </div>
+                <div class="md:ml-auto">
+                  <button type="button" class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full">
+                    View Invoice
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="divide-y divide-gray-300 mt-4">
+              <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+                <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+                  <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+                    <img src='https://readymadeui.com/images/product14.webp' class="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <h6 class="text-[15px] font-medium text-slate-900">Echo Elegance</h6>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">April 22, 2025</p>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+                  <p class="bg-blue-100 text-[13px] font-medium text-blue-600 mt-2 inline-block rounded-md py-1.5 px-3">Processing</p>
+                </div>
+                <div class="md:ml-auto">
+                  <h6 class="text-sm font-medium text-slate-500">Price</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">$24.00</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+                <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+                  <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+                    <img src='https://readymadeui.com/images/watch5.webp' class="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <h6 class="text-[15px] font-medium text-slate-900">Smart Watch Timex</h6>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">May 7, 2025</p>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+                  <p class="bg-red-100 text-[13px] font-medium text-red-600 mt-2 inline-block rounded-md py-1.5 px-3">Cancelled</p>
+                </div>
+                <div class="md:ml-auto">
+                  <h6 class="text-sm font-medium text-slate-500">Price</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">$20.00</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+                <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+                  <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+                    <img src='https://readymadeui.com/images/sunscreen-img-4.webp' class="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <h6 class="text-[15px] font-medium text-slate-900">Sunscreen</h6>
+                  </div>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">May 10, 2025</p>
+                </div>
+                <div>
+                  <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+                  <p class="bg-green-100 text-[13px] font-medium text-green-600 mt-2 inline-block rounded-md py-1.5 px-3">Completed</p>
+                </div>
+                <div class="md:ml-auto">
+                  <h6 class="text-sm font-medium text-slate-500">Price</h6>
+                  <p class="text-sm text-slate-900 font-medium mt-2">$20.00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+</Store>

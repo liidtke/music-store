@@ -1,0 +1,10 @@
+---
+export const partial = true;
+
+const { searchParams } = Astro.url;
+
+// Obter um parâmetro específico
+const name = searchParams.get('name');
+---
+<li>I'm a partial from login test!</li>
+<li>{name}</li>

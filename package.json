@@ -1,0 +1,26 @@
+{
+  "name": "hs",
+  "version": "1.0.0",
+  "description": "- Create a new mariadb database - run create sql scripts - run the project",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liidtke/hs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liidtke/hs/issues"
+  },
+  "homepage": "https://github.com/liidtke/hs#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "daisyui": "^5.0.50",
+    "tailwindcss": "^4.1.11"
+  },
+  "scripts": {
+    "css:build": "npx @tailwindcss/cli -i ./Hs/wwwroot/app.css -o ./Hs/wwwroot/css/styles.css --minify",
+    "css:watch": "npx @tailwindcss/cli -i ./Hs/wwwroot/app.css -o ./Hs/wwwroot/css/styles.css --watch"
+  }
+}

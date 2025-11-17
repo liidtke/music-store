@@ -1,0 +1,233 @@
+@import "flatpickr";
+.border-b {
+  border-color: rgb(230, 230, 230);
+}
+.border {
+  border-color: rgb(230, 230, 230);
+}
+
+.bcolor {
+  border-color: rgb(230, 230, 230);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Red Hat Text", sans-serif;
+}
+
+body {
+  font-family: "Red Hat Text", sans-serif !important;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+main {
+  overflow-x: auto;
+}
+
+.currency-field:focus,
+.select:hover,
+.select:active,
+.select:focus {
+  outline: none;
+  outline-style: none;
+}
+
+.input,
+.currency-field {
+  outline: none;
+  outline-style: none;
+}
+
+.gray.border {
+  border-color: rgb(230, 230, 230);
+}
+
+.divider {
+  margin-top: 4px;
+}
+
+.fade-parent.htmx-swapping > .fade-child {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.alert {
+  margin-top: 50px;
+}
+
+.toaster {
+  z-index: 1000;
+}
+
+.currency-input {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.prefix {
+  margin-right: 4px;
+  font-weight: bold;
+  user-select: none;
+}
+
+.currency-field {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  /*min-width: 80px;*/
+}
+
+.currency-field:focus {
+  /*box-shadow: 0 0 0 2px #007bff;*/
+}
+
+.currency-input.error {
+  border-color: var(--color-error);
+}
+
+.fade-in {
+  opacity: 0;
+}
+
+.fade-in.done {
+  opacity: 1;
+  animation: fadeSlideIn 0.6s ease-out forwards; /* Duration: 0.6s, easing for smooth deceleration, forwards to keep end state */
+}
+
+/* Keyframe animation definition */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%); /* Starts off-screen to the right */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); /* Ends in place */
+  }
+}
+
+.loading {
+  opacity: 0.5;
+  transition: opacity 100ms linear;
+}
+
+.loaded {
+  opacity: 1;
+}
+
+button.htmx-request {
+  background: gray !important;
+  pointer-events: none;
+}
+
+.overlay {
+  position: absolute;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Semi-transparent white backdrop */
+  justify-content: center;
+  align-items: center;
+  opacity: 0; /* For smooth transition */
+  transition: opacity 0.5s ease-in; /* Smooth fade */
+  transition-delay: 300ms;
+}
+
+.overlay.htmx-request {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+
+button.loader.htmx-request {
+  pointer-events: none; /* Disables clicks during loading */
+  opacity: 0.7; /* Optional: Dim the button */
+}
+
+/* The loader using ::after */
+button.loader.htmx-request::after {
+  content: ""; /* Empty content for the pseudo-element */
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 8px; /* Space between text and loader */
+  border: 2px solid transparent;
+  border-top: 2px solid white; /* Creates the spinning ring effect */
+  border-radius: 50%;
+  animation: spin 1s linear infinite; /* Animation for spinning */
+  vertical-align: middle; /* Aligns with text */
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.2s ease; /* Smooth fade-in */
+  transition-delay: 300ms;
+}
+
+/* Show loader when 'loading' class is added */
+button.loader.htmx-request::after {
+  opacity: 1;
+}
+
+/* Keyframe animation for spinning */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+select::after {
+  content: ""; /* Empty content for the pseudo-element */
+  position: absolute;
+  top: 50%;
+  right: 12px; /* Position from right edge */
+  transform: translateY(-50%); /* Vertically center */
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #6c757d; /* Creates the down arrow triangle */
+  pointer-events: none; /* Ensures it doesn't interfere with clicks */
+  transition: border-color 0.2s ease; /* Optional: Smooth color change on focus */
+}

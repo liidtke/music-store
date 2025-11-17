@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="OldContext.fs" />
+        <Compile Include="Context.fs" />
+        <Compile Include="UserData.fs"/>
+        <Compile Include="Access\Repository.fs" />
+        <Compile Include="Access\Models.fs" />
+        <Compile Include="Access\UserVerificationData.fs" />
+        <Compile Include="Store\DataModels.fs" />
+        <Compile Include="AccountsPayable\PartialPaymentData.fs" />
+        <Compile Include="AccountsPayable\PaymentData.fs" />
+        <Compile Include="Integrations.fs" />
+        <Compile Include="MailSender.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Store.Domain\Store.Domain.fsproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Donald" Version="10.1.0" />
+        <PackageReference Include="Falco.Markup" Version="1.4.0" />
+        <PackageReference Include="Flurl" Version="4.0.0" />
+        <PackageReference Include="Flurl.Http" Version="4.0.2" />
+        <PackageReference Include="MongoDB.Bson" Version="3.5.0" />
+        <PackageReference Include="MongoDB.Driver" Version="3.5.0" />
+    </ItemGroup>
+
+</Project>

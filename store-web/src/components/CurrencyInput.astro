@@ -1,0 +1,62 @@
+---
+// CurrencyInput.astro
+// Props:
+// - numericValue: number (default: 0) - The initial value in reais (e.g., 1234.56)
+const { value = 0, name, id } = Astro.props;
+---
+
+<div id="ci" class="currency-input input">
+  <span id="prefix" class="prefix error">R$ </span>
+  <input
+    id={id}
+    type="text"
+    class="currency-field md:w-5/6 w-1/2"
+    name={name}
+    placeholder="0,00"
+  />
+  <span id="cm"></span>
+</div>
+
+<style></style>
+
+<script
+  define:vars={{ rawValue: Math.round(value * 100).toString() }}
+  client:load
+>
+  function formatCurrency(numStr) {
+    numStr = numStr.replace(/\D/g, "");
+    if (numStr.length === 0) return "0,00";
+    const integerStr = numStr.slice(0, -2) || "";
+    const integerPart = integerStr.replace(/^0+/, "") || "0";
+    const decimalPart = numStr.slice(-2).padStart(2, "0");
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return `${formattedInteger},${decimalPart}`;
+  }
+
+  const container = document.currentScript.previousElementSibling;
+  const input = container.querySelector(".currency-field");
+
+  input.value = formatCurrency(rawValue);
+
+  input.addEventListener("focus", () => {
+    input.select();
+  });
+
+  input.addEventListener("blur", () => {
+    if (!input.value.trim()) {
+      input.value = "0,00";
+    }
+  });
+
+  input.addEventListener("keypress", (e) => {
+    // Allow digits only
+    if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
+      e.preventDefault();
+    }
+  });
+
+  input.addEventListener("input", () => {
+    const numericStr = input.value.replace(/\D/g, "");
+    input.value = formatCurrency(numericStr);
+  });
+</script>

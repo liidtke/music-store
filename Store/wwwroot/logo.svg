@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 800 400">
+    <path d="M276.6466814918108 21.556884724385498C296.6067594133603 78.64271286973056 392.6147346737769 320.55888108262116 396.40714902110767 364.0718535964558C400.1995633684384 407.58482611029046 315.5688311500139 296.20757543890375 299.40116757579517 282.6347198073933 "
+          fill="none" stroke-width="29" stroke="Store.(230, 55%, 40%)" stroke-linecap="round"></path>
+    <defs>
+        <linearGradient id="SvgjsLinearGradient1002" gradientTransform="rotate(191, 0.5, 0.5)">
+            <stop stop-color="Store.(340, 45%, 50%)" offset="0"></stop>
+            <stop stop-color="Store.(340, 45%, 80%)" offset="1"></stop>
+        </linearGradient>
+    </defs>
+</svg>

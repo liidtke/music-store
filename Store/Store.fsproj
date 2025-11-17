@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+<!--    <ItemGroup>-->
+<!--        <UpToDateCheckBuilt Include="wwwroot/app.css" Set="Css"/>-->
+<!--        <UpToDateCheckBuilt Include="tailwind.config.js" Set="Css" Condition="Exists('tailwind.config.js')"/>-->
+<!--    </ItemGroup>-->
+<!--    <Target Name="Tailwind" BeforeTargets="Build">-->
+<!--        <Exec Command="npm run css:build"/>-->
+<!--    </Target>-->
+
+    <ItemGroup>
+        <Compile Include="Security.fs"/>
+        <Compile Include="Models.fs"/>
+        <Compile Include="Session.fs"/>
+        <Compile Include="Context.fs" />
+        <Compile Include="Application.fs"/>
+        <Compile Include="EmailTemplate.fs" />
+        <Compile Include="Events.fs" />
+        <Compile Include="Endpoints\Models.fs" />
+        <Compile Include="Endpoints\Login.fs" />
+        <Compile Include="Endpoints\Users.fs" />
+        <Compile Include="Endpoints\Handlers.fs" />
+        <Compile Include="Tests.fs"/>
+        <Compile Include="Configurations.fs" />
+        <Compile Include="Program.fs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="requests.http" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Falco" Version="5.0.0"/>
+        <PackageReference Include="Falco.Markup" Version="1.4.0" />
+        <PackageReference Include="FSharp.SystemTextJson" Version="1.4.36" />
+        <PackageReference Include="MemoryPack" Version="1.21.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.14.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="4.14.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.10" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageReference Include="WolverineFx" Version="4.12.3" />
+        <PackageReference Include="WolverineFx.MemoryPack" Version="4.12.3" />
+        <PackageReference Include="WolverineFx.RabbitMQ" Version="4.12.3" />
+        <PackageReference Include="xunit" Version="2.9.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Store.Domain\Store.Domain.fsproj" />
+        <ProjectReference Include="..\Store.Infrastructure\Store.Infrastructure.fsproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\styles.css" />
+    </ItemGroup>
+
+</Project>

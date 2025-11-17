@@ -1,0 +1,133 @@
+---
+export const partial = true;
+import toaster from '@utils/toaster';
+import dateConverter from '@utils/date-converter'
+import Modal from '@components/Modal.astro';
+import * as shared from '@utils/shared';
+
+const { slug } = Astro.params;
+let data = {};
+
+if (Astro.request.method === "GET") {
+
+  if(slug){
+      console.log('here')
+    const response = await Astro.locals.fetchWithResult("users/timed-subscriptions/" + slug);
+    if(response.success){
+      data = await response.data;
+    }
+    else{
+      console.log('here')
+
+    }
+  }
+
+}
+if (Astro.request.method === "POST") {
+  try {
+    const form = await Astro.request.formData();
+    const number = form.get("number") as string;
+    const id = form.get("id") as string;
+    const userId = form.get("userId") as string;
+    const subscription = form.get("subscription") as string;
+    const startDate = form.get("startDate") as string;
+    const endDate = form.get("endDate") as string;
+    const isCanceled = form.get("isCanceled") as string;
+
+    // Validação básica
+    if (subscription === null || subscription === "Free") {
+    return new Response(toaster.alert("Selecione um plano"), {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+    if (!startDate) {
+    return new Response(`
+        <input id="startDate" hx-swap-oob="true"  type="date" class="input input-error w-full" name="startDate" />
+    `, {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    if (!endDate) {
+    return new Response(`
+        <input id="endDate" hx-swap-oob="true"  type="date" class="input input-error w-full" name="endDate" />
+    `, {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    let body = {
+      id:parseInt(id),
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
+      number: number,
+      userId:parseInt(userId),
+      isCanceled: (isCanceled === null || isCanceled === "false" ),
+      subscription:subscription,
+      organizationId:0}
+
+    const response = await Astro.locals.fetchWithResult(`users/timed-subscriptions/${id}`, {method:'PUT', body:JSON.stringify(body)});
+    if(!response.success){
+      let msg = await response.message;
+      return new Response(toaster.alert("Erro ao salvar - " + msg), {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    return new Response(toaster.success(`/app/users/${userId}`), {
+        status: 200,
+        headers: { "Content-Type": "text/html" }
+      });
+
+  } catch (error) {
+      return new Response(toaster.alert("Erro ao salvar - " + error), {
+        status: 200,
+        headers: { "Content-Type": "text/html" }
+      });
+  }
+}
+
+---
+
+<Modal title="Editar Assinatura" form="f1">
+
+  <h3 class="text-lg font-bold">Adicionar Assinatura</h3>
+
+  <form id="f1" class="mt-4" hx-post=`/app/users/timed/${data.id}` hx-target="#f_message" >
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Plano</legend>
+      <input class="input" type="text" name="subscription" readonly value={shared.trSubscription(data.subscription)}>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Data Início</legend>
+      <input id="startDate" type="date" class="input w-full" name="startDate" readonly value={dateConverter.toInput(data.startDate)} />
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Data Fim</legend>
+      <input id="endDate" type="date" class="input w-full" name="endDate" readonly value={dateConverter.toInput(data.endDate)} />
+    </fieldset>
+
+    <fieldset class="fieldset w-full">
+      <legend class="fieldset-legend w-full">Número</legend>
+      <input id="number" type="text" class="input w-full " name="number" placeholder="Número da Transação" value={data.number} />
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Ativo</legend>
+      <input type="checkbox" checked="checked" class="checkbox" checked={!data.isCanceled} name="isCanceled" />
+    </fieldset>
+
+    <input type="hidden" name="userId" value={data.userId}>
+    <input type="hidden" name="id" value={data.id}>
+
+  </form>
+
+</Modal>
+<div id="f_message"></div>

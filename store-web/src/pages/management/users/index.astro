@@ -1,0 +1,96 @@
+---
+export const prerender = false;
+import toaster from '@utils/toaster'
+import Link from '@components/Link.astro';
+import SearchInput from '@components/SearchInput.astro'
+import BreadCrumbs from "@components/BreadCrumbs.svelte";
+import * as shared from '../../../utils/shared';
+import App from '../../../layouts/App.astro';
+
+let data = [];
+
+let add = "";
+let search = Astro.url.searchParams.get('search');
+console.log('search is ', search)
+if(search){
+  let p = new URLSearchParams({search:search});
+  add = p.toString();
+}
+ const response = await Astro.locals.fetchWithAuth("users?" + add);
+//, {headers:headers});
+if(response.ok){
+  data = await response.json();
+}
+
+---
+<App>
+
+<div class="page">
+  <BreadCrumbs path="users" name="Usuários" />
+
+	<h1 class="text-3xl font-semibold">Usuários</h1>
+
+	<div class="mt-8 grid grid-cols-1 gap-2 md:grid-cols-2">
+      <div>
+        <Link url="/app/users/add" cl="btn-primary">
+        Adicionar Usuário
+        </Link>
+      </div>
+
+      <SearchInput
+           get="/app/users"
+           trigger="keyup changed delay:500ms queue:last"
+           target="#tb"
+           select="#tb"
+           swap="outerHTML"
+           push="true"
+           name="search"
+           placeholder="Buscar"
+           />
+      </div>
+
+		<table id="tb" class="mt-8 table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th class="th">Nome</th>
+					<th class="th">Email</th>
+					<th class="th">Perfil</th>
+					<th class="th">Plano</th>
+					<th class="th">Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+        {
+() => {if (data.length == 0) return (
+					 <tr class="tr text-center">
+					 	<td class="td" colspan="7">Sem itens para exibir</td>
+					 </tr>
+        )}
+        }
+    {
+      data.map((u) => (
+					<tr class="tr">
+						<td class="td">{u.name}</td>
+						<td class="td">{u.email}</td>
+						<td class="td">{shared.trRole(u.role, u.customRole)}</td>
+						<td class="td">{shared.trSubscription(u.subscription)}</td>
+						<td class="td">{u.isDeleted ? 'Inativo' : 'Ativo'}</td>
+          <td class="td">
+          <Link url=`/app/users/${u.id}` cl="table-action">Editar</Link>
+          </td>
+
+					</tr>
+        )
+
+        )}
+
+			</tbody>
+		</table>
+
+    </div>
+
+
+
+</App>

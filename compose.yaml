@@ -1,0 +1,33 @@
+﻿version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassRoo   t  # Replace with a strong password for root
+      MYSQL_DATABASE: hs                      # Optional: Creates a default database
+      MYSQL_USER: hs                           # Non-root user for your app
+      MYSQL_PASSWORD: mypass             # Password for the non-root user
+    ports:
+      - "3306:3306"                                 # Expose MariaDB port
+    volumes:
+      - mariadb_data:/var/lib/mysql                 # Persist database data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:4-management                   # Includes management UI
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: hs                # Default username
+      RABBITMQ_DEFAULT_PASS: rabbitpass  # Default password (replace with strong one)
+    ports:
+      - "5672:5672"                                 # AMQP port for clients
+      - "15672:15672"                               # Management UI (http://localhost:15672)
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq             # Persist RabbitMQ data
+    restart: unless-stopped
+
+volumes:
+  mariadb_data:                                      # Named volume for MariaDB
+  rabbitmq_data:                                     # Named volume for RabbitMQ
