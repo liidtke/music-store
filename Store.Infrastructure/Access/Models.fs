@@ -14,6 +14,15 @@ type UserData =
     isDeleted: bool
     isVerified: bool }
 
+[<CLIMutable>]
+type UserVerificationData =
+  { id: BsonObjectId
+    userId: BsonObjectId
+    hash: string option
+    expiresIn: DateTime
+    isUsed: bool
+    verificationCode: string }
+
 module RoleMapping =
   let toInt (role: Role) =
     match role with
@@ -54,3 +63,33 @@ module UserMapping =
       role = RoleMapping.ofInt data.role
       isDeleted = data.isDeleted
       isVerified = data.isVerified }
+
+module UserVerificationMapping =
+  let toUserVerificationData (verification: UserVerification) : UserVerificationData =
+    let id =
+      if String.IsNullOrEmpty(verification.id) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(verification.id)
+
+    let userId =
+      if String.IsNullOrEmpty(verification.userId) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(verification.userId)
+
+    { id = id
+      userId = userId
+      hash = verification.hash
+      expiresIn = verification.expiresIn
+      isUsed = verification.isUsed
+      verificationCode = verification.verificationCode }
+
+  let toUserVerification (data: UserVerificationData) : UserVerification =
+    { id = data.id.ToString()
+      userId = data.userId.ToString()
+      hash = data.hash
+      user = None
+      expiresIn = data.expiresIn
+      isUsed = data.isUsed
+      verificationCode = data.verificationCode }

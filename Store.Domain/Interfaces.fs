@@ -9,7 +9,6 @@ type IRepository<'T> =
   // abstract member Query: unit -> IQueryable<'T>
   // abstract member Delete: string -> Async<ServiceOutput<unit>>
 
-
 type UserFetchParams = {
   name:string
   email:string
@@ -20,3 +19,7 @@ type IUserRepository =
   abstract member FetchByEmail: string -> Async<ServiceOutput<User>>
   abstract member Fetch: UserFetchParams -> Async<ServiceOutput<User list>>
   abstract member Count: string -> Async<ServiceOutput<int>>
+
+type IUserVerificationRepository =
+  inherit IRepository<UserVerification>
+  abstract member FetchByUser: string -> Async<ServiceOutput<UserVerification list>>

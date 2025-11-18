@@ -9,6 +9,7 @@
         <Compile Include="Context.fs" />
         <Compile Include="Access\Models.fs" />
         <Compile Include="Access\UserRepository.fs" />
+        <Compile Include="Access\UserVerificationRepository.fs" />
         <Compile Include="Store\DataModels.fs" />
         <Compile Include="AccountsPayable\PartialPaymentData.fs" />
         <Compile Include="AccountsPayable\PaymentData.fs" />

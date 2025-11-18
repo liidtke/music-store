@@ -7,7 +7,7 @@ POST {{url}}/login
 Content-Type: application/json
 
 {
-  "email": "admin@hs.com",
+  "email": "admin@store-m.com",
   "password": "admin",
   "grantType": "password"
 }
@@ -39,9 +39,9 @@ POST {{url}}/users/
 Content-Type: application/json
 
 {
-  "name": "Joa silva",
-  "email": "uukk_1@example.com",
-  "password": "SenhaBemSegura123!",
+  "name": "Admin",
+  "email": "admin@store-m.com",
+  "password": "admin",
   "role": "CustomerRole"
 }
 
