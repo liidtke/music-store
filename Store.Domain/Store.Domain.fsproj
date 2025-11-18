@@ -7,8 +7,8 @@
 
     <ItemGroup>
         <Compile Include="SharedKernel.fs"/>
-        <Compile Include="Interfaces.fs" />
         <Compile Include="Access.fs" />
+        <Compile Include="Interfaces.fs" />
         <Compile Include="UserService.fs" />
         <Compile Include="UserVerificationService.fs" />
         <Compile Include="FileStorage.fs" />

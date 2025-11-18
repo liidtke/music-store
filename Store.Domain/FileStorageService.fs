@@ -1,9 +1,7 @@
 module Store.Domain.FileStorageService
 
-open Store.Domain.Health.FileStorage
-open Store.Domain.Health.Interfaces
-
-
+open Store.Domain.FileStorage
+open Store.Domain.Interfaces
 
 
 type IFileMetaRepository =

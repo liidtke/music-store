@@ -1,4 +1,4 @@
-module Store.Domain.Health.UserVerificationService
+module Store.Domain.UserVerificationService
 
 open System
 

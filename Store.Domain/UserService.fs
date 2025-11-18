@@ -1,6 +1,6 @@
 module Store.Domain.Health.UserService
 
-open Store.Domain.Health.Access
+open Store.Domain.Access
 
 module Effects =
   type CountByEmail = string -> Async<ServiceOutput<int>>

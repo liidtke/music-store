@@ -1,4 +1,4 @@
-module Store.Domain.Health.FileStorage
+module Store.Domain.FileStorage
 
 open System
 

@@ -6,12 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="OldContext.fs" />
         <Compile Include="Context.fs" />
         <Compile Include="UserData.fs"/>
-        <Compile Include="Access\Repository.fs" />
         <Compile Include="Access\Models.fs" />
-        <Compile Include="Access\UserVerificationData.fs" />
+        <Compile Include="Access\UserRepository.fs" />
         <Compile Include="Store\DataModels.fs" />
         <Compile Include="AccountsPayable\PartialPaymentData.fs" />
         <Compile Include="AccountsPayable\PaymentData.fs" />

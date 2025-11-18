@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Store.Domain.Health.Access
+module Store.Domain.Access
 
 open System
 
@@ -10,7 +10,7 @@ type Role =
   | Anon //not logged user
 
 type User =
-  { id: int
+  { id: string
     name: string
     email: string
     password: string option

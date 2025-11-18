@@ -1,22 +1,47 @@
 module Store.Infrastructure.Access.Models
 
-type AppSystem =
-  | Health
-  | Store
+open Store.Domain
 
-module AppSystem =
-  let toInt = function
-    | AppSystem.Health -> 1
-    | AppSystem.Store  -> 2
-
-  let ofInt = function
-    | 1 -> AppSystem.Health
-    | 2 -> AppSystem.Store
-    | x -> failwithf "Valor inválido para AppSystem: %i" x
-
-type ResourceData =
-  { id: int
-    code: string
+type UserData =
+  { id: string
     name: string
-    system: int }
+    email: string
+    password: string option
+    role: int
+    isDeleted: bool
+    isVerified: bool }
 
+module RoleMapping =
+  let toInt (role: Role) =
+    match role with
+    | AdminRole        -> 0
+    | ProfessionalRole -> 1
+    | CustomerRole     -> 2
+    | Anon             -> 9
+
+  let ofInt (value: int) =
+    match value with
+    | 0 -> AdminRole
+    | 1 -> ProfessionalRole
+    | 2 -> CustomerRole
+    | 9 -> Anon
+    | _ -> Anon   
+
+module UserMapping =
+  let toUserData (user: User) : UserData =
+    { id = user.id
+      name = user.name
+      email = user.email
+      password = user.password
+      role = RoleMapping.toInt user.role
+      isDeleted = user.isDeleted
+      isVerified = user.isVerified }
+
+  let toUser (data: UserData) : User =
+    { id = data.id
+      name = data.name
+      email = data.email
+      password = data.password
+      role = RoleMapping.ofInt data.role
+      isDeleted = data.isDeleted
+      isVerified = data.isVerified }
