@@ -4,7 +4,7 @@ type ProductType =
   { id: Id
     name: string
     pictureUrl: string
-    
+    isActive: bool
      }
 // gravação, mixagem, produção
 
@@ -14,7 +14,18 @@ type ProductType =
 //     types: ProductType list
 //     createdBy: int }
 
-//portfolio
+type Professional =
+  { id: Id //same as user id
+    name: string
+    document: string option
+    bulkDiscount: decimal
+    isActive: bool
+    pixKey:string option //for direct pix payments
+    isManager: bool //for managing delivery
+    pictureUrl: string option
+    //json from editor.js
+    profile: string }
+  
 type Product =
   { id: Id
     professionalId: Id
@@ -27,16 +38,3 @@ type Product =
     //min days to work be complete
     minDeadLine: int
     isActive: bool }
-
-type Professional =
-  { id: Id
-    name: string
-    document: string
-    userId: int
-    bulkDiscount: decimal
-    isDeleted: bool
-    pixKey:string option //for direct pix payments
-    isManager: bool //for managing delivery
-    pictureUrl: string option
-    //json from editor.js
-    profile: string }

@@ -19,6 +19,9 @@
         <Compile Include="Store\Catalog.fs" />
         <Compile Include="Store\Ordering.fs" />
         <Compile Include="Store\PostOrdering.fs" />
+        <Compile Include="Store\Interfaces.fs" />
+        <Compile Include="Store\ProductTypeService.fs" />
+        <Compile Include="Store\ProfessionalService.fs" />
     </ItemGroup>
 
     <ItemGroup>

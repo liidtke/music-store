@@ -55,7 +55,7 @@ type UserVerificationRepository(ctx: IMongoContext, logger: ILogger<UserVerifica
       // Busca o usuário relacionado a um determinado userId
       async {
         let! user =
-          ctx.Collection<UserData>("store_users").Find(fun u -> u.email = email).FirstOrDefaultAsync()
+          ctx.Collection<UserData>(usersCollectionName).Find(fun u -> u.email = email).FirstOrDefaultAsync()
           |> Async.AwaitTask
 
         if isNull (box user) then

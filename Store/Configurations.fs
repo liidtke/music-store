@@ -5,10 +5,14 @@ open System.Text
 open Store.Domain
 open Store.Domain.Email
 open Store.Domain.Interfaces
+open Store.Domain.Store.Interfaces
 open Store.Infrastructure.Access
 open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
+open Store.Infrastructure.Store
+open Store.Infrastructure.Store.ProductTypeRepository
+open Store.Infrastructure.Store.ProfessionalRepository
 open Store.Session
 open Microsoft.AspNetCore.Authentication.JwtBearer
 open Microsoft.AspNetCore.Authorization
@@ -111,3 +115,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   //events and services
   services.AddScoped<IUserRepository, UserRepository>() |> ignore
   services.AddScoped<IUserVerificationRepository, UserVerificationRepository>() |> ignore
+  services.AddScoped<IProductTypeRepository, ProductTypeRepository>() |> ignore
+  services.AddScoped<IProfessionalRepository, ProfessionalRepository>() |> ignore

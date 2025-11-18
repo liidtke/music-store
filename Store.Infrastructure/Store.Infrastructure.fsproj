@@ -10,7 +10,9 @@
         <Compile Include="Access\Models.fs" />
         <Compile Include="Access\UserRepository.fs" />
         <Compile Include="Access\UserVerificationRepository.fs" />
-        <Compile Include="Store\DataModels.fs" />
+        <Compile Include="Store\Models.fs" />
+        <Compile Include="Store\ProductTypeRepository.fs" />
+        <Compile Include="Store\ProfessionalRepository.fs" />
         <Compile Include="AccountsPayable\PartialPaymentData.fs" />
         <Compile Include="AccountsPayable\PaymentData.fs" />
         <Compile Include="Integrations.fs" />
