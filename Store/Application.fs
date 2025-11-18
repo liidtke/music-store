@@ -6,6 +6,7 @@ open System.Text.Json
 open Falco
 open System.Collections.Generic
 open Store
+open Store.Domain
 open Store.Domain.Health
 open MemoryPack
 open Microsoft.AspNetCore.Authentication

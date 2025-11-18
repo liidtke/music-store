@@ -1,6 +1,7 @@
 module Store.Tests
 
 open System
+open Store.Domain
 open Store.Domain.Health
 open Xunit.Abstractions
 open Xunit
@@ -76,7 +77,7 @@ type SecurityShould(output: ITestOutputHelper) =
     let email = "aldo.liidtke@gmail.com"
     let expected = "123"
     let user: User = 
-        { id = 1
+        { id = ""
           name = "John Doe"
           email = "john@example.com"
           password = Some "secure123"

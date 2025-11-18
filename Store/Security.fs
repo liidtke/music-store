@@ -4,6 +4,7 @@ open System
 open System.IdentityModel.Tokens.Jwt
 open System.Security.Claims
 open System.Text
+open Store.Domain
 open Store.Domain.Health
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Authentication

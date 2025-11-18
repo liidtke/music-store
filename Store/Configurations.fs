@@ -2,8 +2,10 @@ module Store.Configurations
 
 open System
 open System.Text
+open Store.Domain
 open Store.Domain.Email
-open Store.Domain.Health
+open Store.Domain.Interfaces
+open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Context
 open Store.Session
 open Microsoft.AspNetCore.Authentication.JwtBearer
@@ -99,13 +101,12 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services
     .AddSingleton<IMongoContext>(mongoContext)
     // .AddTransient<IPaymentRepository, PaymentRepository>()
-    .AddScoped<UserSession>(fun sp -> UserSession.anon)
+    // .AddScoped<UserSession>(fun sp -> UserSession.anon)
     .AddSingleton(sec)
     .AddSingleton<SessionManager>()
     .AddCors()
   |> ignore
 
   //events and services
-  services
-  // .AddScoped<IUserRepository, UserRepository>()
+  services.AddScoped<IUserRepository, UserRepository>()
   |> ignore

@@ -1,0 +1,54 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- <script src="https://unpkg.com/hyperscript.org@0.9.14"></script> -->
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.js"
+      integrity="sha384-ezjq8118wdwdRMj+nX4bevEi+cDLTbhLAeFF688VK8tPDGeLUe0WoY2MZtSla72F"
+      crossorigin="anonymous"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
+    ></script> -->
+    <meta name="generator" content={Astro.generator} />
+    <title>Testing</title>
+  </head>
+
+  <script>
+    document.body.addEventListener("htmx:beforeSwap", function (evt) {
+      if (evt.detail.xhr.status === 302) {
+        // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
+      } else if (evt.detail.xhr.status === 422) {
+        // allow 422 responses to swap as we are using this as a signal that
+        // a form was submitted with bad data and want to rerender with the
+        // errors
+        //
+        // set isError to false to avoid error logging in console
+        evt.detail.shouldSwap = true;
+        evt.detail.isError = false;
+        evt.detail.swapOverride = "#message";
+        evt.detail.target = document.getElementById("message");
+      }
+    });
+  </script>
+
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>

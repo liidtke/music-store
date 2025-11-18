@@ -1,11 +1,12 @@
 module Store.Endpoints.Models
 
 open System
+open Store.Domain
 open Store.Domain.Health
 open Models
 
 type UserModel =
-  { id: int
+  { id: string
     name: string
     email: string
     role: string
@@ -26,7 +27,7 @@ module UserModel =
 
 module UserSession =
   type UserSessionModel =
-    { userId: int
+    { userId: string
       email: string
       name: string
       role: string }

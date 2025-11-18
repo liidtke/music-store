@@ -7,7 +7,6 @@
 
     <ItemGroup>
         <Compile Include="Context.fs" />
-        <Compile Include="UserData.fs"/>
         <Compile Include="Access\Models.fs" />
         <Compile Include="Access\UserRepository.fs" />
         <Compile Include="Store\DataModels.fs" />

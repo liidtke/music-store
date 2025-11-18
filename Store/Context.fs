@@ -5,10 +5,9 @@ open System
 open System.Data
 open System.Security.Claims
 open Falco
+open Store.Domain
 open Store.Domain.Email
 open Store.Domain.Health
-open Store.Domain.Health.Interfaces
-open Store.Infrastructure.DataContext
 open Store.Security
 open Store.Session
 open Microsoft.AspNetCore.Authentication
@@ -31,19 +30,18 @@ let private getUser
   (logger: ILogger)
   (claims: Claim list)
   (sessionManager: SessionManager)
-  (db: IDbConnection)
   (ctx: HttpContext)
   =
   let headers =
     dict [ for h in ctx.Request.Headers -> h.Key, h.Value.FirstOrDefault() ]
   // let claims = Seq.toList ctx.User.Claims
-  let userId = claims[0].Value |> int
+  let userId = claims[0].Value 
 
   let get: UserService.Effects.GetUser =
     fun i ->
       async {
         return
-          { id = 0
+          { id = ""
             name = "test"
             email = "test"
             password = "test" |> Some
@@ -74,7 +72,7 @@ let private getUser
     | Success s -> return s
     | Failure f ->
       return
-        { userId = 0
+        { userId = ""
           role = Role.Anon
           name = ""
           email = "" }
@@ -83,7 +81,6 @@ let private getUser
 
 let getServiceContext isAuthRequired (ctx: HttpContext) =
   let secSet = ctx.Plug<SecuritySettings>()
-  let db = ctx.Plug<IDbConnection>()
   let messageBus = ctx.Plug<IMessageBus>()
   let sessionManager = ctx.Plug<SessionManager>()
   let eSet = ctx.Plug<EmailSettings>()
@@ -100,7 +97,7 @@ let getServiceContext isAuthRequired (ctx: HttpContext) =
 
   async {
     if authenticateResult.Succeeded then
-      let! session = getUser logger claims sessionManager db ctx
+      let! session = getUser logger claims sessionManager ctx
 
       return
         succeed

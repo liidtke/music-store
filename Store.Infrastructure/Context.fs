@@ -26,15 +26,16 @@ type MongoContext(settings: DatabaseSettings) =
 let mapInsert
   (logger: ILogger)
   (mapperIn: 'entity -> 'data)
-  // (mapperOut: 'data -> 'entity)
+  (mapperOut: 'data -> 'entity)
   (message: string)
   (effect: 'data -> Task)
   (input: 'entity)
   =
   async {
     try
-      do! input |> mapperIn |> effect |> Async.AwaitTask
-      return succeed input
+      let data = input |> mapperIn
+      do! data |> effect |> Async.AwaitTask
+      return mapperOut data |> succeed 
     with ex ->
       logger.LogError(ex, message) |> ignore
       return fail message

@@ -9,6 +9,7 @@ type Role =
   | CustomerRole
   | Anon //not logged user
 
+[<CLIMutable>]
 type User =
   { id: string
     name: string
@@ -25,8 +26,8 @@ type User =
         isVerified = user.isVerified }
 
 type UserVerification =
-  { id: int
-    userId: int
+  { id: string
+    userId: string
     hash: string option
     user: User option
     expiresIn: DateTime
@@ -34,7 +35,7 @@ type UserVerification =
     verificationCode: string } //salt
 
 type UserSession =
-  { userId: int
+  { userId: string
     email: string
     name: string
     role: Role }
@@ -44,7 +45,7 @@ type UserSession =
 
 module UserSession =
   let anon =
-    { userId = -1
+    { userId = ""
       email = ""
       name = ""
       role = Role.Anon }

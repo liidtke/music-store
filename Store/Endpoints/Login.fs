@@ -6,8 +6,7 @@ open Falco
 open Falco.Routing
 open Store
 open Store.Domain
-open Store.Domain.Health
-open Store.Domain.Health.Interfaces
+open Store.Domain.Interfaces
 open Store.Infrastructure
 open Store.Security
 open Store.Session
@@ -95,22 +94,8 @@ type LoginRequest =
 let workflow (a: LoginRequest) : HttpHandler =
   fun (ctx: HttpContext) ->
     let sessionManager = ctx.Plug<SessionManager>()
-    // let getUserEffect = UserData.getUserByEmail db
-
-    let getUserEffect =
-      fun (i:string) ->
-        async {
-          return
-            { id = 0
-              name = "test"
-              email = "test"
-              password = "test" |> Some
-              role = Role.CustomerRole
-              isDeleted = false
-              isVerified = true }
-            |> succeed
-
-        }
+    let repository = ctx.Plug<IUserRepository>()
+    let getUserEffect = repository.FetchByEmail
 
     let config: Security.SecuritySettings =
       ctx.RequestServices.GetService<Security.SecuritySettings>()
@@ -154,4 +139,4 @@ let endpoints =
   [ login
     // RequestPasswordReset.endpoint
     // RequestPasswordConfirm.endpoint
-     ]
+    ]

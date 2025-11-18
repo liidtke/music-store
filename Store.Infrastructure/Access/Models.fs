@@ -1,9 +1,12 @@
 module Store.Infrastructure.Access.Models
 
+open System
+open MongoDB.Bson
 open Store.Domain
 
+[<CLIMutable>]
 type UserData =
-  { id: string
+  { id: BsonObjectId
     name: string
     email: string
     password: string option
@@ -14,10 +17,10 @@ type UserData =
 module RoleMapping =
   let toInt (role: Role) =
     match role with
-    | AdminRole        -> 0
+    | AdminRole -> 0
     | ProfessionalRole -> 1
-    | CustomerRole     -> 2
-    | Anon             -> 9
+    | CustomerRole -> 2
+    | Anon -> 9
 
   let ofInt (value: int) =
     match value with
@@ -25,11 +28,17 @@ module RoleMapping =
     | 1 -> ProfessionalRole
     | 2 -> CustomerRole
     | 9 -> Anon
-    | _ -> Anon   
+    | _ -> Anon
 
 module UserMapping =
   let toUserData (user: User) : UserData =
-    { id = user.id
+    let id =
+      if String.IsNullOrEmpty(user.id) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(user.id)
+
+    { id = id
       name = user.name
       email = user.email
       password = user.password
@@ -38,7 +47,7 @@ module UserMapping =
       isVerified = user.isVerified }
 
   let toUser (data: UserData) : User =
-    { id = data.id
+    { id = data.id.ToString()
       name = data.name
       email = data.email
       password = data.password

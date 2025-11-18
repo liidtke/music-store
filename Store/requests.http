@@ -7,7 +7,7 @@ POST {{url}}/login
 Content-Type: application/json
 
 {
-  "email": "admin@Store.com",
+  "email": "admin@hs.com",
   "password": "admin",
   "grantType": "password"
 }
@@ -33,6 +33,18 @@ Authorization: {{token}}
 GET {{url}}/users
 Content-Type: application/json
 Authorization: {{token}}
+
+### create users
+POST {{url}}/users/
+Content-Type: application/json
+
+{
+  "name": "Joa silva",
+  "email": "uukk_1@example.com",
+  "password": "SenhaBemSegura123!",
+  "role": "CustomerRole"
+}
+
 
 
 ### orgs

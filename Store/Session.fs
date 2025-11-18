@@ -1,14 +1,16 @@
 module Store.Session
 
+open Store.Domain
 open Store.Domain.Health
 open Store.Domain.Health.UserService
 open Microsoft.Extensions.Caching.Memory
 open System.Collections.Concurrent
+open Store.Domain.Interfaces
 
 type SessionManager(cache: IMemoryCache) =
-  let cacheKey (userId: int) = $"session:{userId}"
+  let cacheKey (userId: string) = $"session:{userId}"
 
-  let getSession (userId: int) =
+  let getSession (userId: string) =
     try
       let result = userId |> cacheKey |> cache.Get<UserSession>
 
@@ -22,7 +24,7 @@ type SessionManager(cache: IMemoryCache) =
     let key = session.userId |> cacheKey
     cache.Set<UserSession>(key, session) |> ignore
 
-  let removeSession (userId: int) =
+  let removeSession (userId: string) =
     let key = userId |> cacheKey
     cache.Remove(key)
 
@@ -46,14 +48,14 @@ type SessionManager(cache: IMemoryCache) =
     insertSession newSession |> ignore
     newSession
 
-  member this.RemoveSession(userId: int) = removeSession userId
+  member this.RemoveSession(userId: string) = removeSession userId
 
-  member this.GetSession(userId: int) =
+  member this.GetSession(userId: string) =
     let result = getSession userId
     result
 
 
-let update (repository: IUserRepository) (sessionManager: SessionManager) (users: int list) =
+let update (repository: IUserRepository) (sessionManager: SessionManager) (users: string list) =
   async {
     users |> List.map sessionManager.RemoveSession |> ignore
   // for user in users do

@@ -1,12 +1,13 @@
 module Store.Domain.Health.UserService
 
 open Store.Domain.Access
+open Store.Domain.Interfaces
 
 module Effects =
   type CountByEmail = string -> Async<ServiceOutput<int>>
   type SaveUser = Effect<User>
   type SearchUser = string -> Async<ServiceOutput<User list>>
-  type GetUser = int -> Async<ServiceOutput<User>>
+  type GetUser = string -> Async<ServiceOutput<User>>
   type GetUserByEmail = string -> Async<ServiceOutput<User>>
   type EncryptPassword = string -> string
 
@@ -15,12 +16,6 @@ module Effects =
       save: SaveUser
       get: GetUser }
 
-
-type IUserRepository =
-  abstract member GetUser: Effects.GetUser
-  abstract member Save: User -> Async<ServiceOutput<User>>
-// abstract member CreateUser: User -> Async<ServiceOutput<User>>
-// abstract member ChangePassword: string -> string -> Async<ServiceOutput<User>>
 
 module private Validations =
   let hasAccessToCreate (current: UserSession) (user: User) = succeed user
@@ -97,12 +92,12 @@ module Create =
       password: string
       role: string }
 
-  let handle (current: UserSession) (enc: EncryptPassword) (effects: Dependencies) (input: CreateUser) =
+  let handle (current: UserSession) (enc: EncryptPassword) (repository: IUserRepository) (input: CreateUser) =
     let toUser input =
       if input.password = "" then
         invalidate "Senha Inválida"
       else
-        { id = 0
+        { id = ""
           name = input.name
           email = input.email
           password =
@@ -116,13 +111,13 @@ module Create =
         |> succeed
 
     input |> toUser ?> validEmail ?> hasAccessToCreate current ?> validName
-    ?>< hasDuplicate effects.count
-    ?<> effects.save
+    ?>< hasDuplicate repository.Count
+    ?<> repository.Add
 
 
 module Update =
 
-  let handle (current: UserSession) (effects: Dependencies) (modified: User) =
+  let handle (current: UserSession) (repository: IUserRepository) (modified: User) =
     let validate o =
       updateValidate current modified o ?> validName
 
@@ -131,8 +126,8 @@ module Update =
       toSave |> succeed
 
     async {
-      let! original = effects.get modified.id
-      return! original ?> validate ?> alter modified ?>< effects.save
+      let! original = repository.Find modified.id
+      return! original ?> validate ?> alter modified ?>< repository.Update
     }
 
   let changePassword

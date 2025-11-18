@@ -3,13 +3,14 @@ module Store.Domain.UserVerificationService
 open System
 
 type GetByUserEmail = FetchEffect<string, UserVerification>
+type GetUserEmail = FetchSingleEffect<string, User>
 type SaveEffect = Effect<UserVerification>
 type GenerateSaltEffect = int -> string
 type GenerateCodeEffect = string -> string -> string //salt
 
 let requestPasswordReset
   (email: string)
-  (getUserEffect: UserService.Effects.GetUserByEmail)
+  (getUserEffect: GetUserEmail)
   (saveEffect: SaveEffect)
   (sEff: GenerateSaltEffect)
   (cEff: GenerateCodeEffect)
@@ -23,7 +24,7 @@ let requestPasswordReset
     match userOut with
     | Success user ->
       let verification: UserVerification =
-        { id = 0
+        { id = ""
           expiresIn = DateTime.UtcNow.AddHours(1)
           hash = Some(hash)
           user = Some(user)

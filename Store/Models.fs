@@ -1,7 +1,7 @@
 module Models
 
+open Store.Domain
 open Store.Domain.Health
-open Store.Domain.Health.Access
 
 module Role =
   let convert (str: string)  =

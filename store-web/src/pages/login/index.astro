@@ -1,10 +1,10 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import Login from "@layouts/Login.astro";
 
 const query = Astro.url.searchParams.get("query") || "default";
 ---
 
-<Layout>
+<Login>
   <div class="bg-gray-50">
     <div
       class="min-h-screen flex flex-col items-center justify-center py-6 px-4"
@@ -121,4 +121,4 @@ const query = Astro.url.searchParams.get("query") || "default";
       </div>
     </div>
   </div>
-</Layout>
+</Login>

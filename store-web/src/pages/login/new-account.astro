@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Login from "@layouts/Login.astro";
 import toaster from '@utils/toaster';
 
 let data = null;
@@ -101,7 +101,7 @@ if (Astro.request.method === "POST") {
     }
 </script>
 
-<Layout>
+<Login>
 
     <div id="toaster-wrapper">
     </div>
@@ -172,9 +172,9 @@ if (Astro.request.method === "POST") {
                         <div class="flex flex-wrap items-center justify-between gap-4">
                         </div>
 
-                        <div class="!mt-12">
+                        <div class="!mt-8">
                             <button type="submit"
-                                    class="w-full py-2 px-4 text-[15px] font-medium tracking-wide rounded-md text-white bg-primary  focus:outline-none cursor-pointer">
+                                    class="btn-primary w-full">
                                 Cadastrar
                             </button>
                         </div>
@@ -188,5 +188,4 @@ if (Astro.request.method === "POST") {
 
     </div>
 
-</Layout>
-
+</Login>

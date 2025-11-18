@@ -19,3 +19,4 @@ type IUserRepository =
   inherit IRepository<User>
   abstract member FetchByEmail: string -> Async<ServiceOutput<User>>
   abstract member Fetch: UserFetchParams -> Async<ServiceOutput<User list>>
+  abstract member Count: string -> Async<ServiceOutput<int>>
