@@ -15,7 +15,7 @@ let sendPasswordResetRequest
   (htmlGenerator: RenderHtmlInput -> string)
   (uv: UserVerification)
   =
-  let link = uv.hash.Value |> urlEncodeUri |> generateResetLink emailSettings.BaseUrl
+  let link = uv.verificationCode |> urlEncodeUri |> generateResetLink emailSettings.BaseUrl
 
   let mail =
     { link = link
@@ -44,7 +44,7 @@ let sendPasswordChanged
 
   let mail =
     { link = ""
-      companyName = "Store."
+      companyName = "Store"
       userName = user.name
       email = user.email }
 

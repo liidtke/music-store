@@ -22,4 +22,4 @@ type IUserRepository =
 
 type IUserVerificationRepository =
   inherit IRepository<UserVerification>
-  abstract member FetchByUser: string -> Async<ServiceOutput<UserVerification list>>
+  abstract member FetchByUserEmail: string -> Async<ServiceOutput<UserVerification list>>

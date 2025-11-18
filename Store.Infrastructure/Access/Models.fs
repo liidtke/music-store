@@ -18,7 +18,7 @@ type UserData =
 type UserVerificationData =
   { id: BsonObjectId
     userId: BsonObjectId
-    hash: string option
+    hash: string
     expiresIn: DateTime
     isUsed: bool
     verificationCode: string }
@@ -90,6 +90,24 @@ module UserVerificationMapping =
       userId = data.userId.ToString()
       hash = data.hash
       user = None
+      expiresIn = data.expiresIn
+      isUsed = data.isUsed
+      verificationCode = data.verificationCode }
+
+  let toUserVerificationUser user (data: UserVerificationData) : UserVerification =
+    { id = data.id.ToString()
+      userId = data.userId.ToString()
+      hash = data.hash
+      user = user |> UserMapping.toUser |> Some
+      expiresIn = data.expiresIn
+      isUsed = data.isUsed
+      verificationCode = data.verificationCode }
+
+  let toUserVerificationUserOption user (data: UserVerificationData) : UserVerification =
+    { id = data.id.ToString()
+      userId = data.userId.ToString()
+      hash = data.hash
+      user = user
       expiresIn = data.expiresIn
       isUsed = data.isUsed
       verificationCode = data.verificationCode }

@@ -5,7 +5,9 @@ open System.Text
 open Store.Domain
 open Store.Domain.Email
 open Store.Domain.Interfaces
+open Store.Infrastructure.Access
 open Store.Infrastructure.Access.UserRepository
+open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
 open Store.Session
 open Microsoft.AspNetCore.Authentication.JwtBearer
@@ -51,8 +53,7 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   let section = configuration.GetSection("Security")
 
   let sec: SecuritySettings =
-    { 
-      Iterations = section.GetValue<int>("Iterations")
+    { Iterations = section.GetValue<int>("Iterations")
       JwtSecurityKey = section.GetValue<string>("JwtSecurityKey")
       JwtIssuer = section.GetValue<string>("JwtIssuer")
       JwtAudience = section.GetValue<string>("JwtAudience")
@@ -108,5 +109,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   |> ignore
 
   //events and services
-  services.AddScoped<IUserRepository, UserRepository>()
-  |> ignore
+  services.AddScoped<IUserRepository, UserRepository>() |> ignore
+  services.AddScoped<IUserVerificationRepository, UserVerificationRepository>() |> ignore

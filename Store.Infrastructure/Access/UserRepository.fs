@@ -1,7 +1,7 @@
 module Store.Infrastructure.Access.UserRepository
 
+open System
 open System.Linq
-open System.Threading.Tasks
 open Microsoft.Extensions.Logging
 open MongoDB.Bson
 open MongoDB.Driver
@@ -26,8 +26,9 @@ type UserRepository(ctx: IMongoContext, logger: ILogger<UserRepository>) =
       mapUpdate logger UserMapping.toUserData "Error adding user" f filter user
 
     member this.Fetch(p) =
-      let query =
-        collection.AsQueryable().Where(fun u -> u.name.ToLower().Contains(p.name.ToLower()))
+      let query = collection.AsQueryable()
+      let addName = if String.IsNullOrEmpty(p.name) then query else query.Where(fun u -> u.name.ToLower().Contains(p.name.ToLower()))
+      let query = addName
 
       let effect () = query.ToListAsync()
       mapFetch logger UserMapping.toUser "Error fetching users" effect

@@ -1,7 +1,6 @@
 module Store.Infrastructure.Access.UserVerificationRepository
 
 open System.Linq
-open System.Threading.Tasks
 open Microsoft.Extensions.Logging
 open MongoDB.Bson
 open MongoDB.Driver
@@ -9,7 +8,6 @@ open MongoDB.Driver.Linq
 open Store.Domain.Interfaces
 open Store.Infrastructure.Access.Models
 open Store.Infrastructure.Context
-
 
 type UserVerificationRepository(ctx: IMongoContext, logger: ILogger<UserVerificationRepository>) =
   let verificationsCollectionName = "store_user_verifications"
@@ -25,7 +23,7 @@ type UserVerificationRepository(ctx: IMongoContext, logger: ILogger<UserVerifica
       mapInsert
         logger
         UserVerificationMapping.toUserVerificationData
-        UserVerificationMapping.toUserVerification
+        (UserVerificationMapping.toUserVerificationUserOption verification.user)
         "Error adding user verification"
         verifications.InsertOneAsync
         verification
@@ -53,13 +51,23 @@ type UserVerificationRepository(ctx: IMongoContext, logger: ILogger<UserVerifica
 
       mapFind logger UserVerificationMapping.toUserVerification "Error finding user verification" effect
 
-    member this.FetchByUser(userId) =
+    member this.FetchByUserEmail(email) =
       // Busca o usuário relacionado a um determinado userId
+      async {
+        let! user =
+          ctx.Collection<UserData>("store_users").Find(fun u -> u.email = email).FirstOrDefaultAsync()
+          |> Async.AwaitTask
 
-      let query () =
-        verifications
-          .AsQueryable()
-          .Where(fun v -> v.userId = BsonObjectId.Create(userId) && v.isUsed = false)
-          .ToListAsync()
+        if isNull (box user) then
+          return notFound "Usuário não encontrado"
+        else
+          let query () =
+            verifications.AsQueryable().Where(fun v -> v.userId = user.id && v.isUsed = false).ToListAsync()
 
-      mapFetch logger UserVerificationMapping.toUserVerification "Error fetching user from verification" query
+          return!
+            mapFetch
+              logger
+              (UserVerificationMapping.toUserVerificationUser user)
+              "Error fetching user from verification"
+              query
+      }

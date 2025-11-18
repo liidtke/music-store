@@ -28,7 +28,7 @@ type User =
 type UserVerification =
   { id: string
     userId: string
-    hash: string option
+    hash: string 
     user: User option
     expiresIn: DateTime
     isUsed: bool

@@ -98,7 +98,7 @@ type SecurityShould(output: ITestOutputHelper) =
 
     match result with
     | Success userVerification ->
-      write userVerification.hash.Value |> ignore
+      write userVerification.hash |> ignore
       write userVerification.verificationCode |> ignore
       Assert.NotNull(value)
 
