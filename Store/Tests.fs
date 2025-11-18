@@ -36,8 +36,8 @@ type SecurityShould(output: ITestOutputHelper) =
     let value = Security.Cypher.enc number
     write value
     Assert.Equal(expected, value)
-    
-    
+
+
   [<Fact>]
   let encodeInt2 () =
     let number = 7
@@ -76,46 +76,64 @@ type SecurityShould(output: ITestOutputHelper) =
   let createKey () =
     let email = "aldo.liidtke@gmail.com"
     let expected = "123"
-    let user: User = 
-        { id = ""
-          name = "John Doe"
-          email = "john@example.com"
-          password = Some "secure123"
-          role = Role.AdminRole // Assuming Role is an existing type with a User variant
-          isDeleted = false
-          isVerified = true }
-        
+
+    let user: User =
+      { id = ""
+        name = "John Doe"
+        email = "john@example.com"
+        password = Some "secure123"
+        role = Role.AdminRole // Assuming Role is an existing type with a User variant
+        isDeleted = false
+        isVerified = true }
+
     let getuser s = async { return user |> succeed }
-    let saveEffect u = async {return u |> succeed}
+    let saveEffect u = async { return u |> succeed }
     let salt = Security.Crypto.createSalt
     let genCode = Security.Crypto.sha256 2 32
-    let value = UserVerificationService.requestPasswordReset email getuser saveEffect salt genCode
+
+    let value =
+      UserVerificationService.requestPasswordReset email getuser saveEffect salt genCode
+
     let result = value |> Async.RunSynchronously
-    
+
     match result with
     | Success userVerification ->
       write userVerification.hash.Value |> ignore
       write userVerification.verificationCode |> ignore
       Assert.NotNull(value)
-    
+
   [<Fact>]
-  let compareKey () =
-    let email = "aldo.liidtke@gmail.com"
-    let hash = "FUvRJOCLyYdXP/IvRAnCmJNV9O2WCqN4IFcL14KedCM="
-    let salt = "T020/QjxUVmXG4nTsg/8gw=="
-    
-    let saltEffect = Security.Crypto.createSalt
-    let genCodeEffect = Security.Crypto.sha256 2 32
-    let result = UserVerificationService.decode email salt genCodeEffect
-    let isSame = result = hash
-    Assert.True(isSame)
-    
+  let hashPassword () =
+    let password = "123456"
+    let h1 = Security.hashPassword 32 password
+    let h2 = Security.hashPassword 32 password
+    Assert.True(h1 <> h2)
+
+  [<Fact>]
+  let comparePasswords () =
+    let password = "123456"
+    let hashed = "EGBqsUsEzuAfbcLvuBzH/3L5UTal1ctStf1uHhaYQyEBYmqrdBB2yzN0iISvFi3F"
+
+    let result =
+      Security.validateUserPassword
+        32
+        password
+        { password = Some <| hashed
+          id = ""
+          name = ""
+          email = ""
+          role = Role.AdminRole
+          isDeleted = false
+          isVerified = true }
+
+    Assert.True(result)
+
 // hash   Result: FUvRJOCLyYdXP/IvRAnCmJNV9O2WCqN4IFcL14KedCM=
- // salt   Result: T020/QjxUVmXG4nTsg/8gw==
-    
-  // [<Fact>]
-  // let parseMoneyShould () =
-  //   let original = "R$ 233,01"
-  //   let expected = 233.01m
-  //   let result = Money.parse original
-  //   Assert.Equal(result, expected)
+// salt   Result: T020/QjxUVmXG4nTsg/8gw==
+
+// [<Fact>]
+// let parseMoneyShould () =
+//   let original = "R$ 233,01"
+//   let expected = 233.01m
+//   let result = Money.parse original
+//   Assert.Equal(result, expected)

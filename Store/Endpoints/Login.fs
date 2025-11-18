@@ -111,7 +111,7 @@ let workflow (a: LoginRequest) : HttpHandler =
         else
           config
 
-      if u |> Security.validateUserPassword config a.password then
+      if u |> Security.validateUserPassword config.Iterations a.password then
         Response.ofJson <| Security.generateToken config u
       else
         Response.withStatusCode 401

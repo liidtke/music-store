@@ -3,6 +3,7 @@ module Store.Security
 open System
 open System.IdentityModel.Tokens.Jwt
 open System.Security.Claims
+open System.Security.Cryptography
 open System.Text
 open Store.Domain
 open Store.Domain.Health
@@ -63,8 +64,7 @@ type Token =
     expiration: DateTime }
 
 type SecuritySettings =
-  { Salt: string
-    Iterations: int32
+  { Iterations: int32
     JwtSecurityKey: string
     TokenExpirationTime: int32
     JwtIssuer: string
@@ -87,47 +87,55 @@ let getProperties =
 
 
 let generateToken (config: SecuritySettings) (user: User) =
-    let symmetricKey =
-        config.JwtSecurityKey
-        |> Encoding.UTF8.GetBytes
-        |> SymmetricSecurityKey
+  let symmetricKey =
+    config.JwtSecurityKey |> Encoding.UTF8.GetBytes |> SymmetricSecurityKey
 
-    let credentials =
-        SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256)
+  let credentials = SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256)
 
-    let expiration =
-        config.TokenExpirationTime
-        |> DateTime.Now.AddHours
+  let expiration = config.TokenExpirationTime |> DateTime.Now.AddHours
 
-    let notBefore = DateTime.Now
-    
-    let claims = getClaims user
+  let notBefore = DateTime.Now
 
-    let securityToken =
-        JwtSecurityToken(config.JwtIssuer, config.JwtAudience, claims, System.Nullable(), expiration, credentials)
+  let claims = getClaims user
 
-    let handler = JwtSecurityTokenHandler()
-    let token = handler.WriteToken securityToken
+  let securityToken =
+    JwtSecurityToken(config.JwtIssuer, config.JwtAudience, claims, System.Nullable(), expiration, credentials)
 
-    { token = token
-      token_type = "Bearer"
-      expiration = securityToken.ValidTo }
+  let handler = JwtSecurityTokenHandler()
+  let token = handler.WriteToken securityToken
+
+  { token = token
+    token_type = "Bearer"
+    expiration = securityToken.ValidTo }
 
 
-let hashPassword (config: SecuritySettings) =
-  let hash (password: string) =
-    password |> Crypto.sha256 config.Iterations 32 config.Salt
+let keyLength = 32
 
-  hash
 
-let validateUserPassword (config: SecuritySettings) =
+let private hash (iterations: int) (salt: byte[]) (password: string) =
+  let hash =
+    use pbkdf2 =
+      new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA256)
+
+    pbkdf2.GetBytes(keyLength)
+
+  Array.concat [ salt; hash ] |> Convert.ToBase64String
+
+let hashPassword (iterations: int) =
+  let salt = RandomNumberGenerator.GetBytes(16)
+  hash iterations salt
+
+
+let validateUserPassword (iterations:int) =
   let validate (password: string) (user: User) =
     let existing =
       match user.password with
       | None -> "missing-password"
       | Some value -> value
 
-    let hashedPassword = password |> hashPassword config
+    let hashedBytes = Convert.FromBase64String existing
+    let salt = hashedBytes.[..15]
+    let hashedPassword = password |> hash iterations salt
     hashedPassword = existing
 
   validate

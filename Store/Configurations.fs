@@ -51,7 +51,7 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   let section = configuration.GetSection("Security")
 
   let sec: SecuritySettings =
-    { Salt = section.GetValue<string>("Salt")
+    { 
       Iterations = section.GetValue<int>("Iterations")
       JwtSecurityKey = section.GetValue<string>("JwtSecurityKey")
       JwtIssuer = section.GetValue<string>("JwtIssuer")

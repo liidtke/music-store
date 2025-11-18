@@ -85,7 +85,7 @@ module Create =
   let createWorkflow (stx: ServiceContext) user =
     let db = stx.context.Plug<IUserRepository>()
     let secSet = stx.securitySettings
-    let encryptEffect = hashPassword secSet
+    let encryptEffect = hashPassword secSet.Iterations
 
     async {
       let! result = UserService.Create.handle stx.userSession encryptEffect db user
