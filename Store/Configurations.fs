@@ -12,6 +12,7 @@ open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
 open Store.Infrastructure.Store
+open Store.Infrastructure.Store.ProductRepository
 open Store.Infrastructure.Store.ProductTypeRepository
 open Store.Infrastructure.Store.ProfessionalRepository
 open Store.Session
@@ -121,4 +122,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
 
   services.AddScoped<IProductTypeRepository, ProductTypeRepository>() |> ignore
   services.AddScoped<IProfessionalRepository, ProfessionalRepository>() |> ignore
+  services.AddScoped<IProductRepository, ProductRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore

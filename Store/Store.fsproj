@@ -26,7 +26,9 @@
         <Compile Include="Endpoints\Login.fs" />
         <Compile Include="Endpoints\Users.fs" />
         <Compile Include="Endpoints\ProductTypes.fs" />
+        <Compile Include="Endpoints\Products.fs" />
         <Compile Include="Endpoints\Professionals.fs" />
+        <Compile Include="Endpoints\Samples.fs" />
         <Compile Include="Endpoints\Handlers.fs" />
         <Compile Include="Tests.fs"/>
         <Compile Include="Configurations.fs" />

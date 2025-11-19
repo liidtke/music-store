@@ -17,7 +17,7 @@ module Update =
     async { return! service input }
 
   let handler: HttpHandler = Request.mapJson<Professional> <| runAsync workflow
-  let endpoint = put "/product-types/{id}" handler
+  let endpoint = put "/professionals/{id}" handler
 
 module Create =
   let private workflow (stx: ServiceContext) (input: Professional) =
@@ -28,7 +28,6 @@ module Create =
 
   let handler: HttpHandler = Request.mapJson<Professional> <| runAsync workflow
   let endpoint = post "/professionals" handler
-
 
 module Details =
   let private workflow (stx: ServiceContext) () =

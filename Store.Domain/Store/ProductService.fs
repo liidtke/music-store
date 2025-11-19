@@ -63,7 +63,7 @@ let create
 
   async {
     let! pt = fetchProductType input.productTypeId
-    return pt ?> toProduct input ?> validateAccess us ?> validateProduct ?>< saveEffect
+    return! pt ?> toProduct input ?> validateAccess us ?> validateProduct ?>< saveEffect
   }
 
 let update
@@ -102,7 +102,7 @@ let update
     let! pt = fetchProductType input.productTypeId
     let! existing = fetchEffect input.id
 
-    return
+    return!
       pt ?> toProduct input |> map2 update existing
       ?> validateAccess us
       ?> validateProduct

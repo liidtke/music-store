@@ -13,6 +13,8 @@
         <Compile Include="Store\Models.fs" />
         <Compile Include="Store\ProductTypeRepository.fs" />
         <Compile Include="Store\ProfessionalRepository.fs" />
+        <Compile Include="Store\ProductRepository.fs" />
+        <Compile Include="Store\SampleRepository.fs" />
         <Compile Include="AccountsPayable\PartialPaymentData.fs" />
         <Compile Include="AccountsPayable\PaymentData.fs" />
         <Compile Include="Integrations.fs" />

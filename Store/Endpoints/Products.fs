@@ -1,0 +1,47 @@
+module Store.Endpoints.Products
+
+open Application
+open Falco
+open Falco.Routing
+open Store
+open Store.Domain.Store
+open Store.Domain.Store.Interfaces
+open Store.Domain.Store.ProductService
+
+module Update =
+  let private workflow (stx: ServiceContext) (input: ProductServiceInput) =
+    let db = stx.context.Plug<IProductRepository>()
+    let dbPt = stx.context.Plug<IProductTypeRepository>()
+    let service = ProductService.update stx.userSession db.Update db.Find dbPt.Find
+
+    async { return! service input }
+
+  let handler: HttpHandler = Request.mapJson<ProductServiceInput> <| runAsync workflow
+  let endpoint = put "/products/{id}" handler
+
+module Create =
+  let private workflow (stx: ServiceContext) (input: ProductServiceInput) =
+    let db = stx.context.Plug<IProductRepository>()
+    let dbPt = stx.context.Plug<IProductTypeRepository>()
+    let service = ProductService.create stx.userSession db.Add dbPt.Find
+
+    async { return! service input }
+
+  let handler: HttpHandler = Request.mapJson<ProductServiceInput> <| runAsync workflow
+  let endpoint = post "/products" handler
+
+let private workflow (stx: ServiceContext) (input) =
+  let db = stx.context.Plug<IProductRepository>()
+
+  async { return! db.Fetch(input) }
+
+let httpHandler: HttpHandler =
+  Request.mapQuery (fun q ->
+    { professionalId = q.TryGetString("professionalId")
+      productTypeId = q.TryGetString("productTypeId")
+      search = q.TryGetString("search") })
+  <| runAnonAsync workflow
+
+let allEndpoint = get "/products" httpHandler
+
+let endpoints = [ allEndpoint; Create.endpoint; Update.endpoint ]

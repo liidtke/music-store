@@ -1,12 +1,10 @@
 module Store.Infrastructure.Store.ProductTypeRepository
 
-
 open Microsoft.Extensions.Logging
 open MongoDB.Bson
 open MongoDB.Driver
 open Store.Domain.Store.Interfaces
 open Store.Domain.Store.Catalog
-open Store.Domain.Interfaces
 open Store.Infrastructure.Store.Models
 open Store.Infrastructure.Context
 
@@ -26,14 +24,14 @@ type ProductTypeRepository(ctx: IMongoContext, logger: ILogger<ProductTypeReposi
 
     member this.Update(productType) =
       let filter =
-        MongoDB.Driver.Builders<ProductTypeData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(productType.id))
+        Builders<ProductTypeData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(productType.id))
 
       let f a b = collection.ReplaceOneAsync(a, b)
       mapUpdate logger ProductTypeMapping.toProductTypeData "Error updating product type" f filter productType
 
     member this.Find(productTypeId) =
       let filter =
-        MongoDB.Driver.Builders<ProductTypeData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(productTypeId))
+        Builders<ProductTypeData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(productTypeId))
 
       let effect () =
         collection.Find(filter).FirstOrDefaultAsync()

@@ -52,6 +52,12 @@ type Sample =
     sampleType: SampleType
     description: string
     productId: Id
+    }
+  
+type SampleFile = {
+    id:Id //same as sample
+    fileName: string
+    mimeType: string
     contents: byte array }
 
 //v1
