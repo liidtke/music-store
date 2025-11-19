@@ -7,8 +7,11 @@ open Store.Domain.Store.Catalog
 type SaveEffect = Effect<Professional>
 type FetchEffect = FetchSingleEffect<string, Professional>
 
-let private validateAccess (us:UserSession) (professional: Professional) =
-  
+let private validateAccess (us: UserSession) (professional: Professional) =
+  if us.role = Role.AdminRole then succeed professional
+  elif us.userId = professional.id then succeed professional
+  else invalidate "Access denied"
+
 let private validation (input: Professional) =
   if input.name = "" then
     invalidate "Name cannot be empty"
@@ -23,26 +26,29 @@ let private validation (input: Professional) =
   else
     succeed input
 
-let create (saveEffect: SaveEffect) (input: Professional) =
+let create (us: UserSession) (saveEffect: SaveEffect) (input: Professional) =
   { input with
       name = input.name.Trim()
       isActive = true }
   |> validation
+  ?> validateAccess us
   ?>< saveEffect
 
-let update (us:UserSession) (saveEffect: SaveEffect) (fetchEffect: FetchEffect) (input: Professional) =
+let update (us: UserSession) (saveEffect: SaveEffect) (fetchEffect: FetchEffect) (input: Professional) =
   async {
     let! professional = fetchEffect input.id
 
-    return professional
-    ?> (fun pro ->
-      { pro with
-          bulkDiscount = input.bulkDiscount 
-          name = input.name.Trim()
-          document = input.document
-          pixKey = input.pixKey
-          isManager = input.isManager
-          isActive = input.isActive }
-      |> validation)
-    ?>< saveEffect
+    return!
+      professional
+      ?> (fun pro ->
+        { pro with
+            bulkDiscount = input.bulkDiscount
+            name = input.name.Trim()
+            document = input.document
+            pixKey = input.pixKey
+            isManager = input.isManager
+            isActive = input.isActive }
+        |> validation)
+      ?> validateAccess us
+      ?>< saveEffect
   }

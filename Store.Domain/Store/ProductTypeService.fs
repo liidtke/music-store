@@ -1,12 +1,14 @@
 module Store.Domain.Store.ProductTypeService
 
+open Store.Domain
 open Store.Domain.Store.Catalog
 
 type SaveEffect = Effect<ProductType>
 type FetchEffect = FetchSingleEffect<string, ProductType>
 
-let private validation (input: ProductType) =
-  if input.name = "" then
+let private validation (us:UserSession) (input: ProductType) =
+  if us.role <> AdminRole then invalidate "Access Denied"
+  elif input.name = "" then
     invalidate "Name cannot be empty"
   elif input.name.Length > 50 then
     invalidate "Name cannot be longer than 50 characters"
@@ -15,16 +17,16 @@ let private validation (input: ProductType) =
   else
     succeed input
 
-let save (saveEffect: SaveEffect) (input: ProductType) =
+let create (us:UserSession)(saveEffect: SaveEffect) (input: ProductType) =
   { input with
       name = input.name.Trim()
       isActive = true }
-  |> validation
+  |> validation us
   ?>< saveEffect
 
-let update (saveEffect: SaveEffect) (input: ProductType) =
+let update (us:UserSession) (saveEffect: SaveEffect) (input: ProductType) =
   { input with
       name = input.name.Trim()
       isActive = true }
-  |> validation
+  |> validation us
   ?>< saveEffect

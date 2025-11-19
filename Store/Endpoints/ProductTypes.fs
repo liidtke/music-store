@@ -11,7 +11,7 @@ open Store.Domain.Store.Interfaces
 module Update =
   let private workflow (stx: ServiceContext) (input: ProductType) =
     let db = stx.context.Plug<IProductTypeRepository>()
-    let service = ProductTypeService.update db.Update
+    let service = ProductTypeService.update stx.userSession db.Update
 
     async { return! service input }
 
@@ -21,7 +21,7 @@ module Update =
 module Create =
   let private workflow (stx: ServiceContext) (input: ProductType) =
     let db = stx.context.Plug<IProductTypeRepository>()
-    let service = ProductTypeService.create db.Add
+    let service = ProductTypeService.create stx.userSession db.Add
 
     async { return! service input }
 

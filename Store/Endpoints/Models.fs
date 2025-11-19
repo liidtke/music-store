@@ -4,6 +4,7 @@ open System
 open Store.Domain
 open Store.Domain.Health
 open Models
+open Store.Domain.Store.Catalog
 
 type UserModel =
   { id: string
@@ -37,3 +38,27 @@ module UserSession =
       email = us.email
       name = us.name
       role = Role.toString us.role }
+
+type ProfessionalPublicModel =
+  { id: string
+    name: string
+    pictureUrl: string option
+    profile: string }
+
+module ProfessionalPublicModel =
+  let map (p: Professional) : ProfessionalPublicModel =
+    { id = p.id
+      name = p.name
+      pictureUrl = p.pictureUrl
+      profile = p.profile }
+
+// let toDomain (m: ProfessionalPublicModel) : Professional =
+//   { id = m.id
+//     name = m.name
+//     document = m.document
+//     bulkDiscount = m.bulkDiscount
+//     isActive = m.isActive
+//     pixKey = m.pixKey
+//     isManager = m.isManager
+//     pictureUrl = m.pictureUrl
+//     profile = m.profile }

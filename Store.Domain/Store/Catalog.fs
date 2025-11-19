@@ -1,11 +1,12 @@
 module Store.Domain.Store.Catalog
 
+open System
+
 type ProductType =
   { id: Id
     name: string
     pictureUrl: string
-    isActive: bool
-     }
+    isActive: bool }
 // gravação, mixagem, produção
 
 // type ComboTemplate =
@@ -20,12 +21,12 @@ type Professional =
     document: string option
     bulkDiscount: decimal
     isActive: bool
-    pixKey:string option //for direct pix payments
+    pixKey: string option //for direct pix payments
     isManager: bool //for managing delivery
     pictureUrl: string option
     //json from editor.js
     profile: string }
-  
+
 type Product =
   { id: Id
     professionalId: Id
@@ -38,3 +39,28 @@ type Product =
     //min days to work be complete
     minDeadLine: int
     isActive: bool }
+
+type SampleType =
+  | Audio = 1
+  | Pdf = 2
+  | Video = 3
+  | Image = 4
+
+type Sample =
+  { id: Id
+    sampleType: SampleType
+    description: string
+    productId: Id
+    contents: byte array }
+
+//v1
+type CreatedBy = { userId: string; userName: string }
+
+type QuestionAsked =
+  { id: Id
+    professionalId: Id
+    question: string
+    response: string option
+    isPending: bool
+    occurred: DateTime
+    createdBy: CreatedBy }

@@ -6,6 +6,7 @@ open Store.Domain
 open Store.Domain.Email
 open Store.Domain.Interfaces
 open Store.Domain.Store.Interfaces
+open Store.Endpoints.Queries
 open Store.Infrastructure.Access
 open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Access.UserVerificationRepository
@@ -114,6 +115,10 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
 
   //events and services
   services.AddScoped<IUserRepository, UserRepository>() |> ignore
-  services.AddScoped<IUserVerificationRepository, UserVerificationRepository>() |> ignore
+
+  services.AddScoped<IUserVerificationRepository, UserVerificationRepository>()
+  |> ignore
+
   services.AddScoped<IProductTypeRepository, ProductTypeRepository>() |> ignore
   services.AddScoped<IProfessionalRepository, ProfessionalRepository>() |> ignore
+  services.AddScoped<ProfessionalQuery>() |> ignore
