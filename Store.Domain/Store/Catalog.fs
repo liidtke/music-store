@@ -29,6 +29,7 @@ type Professional =
 
 type Product =
   { id: Id
+    name:string
     professionalId: Id
     productType: ProductType
     description: string option //json from editor.js

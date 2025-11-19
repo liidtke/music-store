@@ -31,7 +31,6 @@ module Create =
 
 
 module Details =
-
   let private workflow (stx: ServiceContext) () =
     let db = stx.context.Plug<ProfessionalQuery>()
 
@@ -49,7 +48,6 @@ module Private =
   let allEndpoint = get "professionals" (runAsync workflow ())
 
 module Public =
-
   let private workflow (stx: ServiceContext) () =
     let db = stx.context.Plug<ProfessionalQuery>()
 
