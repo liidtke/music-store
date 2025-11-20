@@ -1,4 +1,14 @@
 <script>
+import dateConverter from "@utils/date-converter.ts";
+
+const formatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+export let data;
+
+// let dueDate = dateConverter.dayjs().add(data.minDeadLine, 'day')
 
 </script>
 
@@ -8,28 +18,29 @@
           <div class="w-full lg:sticky top-0">
             <div class="flex flex-col gap-4">
               <div class="bg-white shadow-sm p-2">
-                <img src="https://readymadeui.com/images/sunscreen-img-1.webp" alt="Product"
+                <img src={data.productType.pictureUrl} alt="Product"
                   class="w-full aspect-[11/8] object-cover object-top" />
               </div>
             </div>
           </div>
-
           <div class="w-full">
             <div>
-              <h3 class="text-lg sm:text-xl font-semibold text-slate-900">SunProtect Sunscreen SPF</h3>
+              <h2 class="text-base mt-4 text-slate-500 font-semibold">{data.productType.name}</h2>
+              <h3 class="text-lg sm:text-xl font-semibold text-slate-900">{data.name}</h3>
               <div class="mt-4">
-                <p class="text-slate-500 mt-1 text-sm">Contains Vitamin E and Green Tea Extract to protect, nourish, and
-                  hydrate the skin while providing antioxidant benefits to combat free radicals and promote a healthy
-                  complexion.</p>
+                <p class="text-slate-500 mt-1 text-sm">{data.description}</p>
               </div>
 
               <div class="flex items-center flex-wrap gap-2 mt-6">
-                <p class="text-hs-400 text-base"><strike>$16</strike></p>
-                <h4 class="text-hs text-2xl sm:text-3xl font-semibold">$12</h4>
+                {#if data.unitPrice != data.oldUnitPrice}
+                <p class="text-slate-400 text-base"><strike>R$ {data.oldUnitPrice}</strike></p>
+                {/if}
+                <h4 class="text-hs text-2xl sm:text-3xl font-semibold">R$ {formatter.format(data.unitPrice)} </h4>
               </div>
 
               <div>
                 <h4 class="text-base mt-4 text-slate-500 font-semibold">Prazo</h4>
+                <p class="text-sm text-slate-500">{data.minDeadLine} dias úteis</p>
               </div>
             </div>
 
@@ -65,7 +76,6 @@
             </div>
 
             <hr class="my-6 border-gray-300" />
-
 
           </div>
         </div>

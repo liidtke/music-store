@@ -2,8 +2,12 @@
 import Store from '../layouts/Store.astro';
 import Link from "@components/Link.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+let number = Math.floor(Math.random() * 15) + 1;
+
+let image = "image" + number + ".jpg"
+
+
 ---
 
 <Store>
@@ -16,19 +20,18 @@ import Link from "@components/Link.astro";
               <p class="text-base text-slate-600 leading-relaxed">Discover a smarter way to order, crafted by artificial intelligence. From personalized menu suggestions to lightning-fast delivery, enjoy a dining experience designed just for you.</p>
 
               <div class="mt-12 flex flex-wrap max-lg:justify-center gap-4">
-                <Link cl="btn-primary" url="/categories">Categorias</Link>
+                <Link cl="btn-secondary" url="/categories">Categorias</Link>
                 <Link cl="btn-ghost" url="/professionals">Profissionais</Link>
-                <Link cl="btn-ghost" url="/mission">Nossa Missão</Link>
               </div>
             </div>
             <div class="w-full aspect-[12/9]">
-              <img src="image1.jpg" class="w-full h-full object-cover rounded-lg shadow-xl" alt="hero-img" />
+              <img src={image} class="w-full h-full object-cover rounded-lg shadow-xl" alt="hero-img" />
             </div>
           </div>
         </div>
       </div>
 
-      <div id="pr-wrapper" hx-get="/partials/public/products" hx-trigger="load" ></div>
+      <div id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" ></div>
 
 
 </Store>

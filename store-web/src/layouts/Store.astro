@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import '@unocss/reset/normalize.css';
 import Masthead from "@components/Masthead.astro";
+import Link from "@components/Link.astro";
 const { content } = Astro.props;
 
 let data = {};
@@ -9,64 +10,64 @@ let isAdmin = false;
 
 
 if (Astro.request.method === "GET") {
-try{
-  const hxRequest = Astro.request.headers.get('HX-Request');
-  const hxTarget = Astro.request.headers.get('HX-Target');
+  try{
+    const hxRequest = Astro.request.headers.get('HX-Request');
+    const hxTarget = Astro.request.headers.get('HX-Target');
 
-  if(!hxTarget){
-  const result = await Astro.locals.fetchWithResult("users/current");
-  //todo add redirect if not admin or professional
-  if (result.success) {
-    data = result.data;
-    isAdmin = result.isAdmin;
-  } else {
-    console.log('response is NOT ok', result.message)
+    if(!hxTarget){
+      const result = await Astro.locals.fetchWithResult("users/current");
+      //todo add redirect if not admin or professional
+      if (result.success) {
+        data = result.data;
+        isAdmin = result.isAdmin;
+      } else {
+        console.log('response is NOT ok', result.message)
+      }
+    }
   }
-  }
-}
-catch(err){
+  catch(err){
 
-}
+  }
 }
 
 ---
 <!doctype html
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script> -->
-<script src="https://unpkg.com/htmx-ext-class-tools@2.0.1/class-tools.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.js" integrity="sha384-ezjq8118wdwdRMj+nX4bevEi+cDLTbhLAeFF688VK8tPDGeLUe0WoY2MZtSla72F" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+  <script src="https://unpkg.com/htmx-ext-class-tools@2.0.1/class-tools.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.js" integrity="sha384-ezjq8118wdwdRMj+nX4bevEi+cDLTbhLAeFF688VK8tPDGeLUe0WoY2MZtSla72F" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
   <meta name="generator" content={Astro.generator} />
-<title>{content?.title??"Sistema"}</title>
-  </head>
+  <title>{content?.title??"Sistema"}</title>
+</head>
 
-  <div id="toaster-wrapper" class="space-y-3 absolute top-14 end-3"></div>
-  <body class="bg-base-200">
-    <div class="bg-gray-100 flex min-h-screen flex-col">
-      <Masthead data={data}>
-      </Masthead>
+<div id="toaster-wrapper" class="space-y-3 absolute top-14 end-3"></div>
+<body class="bg-base-200">
+  <div class="bg-gray-100 flex min-h-screen flex-col">
+    <Masthead data={data}>
+    </Masthead>
 
-      <div class="flex flex-row">
-        <main class="flex flex-col h-screen justify-between w-full">
-          <slot />
+    <div class="flex flex-row">
+      <main class="flex flex-col h-screen justify-between w-full">
+        <slot />
 
         <!-- footer -->
 
         <footer class="bg-gray-100">
-          <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:pt-24">
+          <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:pt-12">
             <div class="absolute end-4 top-4 sm:end-6 sm:top-6 lg:end-8 lg:top-8">
             </div>
 
@@ -80,39 +81,45 @@ catch(err){
                   Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequuntur amet
                   culpa cum itaque neque.
                 </p>
+
+
+                <p class="text-center text-sm text-gray-500 mt-2 lg:text-right">
+                  Copyright © 2022. All rights reserved.
+                </p>
+
               </div>
+
+              <div class="h-24 w-full">
 
               <ul class="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:mt-0 lg:justify-end lg:gap-12">
                 <li>
-                  <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> About </a>
+                  <Link cl="table-action" url="/professionals">Profissionais</Link>
                 </li>
 
                 <li>
-                  <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Services </a>
+                  <Link cl="table-action" url="/mission">Nossa Missão</Link>
                 </li>
 
                 <li>
-                  <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Projects </a>
+                  <Link cl="table-action" url="/mission">Contato</Link>
                 </li>
 
                 <li>
-                  <a class="text-gray-700 transition hover:text-gray-700/75" href="#"> Blog </a>
                 </li>
               </ul>
+              </div>
+
             </div>
 
-            <p class="mt-12 text-center text-sm text-gray-500 lg:text-right">
-              Copyright © 2022. All rights reserved.
-            </p>
           </div>
         </footer>
 
-        </main>
+      </main>
 
-      </div>
+    </div>
 
     <div id="overlay" class="overlay">
     </div>
 
-  </body>
+</body>
 </html>
