@@ -1,7 +1,7 @@
 ###
 
 @url =  http://localhost:5263
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2OTFjNmFiYWU0N2UyN2Y1NzkzYTc0NTAiLCJSb2xlIjoiQWRtaW5Sb2xlIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQW5vbiIsImV4cCI6MTc2MzYzMDM2MiwiaXNzIjoiQVBJLVBWVm12Zm90b2EiLCJhdWQiOiJBcHAtOUxhWHpUMDhaaiJ9.qskwfKcBUa1I0F6BGBJHR83ZFV8kjxrUdsKlzlvelQ0
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2OTFjNmFiYWU0N2UyN2Y1NzkzYTc0NTAiLCJSb2xlIjoiQWRtaW5Sb2xlIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQW5vbiIsImV4cCI6MTc2MzcwMTEwOSwiaXNzIjoiQVBJLVBWVm12Zm90b2EiLCJhdWQiOiJBcHAtOUxhWHpUMDhaaiJ9.KFiXGxWyIdIvD-W65vAg6DLaIAcu6fQs9JEAsKJd8HU
 
 POST {{url}}/login
 Content-Type: application/json
@@ -116,3 +116,9 @@ Content-Type: application/json
   "minDeadLine": 3,
   "isActive": true
 }
+
+### list Products
+GET {{url}}/products
+Authorization: {{token}}
+Content-Type: application/json
+
