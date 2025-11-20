@@ -64,7 +64,7 @@ let fromException (ex: Exception) =
       ex = ex |> Some
       errorMessages = [ ex.Message ] }
 
-let validation message = fromError Validation message
+let validation<'t> message = fromError Validation message :> ServiceOutput<'t>
 let notFound message = fromError NotFound message
 
 let formValidation html =
@@ -284,7 +284,7 @@ let optionMapSo func so =
   | Failure e -> failure e
 
 /// Apply a function to the success values of two service outputs, short-circuiting on the first failure.
-let map2 (f: 'a -> 'b -> ServiceOutput<'c>) (so1: ServiceOutput<'a>) (so2: ServiceOutput<'b>) : ServiceOutput<'c> =
+let may2 (f: 'a -> 'b -> ServiceOutput<'c>) (so1: ServiceOutput<'a>) (so2: ServiceOutput<'b>) : ServiceOutput<'c> =
   match so1, so2 with
   | Success a, Success b -> f a b
   | Success _, Failure e -> Failure e

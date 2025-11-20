@@ -38,13 +38,16 @@ type ProfessionalRepository(ctx: IMongoContext, logger: ILogger<ProfessionalRepo
         professional
 
     member this.Find(id: string) =
-      let filter =
-        Builders<ProfessionalData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(id))
+      let query id =
+        let filter =
+          Builders<ProfessionalData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(id))
 
-      let effect () =
-        collection.Find(filter).FirstOrDefaultAsync()
+        let effect () =
+          collection.Find(filter).FirstOrDefaultAsync()
 
-      mapFind logger ProfessionalMapping.toProfessional "Error finding professional" effect
+        mapFind logger ProfessionalMapping.toProfessional "Error finding professional" effect
+
+      query |> parseExec id
 
     member this.All() =
       let effect () =

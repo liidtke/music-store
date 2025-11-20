@@ -1,7 +1,7 @@
 ###
 
 @url =  http://localhost:5263
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2OTFjNmFiYWU0N2UyN2Y1NzkzYTc0NTAiLCJSb2xlIjoiQ3VzdG9tZXJSb2xlIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQW5vbiIsImV4cCI6MTc2MzUwMjQxNiwiaXNzIjoiQVBJLVBWVm12Zm90b2EiLCJhdWQiOiJBcHAtOUxhWHpUMDhaaiJ9.8D9uy8wgh5JVBYk2a09BzmqiYdYcuDKP1g__oQ_zaHw
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI2OTFjNmFiYWU0N2UyN2Y1NzkzYTc0NTAiLCJSb2xlIjoiQWRtaW5Sb2xlIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQW5vbiIsImV4cCI6MTc2MzYzMDM2MiwiaXNzIjoiQVBJLVBWVm12Zm90b2EiLCJhdWQiOiJBcHAtOUxhWHpUMDhaaiJ9.qskwfKcBUa1I0F6BGBJHR83ZFV8kjxrUdsKlzlvelQ0
 
 POST {{url}}/login
 Content-Type: application/json
@@ -33,7 +33,6 @@ GET {{url}}/users
 Content-Type: application/json
 Authorization: {{token}}
 
-
 ###
 GET {{url}}/users/691c6abae47e27f5793a7450
 Content-Type: application/json
@@ -49,7 +48,6 @@ Content-Type: application/json
   "password": "admin",
   "role": "CustomerRole"
 }
-
 
 ###
 POST {{url}}/login/password-reset
@@ -69,3 +67,52 @@ Content-Type: application/json
   "password": "123456"
 }
 
+### create products
+POST {{url}}/product-types
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "id": "",
+  "name": "Test",
+  "pictureUrl": "/pic.jpg",
+  "isActive": true
+}
+
+### list products
+GET {{url}}/product-types
+Authorization: {{token}}
+Content-Type: application/json
+
+
+
+### list professionals
+GET {{url}}/professionals
+Authorization: {{token}}
+Content-Type: application/json
+
+
+### create professionals
+POST {{url}}/professionals
+Authorization: {{token}}
+Content-Type: application/json
+{
+}
+
+### Create products
+POST {{url}}/products
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "id": "",
+  "name": "Nome do Produto",
+  "professionalId": "691e64a1d105034136fa4885",
+  "productTypeId": "691e64a1d105034136fa4885",
+  "description": "Uma descrição opcional aqui",
+  "unitPrice": 150.50,
+  "oldUnitPrice": 120.00,
+  "effort": 8,
+  "minDeadLine": 3,
+  "isActive": true
+}

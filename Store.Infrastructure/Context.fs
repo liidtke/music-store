@@ -3,6 +3,7 @@ module Store.Infrastructure.Context
 open System.Linq
 open System.Threading.Tasks
 open Microsoft.Extensions.Logging
+open MongoDB.Bson
 open MongoDB.Driver
 
 type DatabaseSettings =
@@ -111,3 +112,9 @@ let mapFind (logger: ILogger) (mapperOut: 'data -> 'entity) (errorMessage: strin
       logger.LogError(ex, errorMessage) |> ignore
       return fail errorMessage
   }
+
+let parseExec<'t> (id: string) (effect: BsonObjectId -> Async<ServiceOutput<'t>>) =
+  match ObjectId.TryParse id with
+  | true, objectId -> effect objectId
+  | false, objectId -> async {return validation<'t> "Invalid id"}
+

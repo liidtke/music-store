@@ -11,8 +11,11 @@ open Store.Domain.Store.ProductService
 module Update =
   let private workflow (stx: ServiceContext) (input: ProductServiceInput) =
     let db = stx.context.Plug<IProductRepository>()
+    let dbProf = stx.context.Plug<IProfessionalRepository>()
     let dbPt = stx.context.Plug<IProductTypeRepository>()
-    let service = ProductService.update stx.userSession db.Update db.Find dbPt.Find
+
+    let service =
+      ProductService.update stx.userSession db.Update db.Find dbPt.Find dbProf.Find
 
     async { return! service input }
 
@@ -23,7 +26,8 @@ module Create =
   let private workflow (stx: ServiceContext) (input: ProductServiceInput) =
     let db = stx.context.Plug<IProductRepository>()
     let dbPt = stx.context.Plug<IProductTypeRepository>()
-    let service = ProductService.create stx.userSession db.Add dbPt.Find
+    let dbProf = stx.context.Plug<IProfessionalRepository>()
+    let service = ProductService.create stx.userSession db.Add dbPt.Find dbProf.Find
 
     async { return! service input }
 

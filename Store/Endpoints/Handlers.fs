@@ -5,5 +5,7 @@ let all =
     Users.endpoints
     ProductTypes.endpoints
     Professionals.endpoints
+    Products.endpoints
+    Samples.endpoints
     ]
   |> List.concat

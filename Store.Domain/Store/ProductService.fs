@@ -29,6 +29,7 @@ let private validateAccess (us: UserSession) (input: Product) =
 type SaveEffect = Effect<Product>
 type FetchEffect = FetchSingleEffect<string, Product>
 type FetchProductType = FetchSingleEffect<string, ProductType>
+type FetchProfessional = FetchSingleEffect<string, Professional>
 
 type ProductServiceInput =
   { id: Id
@@ -46,9 +47,10 @@ let create
   (us: UserSession)
   (saveEffect: SaveEffect)
   (fetchProductType: FetchProductType)
+  (fetchProfessional: FetchProfessional)
   (input: ProductServiceInput)
   =
-  let toProduct (input: ProductServiceInput) (pt: ProductType) =
+  let toProduct (pt: ProductType) (professional: Professional) =
     { id = input.id
       effort = input.effort
       name = input.name
@@ -63,7 +65,11 @@ let create
 
   async {
     let! pt = fetchProductType input.productTypeId
-    return! pt ?> toProduct input ?> validateAccess us ?> validateProduct ?>< saveEffect
+    let! professional = fetchProfessional input.professionalId
+
+    return!
+      may2 toProduct pt professional ?> validateAccess us ?> validateProduct
+      ?>< saveEffect
   }
 
 let update
@@ -71,9 +77,10 @@ let update
   (saveEffect: SaveEffect)
   (fetchEffect: FetchEffect)
   (fetchProductType: FetchProductType)
+  (fetchProfessional: FetchProfessional)
   (input: ProductServiceInput)
   =
-  let toProduct (input: ProductServiceInput) (pt: ProductType) =
+  let toProduct (pt: ProductType) (professional: Professional) =
     { id = input.id
       effort = input.effort
       name = input.name
@@ -101,9 +108,10 @@ let update
   async {
     let! pt = fetchProductType input.productTypeId
     let! existing = fetchEffect input.id
+    let! professional = fetchProfessional input.professionalId
 
     return!
-      pt ?> toProduct input |> map2 update existing
+      may2 toProduct pt professional |> may2 update existing
       ?> validateAccess us
       ?> validateProduct
       ?>< saveEffect

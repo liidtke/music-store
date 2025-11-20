@@ -8,6 +8,7 @@ open Falco
 open Store.Domain
 open Store.Domain.Email
 open Store.Domain.Health
+open Store.Domain.Interfaces
 open Store.Security
 open Store.Session
 open Microsoft.AspNetCore.Authentication
@@ -35,22 +36,9 @@ let private getUser
   let headers =
     dict [ for h in ctx.Request.Headers -> h.Key, h.Value.FirstOrDefault() ]
   // let claims = Seq.toList ctx.User.Claims
-  let userId = claims[0].Value 
-
-  let get: UserService.Effects.GetUser =
-    fun i ->
-      async {
-        return
-          { id = ""
-            name = "test"
-            email = "test"
-            password = "test" |> Some
-            role = Role.CustomerRole
-            isDeleted = false
-            isVerified = true }
-          |> succeed
-
-      }
+  let userId = claims[0].Value
+  let db = ctx.Plug<IUserRepository>()
+  let get: UserService.Effects.GetUser = db.Find
 
   let loadFrom () =
     async {

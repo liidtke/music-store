@@ -30,13 +30,15 @@ type ProductTypeRepository(ctx: IMongoContext, logger: ILogger<ProductTypeReposi
       mapUpdate logger ProductTypeMapping.toProductTypeData "Error updating product type" f filter productType
 
     member this.Find(productTypeId) =
-      let filter =
-        Builders<ProductTypeData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(productTypeId))
+      let query id =
+        let filter = Builders<ProductTypeData>.Filter.Eq((fun p -> p.id), id)
 
-      let effect () =
-        collection.Find(filter).FirstOrDefaultAsync()
+        let effect () =
+          collection.Find(filter).FirstOrDefaultAsync()
 
-      mapFind logger ProductTypeMapping.toProductType "Error finding product type" effect
+        mapFind logger ProductTypeMapping.toProductType "Error finding product type" effect
+
+      query |> parseExec productTypeId
 
     member this.All() =
       let effect () =
