@@ -1,0 +1,14 @@
+---
+
+import Modal from "@components/Modal.astro";
+import Product from "@components/public/Product.svelte";
+
+const id = Astro.url.searchParams.get("id") || "";
+---
+
+<Modal title='Detalhes do Produto'>
+
+
+  <Product></Product>
+
+</Modal>

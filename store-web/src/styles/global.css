@@ -16,11 +16,11 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Red Hat Text", sans-serif;
+  font-family: "Montserrat","Red Hat Text", sans-serif;
 }
 
 body {
-  font-family: "Red Hat Text", sans-serif !important;
+  font-family: "Montserrat","Red Hat Text", sans-serif !important;
 }
 
 html {

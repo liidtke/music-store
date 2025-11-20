@@ -1,6 +1,14 @@
 ---
-import Products from '@components/Products.svelte';
+import Products from '@components/public/Products.svelte';
+
+let data = []
+
+const result = await Astro.locals.fetchWithResult("products");
+if(result.success){
+  data = result.data;
+}
+
 ---
 
 
-<Products></Products>
+<Products data={data}></Products>

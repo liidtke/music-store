@@ -1,5 +1,5 @@
 ---
-const { title = "Modal", form, showSave = "show" } = Astro.props;
+const { title = "Modal", form, showSave = "" } = Astro.props;
 // var timestamp = new Date().getUTCMilliseconds();
 ---
 
@@ -11,8 +11,11 @@ const { title = "Modal", form, showSave = "show" } = Astro.props;
   aria-labelledby="modalTitle"
 >
   <div
-    class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg absolute md:top-[10vh] md:left-[40vh] mt-24 md:max-w-xl"
+    class="w-full absolute mt-2"
   >
+    <div class="rounded-lg p-6 shadow-lg  bg-white md:m-6 m-2">
+
+
     <h2 id="modalTitle" class="text-md font-bold text-slate-700 sm:text-2xl">
       {title}
     </h2>
@@ -20,7 +23,7 @@ const { title = "Modal", form, showSave = "show" } = Astro.props;
       <span class="h-px flex-1 bg-gray-300"></span>
       <span class="h-px flex-1 bg-gray-300"></span>
     </span>
-    <div class="mt-8">
+    <div class="mt-4">
       <slot />
     </div>
 
@@ -41,6 +44,9 @@ const { title = "Modal", form, showSave = "show" } = Astro.props;
         }
       }
     </footer>
+
+    </div>
+
   </div>
 </div>
 
