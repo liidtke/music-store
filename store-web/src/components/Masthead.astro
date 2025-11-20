@@ -32,40 +32,9 @@ class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py
         <a class="nav-item" href="/app/profile">Perfil</a>
         <a class="nav-item" href="/login">Entrar</a>
 
-        {
-        () => {
-        if (data.organizationId) {
-        return (
-        <button
-        class="font-sm border-b text-gray-600"
-        id="org-select-button"
-        hx-get="/partials/org-select"
-        hx-target="#org-select-area"
-        hx-trigger="click"
-        >
-          Organizacão {data.organizationName}
-        </button>
-        );
-        } else if (data.role == "AdminRole") {
-        return (
-        <button
-        class="font-sm border-b text-gray-600"
-        id="org-select-button"
-        hx-get="/partials/org-select"
-        hx-target="#org-select-area"
-        hx-trigger="click"
-        >
-          Selecionar Organizacão
-        </button>
-        );
-        }
-        }
-        }
-
         <a class="nav-item" href="#">Sair</a>
       </div>
     </a>
   </nav>
 
-  <div id="org-select-area"></div>
 </header>
