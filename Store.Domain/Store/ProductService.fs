@@ -55,6 +55,7 @@ let create
       effort = input.effort
       name = input.name
       minDeadLine = input.minDeadLine
+      professionalName = professional.name
       productType = pt
       oldUnitPrice = input.oldUnitPrice
       unitPrice = input.unitPrice
@@ -86,6 +87,7 @@ let update
       name = input.name
       minDeadLine = input.minDeadLine
       productType = pt
+      professionalName = professional.name
       oldUnitPrice = input.oldUnitPrice
       unitPrice = input.unitPrice
       description = input.description

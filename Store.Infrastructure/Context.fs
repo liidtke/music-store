@@ -54,12 +54,12 @@ let mapUpdate
   async {
     try
       let data = mapperIn input
-      let! result = effect filter data |> Async.AwaitTask
+      let! _ = effect filter data |> Async.AwaitTask
       //later check result.IsAcknowledged
-      if result.ModifiedCount = 0 then
-        return fail message
-      else
-        return succeed input
+      // if result.ModifiedCount = 0 then
+      //   return fail message
+      // else
+      return succeed input
     with ex ->
       logger.LogError(ex, message) |> ignore
       return fail message

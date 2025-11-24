@@ -82,6 +82,7 @@ type ProductData =
   { id: BsonObjectId
     name: string
     professionalId: BsonObjectId
+    professionalName: string
     productType: ProductTypeData
     description: string option
     unitPrice: decimal
@@ -109,6 +110,7 @@ module ProductMapping =
       name = product.name
       professionalId = professionalId
       productType = ProductTypeMapping.toProductTypeData product.productType
+      professionalName = product.professionalName
       description = product.description
       unitPrice = product.unitPrice
       oldUnitPrice = product.oldUnitPrice
@@ -122,6 +124,7 @@ module ProductMapping =
       professionalId = data.professionalId.ToString()
       productType = ProductTypeMapping.toProductType data.productType
       description = data.description
+      professionalName = data.professionalName
       unitPrice = data.unitPrice
       oldUnitPrice = data.oldUnitPrice
       effort = data.effort

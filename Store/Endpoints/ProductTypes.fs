@@ -28,6 +28,18 @@ module Create =
   let handler: HttpHandler = Request.mapJson<ProductType> <| runAsync workflow
   let endpoint = post "/product-types" handler
 
+module Details =
+
+  let private workflow (stx: ServiceContext) (id: string) =
+    let db = stx.context.Plug<IProductTypeRepository>()
+    db.Find(id)
+
+  let handler: HttpHandler =
+    Request.mapRoute (fun r -> r.GetString("id")) <| runAsync workflow
+
+  let endpoint = get "/product-types/{id}" handler
+
+
 let private workflow (stx: ServiceContext) () =
   let db = stx.context.Plug<IProductTypeRepository>()
 
@@ -35,4 +47,4 @@ let private workflow (stx: ServiceContext) () =
 
 let allEndpoint = get "/product-types" (runAnonAsync workflow ())
 
-let endpoints = [ allEndpoint; Create.endpoint; Update.endpoint ]
+let endpoints = [ allEndpoint; Details.endpoint; Create.endpoint; Update.endpoint ]

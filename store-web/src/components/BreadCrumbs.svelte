@@ -10,7 +10,7 @@ console.log(names);
 <nav aria-label="Breadcrumb">
   <ol class="flex items-center gap-1 text-sm text-gray-700">
     <li>
-      <a href="#" class="block transition-colors hover:text-gray-900"> Início </a>
+      <a href="/" class="block transition-colors hover:text-gray-900">Loja</a>
     </li>
 
 
@@ -23,7 +23,7 @@ console.log(names);
     </li>
 
     <li>
-      <a href={"/app/" + path} class="block transition-colors hover:text-gray-900"> {names[index]} </a>
+      <a href={"/" + path} class="block transition-colors hover:text-gray-900"> {names[index]} </a>
     </li>
 
 {/each}

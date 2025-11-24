@@ -53,6 +53,19 @@ export const POST: APIRoute = async ({ cookies, redirect, request }) => {
     // Get the backend response data
     const data = await response.json();
 
+    let role = ''
+    let isAdmin = false;
+
+    if(response.headers.has('x-us-role')){
+      role = response.headers.get('x-us-role')
+      isAdmin = role == "AdminRole";
+    }
+
+    let location = "/";
+    if(isAdmin){
+      location = "/management";
+    }
+
     // Store token, token_type, and expiration in cookies
     cookies.set("auth_token", data.token, {
       expires: new Date(data.expiration), // Set cookie expiration to match token
@@ -71,7 +84,7 @@ export const POST: APIRoute = async ({ cookies, redirect, request }) => {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: "/app",
+        Location: location,
         // 'Set-Cookie': { token: data.token }
       },
     });
