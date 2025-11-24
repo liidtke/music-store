@@ -106,7 +106,7 @@ module Create =
             else
               None
           role = Role.CustomerRole
-          isDeleted = false
+          isActive = false
           isVerified = false }
         |> succeed
 

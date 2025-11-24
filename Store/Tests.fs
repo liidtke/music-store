@@ -83,7 +83,7 @@ type SecurityShould(output: ITestOutputHelper) =
         email = "john@example.com"
         password = Some "secure123"
         role = Role.AdminRole // Assuming Role is an existing type with a User variant
-        isDeleted = false
+        isActive = false
         isVerified = true }
 
     let getuser s = async { return user |> succeed }
@@ -123,7 +123,7 @@ type SecurityShould(output: ITestOutputHelper) =
           name = ""
           email = ""
           role = Role.AdminRole
-          isDeleted = false
+          isActive = false
           isVerified = true }
 
     Assert.True(result)

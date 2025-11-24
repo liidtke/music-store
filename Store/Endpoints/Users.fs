@@ -50,7 +50,7 @@ module Update =
       subscription: string
       customRoleId: int option
       role: string
-      isDeleted: bool }
+      isActive: bool }
 
   let updateWorkflow (stx: ServiceContext) (input: UserInput) =
     let db = stx.context.Plug<IUserRepository>()
@@ -61,7 +61,7 @@ module Update =
         name = input.name
         password = None
         role = Models.Role.convert input.role
-        isDeleted = input.isDeleted
+        isActive = input.isActive
         isVerified = false }
 
     async {

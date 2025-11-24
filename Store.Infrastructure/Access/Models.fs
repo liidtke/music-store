@@ -11,7 +11,7 @@ type UserData =
     email: string
     password: string option
     role: int
-    isDeleted: bool
+    isActive: bool
     isVerified: bool }
 
 [<CLIMutable>]
@@ -52,7 +52,7 @@ module UserMapping =
       email = user.email
       password = user.password
       role = RoleMapping.toInt user.role
-      isDeleted = user.isDeleted
+      isActive = user.isActive
       isVerified = user.isVerified }
 
   let toUser (data: UserData) : User =
@@ -61,7 +61,7 @@ module UserMapping =
       email = data.email
       password = data.password
       role = RoleMapping.ofInt data.role
-      isDeleted = data.isDeleted
+      isActive = data.isActive
       isVerified = data.isVerified }
 
 module UserVerificationMapping =

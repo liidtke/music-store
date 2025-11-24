@@ -3,7 +3,29 @@ module Store.Domain.Store.Entities
 open System
 
 open Catalog
-open Store.Domain.Store.Catalog
+
+type Phone = {
+  number: string
+}
+
+type Address = {
+  street: string
+  number: string
+  complement: string
+  zipCode: string
+  city: string
+  state: string
+  isBillingAddress: bool
+}
+
+type Customer = {
+  //same as userid
+  id: Id
+  name: string
+  phones: Phone list
+  addresses: Address list
+  document:string //cpf or cnpj
+}
 
 type BasketItem = { product: Product; quantity: int }
 

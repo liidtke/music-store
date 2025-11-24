@@ -1,6 +1,6 @@
 ---
 export const prerender = false;
-import App from '@layouts/App.astro';
+import Management from '@layouts/Management.astro';
 import Link from '@components/Link.astro';
 import toaster from '@utils/toaster'
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
@@ -20,24 +20,12 @@ if (Astro.request.method === "GET") {
       isAdmin = result.isAdmin;
     }
     else{
-      return new Response("/app", {
+      return new Response("/management", {
         status: 307,
-        headers: { "Content-Type": "text/html", "Location": "/app" }
+        headers: { "Content-Type": "text/html", "Location": "/management" }
       });
 
     }
-
-      console.log('r0', data);
-    let org = data.organizations && data.organizations.length > 0 ? data.organizations[0] : 0;
-      const rolesResult = await Astro.locals.fetchWithResult(`custom-roles/?organizationId=${org}`);
-      if(rolesResult.success){
-        roles.splice(0,1);
-      let items = rolesResult.data.map(i => {
-        return {id: `CustomRole#${i.id}`, name: i.name }
-      });
-         roles.push(...items)
-      console.log('r1', roles);
-      }
 
   }
 }
@@ -49,9 +37,8 @@ if (Astro.request.method === "PUT") {
     const id = form.get("id") as string;
     const name = form.get("name") as string;
     const email = form.get("email") as string;
-    const subscription = form.get("subscription") as string;
     const role = form.get("role") as string;
-    const isDeleted = form.get("isDeleted") as string;
+    const isActive = form.get("isActive") as string;
 
     // Validação básica
     if (!name) {
@@ -61,7 +48,7 @@ if (Astro.request.method === "PUT") {
       });
     }
 
-    let body = {name, email, subscription, id: parseInt(id), isDeleted: isDeleted === "off", role:role}
+    let body = {name, email, id: id, isActive: isActive === "on", role:role}
 
     const response = await Astro.locals.fetchWithAuth("users/" + id, {method:'PUT', body:JSON.stringify(body)});
     if(response.ok){
@@ -76,7 +63,7 @@ if (Astro.request.method === "PUT") {
       });
     }
 
-    return new Response(toaster.success( "/app/users"), {
+    return new Response(toaster.success( "/management/users"), {
         status: 200,
         headers: { "Content-Type": "text/html" }
       });
@@ -89,15 +76,15 @@ if (Astro.request.method === "PUT") {
 
 ---
 
-<App>
+<Management>
 
 <div class="page">
   <BreadCrumbs path=`users,users/${data.id}` name="Usuários, Editar" />
 
 	<h1 class="text-3xl font-semibold">Editar Usuário</h1>
 
-    <Link url="/app/users" cl="btn-neutral mt-8">Voltar</Link>
-    <form class="mt-8" hx-put={"/app/users/" + data.id} hx-target="#message">
+    <Link url="/management/users" cl="btn-neutral mt-8">Voltar</Link>
+    <form class="mt-8" hx-put={"/management/users/" + data.id} hx-target="#message">
 
     { () => {if (data) return (
 
@@ -129,27 +116,11 @@ if (Astro.request.method === "PUT") {
 
 
       <fieldset class="fieldset">
-        <legend class="fieldset-legend">Plano</legend>
-        <select class="select" name="subscription" id="" disabled={!isAdmin} >
-          {
-            shared.subscriptions.map((i) => (
-            <option value={i.id} selected={i.id === data.subscription}
-          >{i.name}</option>
-            ))
-          }
-
-        </select>
-
-      </fieldset>
-
-
-      <fieldset class="fieldset">
         <legend class="fieldset-legend">Usuário Ativo</legend>
-        <input type="checkbox"  class="checkbox" checked={!data.isDeleted} name="isDeleted" />
+        <input type="checkbox"  class="checkbox" checked={data.isActive} name="isActive" />
       </fieldset>
 
     )}
-
 
     }
     <button  class=" btn btn-primary mt-0" type="submit" >Salvar</button>
@@ -157,13 +128,6 @@ if (Astro.request.method === "PUT") {
 
   <p id="message"></p>
 
-
-    { () => {
-    if (isAdmin) return (
-    <div class="mt-8" hx-get={"timed/?userId=" + data.id} hx-trigger="load"></div>
-    )
-    }
-    }
 	</div>
 
-</App>
+</Management>

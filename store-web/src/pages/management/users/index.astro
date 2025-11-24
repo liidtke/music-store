@@ -5,7 +5,7 @@ import Link from '@components/Link.astro';
 import SearchInput from '@components/SearchInput.astro'
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
 import * as shared from '../../../utils/shared';
-import App from '../../../layouts/App.astro';
+import Management from '@layouts/Management.astro';
 
 let data = [];
 
@@ -23,7 +23,7 @@ if(response.ok){
 }
 
 ---
-<App>
+<Management>
 
 <div class="page">
   <BreadCrumbs path="users" name="Usuários" />
@@ -32,13 +32,13 @@ if(response.ok){
 
 	<div class="mt-8 grid grid-cols-1 gap-2 md:grid-cols-2">
       <div>
-        <Link url="/app/users/add" cl="btn-primary">
+        <Link url="/management/users/add" cl="btn-primary">
         Adicionar Usuário
         </Link>
       </div>
 
       <SearchInput
-           get="/app/users"
+           get="/management/users"
            trigger="keyup changed delay:500ms queue:last"
            target="#tb"
            select="#tb"
@@ -56,7 +56,6 @@ if(response.ok){
 					<th class="th">Nome</th>
 					<th class="th">Email</th>
 					<th class="th">Perfil</th>
-					<th class="th">Plano</th>
 					<th class="th">Status</th>
 					<th></th>
 				</tr>
@@ -74,11 +73,10 @@ if(response.ok){
 					<tr class="tr">
 						<td class="td">{u.name}</td>
 						<td class="td">{u.email}</td>
-						<td class="td">{shared.trRole(u.role, u.customRole)}</td>
-						<td class="td">{shared.trSubscription(u.subscription)}</td>
-						<td class="td">{u.isDeleted ? 'Inativo' : 'Ativo'}</td>
+						<td class="td">{shared.trRole(u.role)}</td>
+						<td class="td">{u.isActive ? 'Ativo' : 'Inativo'}</td>
           <td class="td">
-          <Link url=`/app/users/${u.id}` cl="table-action">Editar</Link>
+          <Link url=`/management/users/${u.id}` cl="table-action">Editar</Link>
           </td>
 
 					</tr>
@@ -93,4 +91,4 @@ if(response.ok){
 
 
 
-</App>
+</Management>

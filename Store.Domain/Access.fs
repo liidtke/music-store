@@ -16,7 +16,7 @@ type User =
     email: string
     password: string option
     role: Role
-    isDeleted: bool
+    isActive: bool
     isVerified: bool }
 
   member this.update user =

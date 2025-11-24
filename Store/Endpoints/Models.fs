@@ -11,7 +11,7 @@ type UserModel =
     name: string
     email: string
     role: string
-    isDeleted: bool
+    isActive: bool
     isVerified: bool }
 
 
@@ -21,7 +21,7 @@ module UserModel =
       name = user.name
       email = user.email
       role = Role.toString user.role
-      isDeleted = user.isDeleted
+      isActive = user.isActive
       isVerified = user.isVerified }
 
 
