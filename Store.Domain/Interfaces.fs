@@ -12,6 +12,7 @@ type IRepository<'T> =
 type UserFetchParams = {
   name:string
   email:string
+  role:Role option
 }
 
 type IUserRepository =

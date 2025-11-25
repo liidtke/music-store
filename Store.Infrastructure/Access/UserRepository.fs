@@ -27,8 +27,20 @@ type UserRepository(ctx: IMongoContext, logger: ILogger<UserRepository>) =
 
     member this.Fetch(p) =
       let query = collection.AsQueryable()
-      let addName = if String.IsNullOrEmpty(p.name) then query else query.Where(fun u -> u.name.ToLower().Contains(p.name.ToLower()))
+
+      let addName =
+        if String.IsNullOrEmpty(p.name) then
+          query
+        else
+          query.Where(fun u -> u.name.ToLower().Contains(p.name.ToLower()))
+
       let query = addName
+
+      let query =
+        if p.role.IsSome then
+          query.Where(fun u -> u.role = (RoleMapping.toInt p.role.Value))
+        else
+          query
 
       let effect () = query.ToListAsync()
       mapFetch logger UserMapping.toUser "Error fetching users" effect

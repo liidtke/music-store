@@ -1,0 +1,112 @@
+---
+export interface Props {
+  /** Editor.js JSON data (object or string) */
+  data: any;
+  /** Optional CSS class for the container */
+  class?: string;
+}
+
+const { data: rawData, class: className } = Astro.props;
+
+// Normalize input: accept string or object
+let data: any;
+try {
+  data = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+} catch (e) {
+  data = null;
+}
+
+if (!data || !data.blocks || !Array.isArray(data.blocks)) {
+  return <div class="text-red-600">Invalid Editor.js data</div>;
+}
+
+// Helper: sanitize text (prevent XSS from user input)
+const sanitize = (text: string) => {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
+// Render each block
+const renderBlock = (block: any): string => {
+  switch (block.type) {
+    case 'header':
+      const level = Math.min(Math.max(block.data.level, 1), 6);
+      return `<h${level} class="text-${7 - level}xl font-bold mt-8 mb-4">${sanitize(block.data.text)}</h${level}>`;
+
+    case 'paragraph':
+      return `<p class="my-4 leading-relaxed">${block.data.text
+        .split('\n')
+        .map((line: string) => `<span>${sanitize(line)}</span><br>`)
+        .join('')}</p>`;
+
+    case 'list':
+      const Tag = block.data.style === 'ordered' ? 'ol' : 'ul';
+      const items = block.data.items
+        .map((item: string) => `<li class="ml-6">${sanitize(item)}</li>`)
+        .join('');
+      return `<${Tag} class="my-4 list-disc space-y-1">${items}</${Tag}>`;
+
+    case 'quote':
+      return `
+        <blockquote class="border-l-4 border-blue-500 pl-6 py-4 my-8 italic text-lg text-gray-700">
+          <p>${sanitize(block.data.text)}</p>
+          ${block.data.caption ? `<footer class="mt-2 text-sm text-gray-500">— ${sanitize(block.data.caption)}</footer>` : ''}
+        </blockquote>`;
+
+    case 'delimiter':
+      return `<hr class="my-12 border-t-2 border-gray-300" />`;
+
+    case 'table':
+      const rows = block.data.content
+        .map((row: string[]) =>
+          `<tr>${row.map((cell: string) => `<td class="border border-gray-300 px-4 py-2">${sanitize(cell)}</td>`).join('')}</tr>`
+        )
+        .join('');
+      return `<div class="overflow-x-auto my-8"><table class="min-w-full border-collapse border border-gray-300">${rows}</table></div>`;
+
+    case 'code':
+      return `
+        <pre class="bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto my-8 font-mono text-sm">
+          <code>${sanitize(block.data.code)}</code>
+        </pre>`;
+
+    case 'image':
+      // Simple image support (you can extend with cloudinary, etc.)
+      const url = block.data.file?.url || block.data.url || '';
+      const caption = block.data.caption ? `<figcaption class="text-center text-sm text-gray-600 mt-2">${sanitize(block.data.caption)}</figcaption>` : '';
+      return `
+        <figure class="my-10">
+          <img src="${url}" alt="${sanitize(block.data.caption || '')}" class="w-full rounded-lg shadow-lg" />
+          ${caption}
+        </figure>`;
+
+    default:
+      // Fallback for unknown or custom blocks
+      return `<div class="bg-yellow-100 border border-yellow-400 text-yellow-900 p-4 rounded my-4">
+        [Unsupported block: ${block.type}]
+      </div>`;
+  }
+};
+---
+
+<div class={`prose prose-lg max-w-none ${className || ''}`} set:html={data.blocks.map(renderBlock).join('')} />
+
+<style is:global>
+  /* Optional: nice default styling (you can remove if using Tailwind Prose already) */
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply font-bold text-gray-900;
+  }
+  .prose p {
+    @apply text-gray-700;
+  }
+  .prose a {
+    @apply text-blue-600 hover:underline;
+  }
+  .prose strong {
+    @apply font-semibold;
+  }
+</style>

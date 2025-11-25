@@ -38,7 +38,7 @@ module ProductTypeMapping =
 type ProfessionalData =
   { id: BsonObjectId
     name: string
-    document: string option
+    document: string
     bulkDiscount: decimal
     isActive: bool
     pixKey: string option

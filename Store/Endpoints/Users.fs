@@ -108,11 +108,19 @@ let private workflow (stx: ServiceContext) (listInput: UserFetchParams) =
     return searchOutput ?> (fun users -> List.map UserModel.map users |> succeed)
   }
 
+open Models
+
+let private getRole (name: string option) =
+  match name with
+  | Some x -> x |> Role.convert |> Some
+  | None -> None
+
 let handler: HttpHandler =
   runAsync workflow
   |> Request.mapQuery (fun q ->
     { name = q.GetString("name", null)
-      email = q.GetString("email", null) })
+      email = q.GetString("email", null)
+      role = q.TryGetString("role") |> getRole })
 
 
 let usersEndpoint = get "/users" handler

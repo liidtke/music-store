@@ -18,7 +18,7 @@ type ProductType =
 type Professional =
   { id: Id //same as user id
     name: string
-    document: string option
+    document: string
     bulkDiscount: decimal
     isActive: bool
     pixKey: string option //for direct pix payments
