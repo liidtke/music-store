@@ -17,17 +17,14 @@ try {
 }
 
 if (!data || !data.blocks || !Array.isArray(data.blocks)) {
-  return <div class="text-red-600">Invalid Editor.js data</div>;
+  return `<div class="text-red-600">Invalid Editor.js data</div>`;
 }
 
-// Helper: sanitize text (prevent XSS from user input)
 const sanitize = (text: string) => {
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
 };
 
 // Render each block

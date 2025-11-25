@@ -17,6 +17,7 @@ if(search){
   add = p.toString();
 }
  const response = await Astro.locals.fetchWithResult("professionals?" + add);
+ console.log(response);
 if(response.success){
   data = response.data;
 }
@@ -25,7 +26,7 @@ if(response.success){
 <Management>
 
 <div class="page">
-  <BreadCrumbs path="users" name="Usuários" />
+  <BreadCrumbs path='management/professionals' name="Profissionais" />
 
 	<h1 class="text-3xl font-semibold">Profissionais</h1>
 

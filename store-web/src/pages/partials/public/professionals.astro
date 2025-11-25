@@ -1,0 +1,18 @@
+---
+export const prerender = false;
+import ProfessionalCard from '@components/public/ProfessionalCard.astro';
+
+let data = [];
+
+ const response = await Astro.locals.fetchWithResult("public/professionals");
+if(response.success){
+  data = response.data;
+}
+
+---
+
+{
+          data.map((i) => (
+          <ProfessionalCard item={i} />
+          ))
+        }

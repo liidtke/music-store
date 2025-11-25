@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
 
-
-
   // Props
   export let raw: string = '';        // Initial JSON string from Editor.js
   export let name: string = 'content'; // Name for the hidden input

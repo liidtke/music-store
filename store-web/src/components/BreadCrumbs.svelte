@@ -10,7 +10,7 @@ console.log(names);
 <nav aria-label="Breadcrumb">
   <ol class="flex items-center gap-1 text-sm text-gray-700">
     <li>
-      <a href="/" class="block transition-colors hover:text-gray-900">Loja</a>
+      <a href="/management" class="block transition-colors hover:text-gray-900">Gerenciamento</a>
     </li>
 
 

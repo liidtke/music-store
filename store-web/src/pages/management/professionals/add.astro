@@ -21,6 +21,7 @@ if (Astro.request.method === "POST") {
     const isManager = form.get("isManager") as string;
     const pictureUrl = form.get("pictureUrl") as string;
     const profile = form.get("profile") as string;
+    const title = form.get("title") as string;
 
     // Validação básica
     if (!name) {
@@ -35,14 +36,14 @@ if (Astro.request.method === "POST") {
        return toaster.inputValidation("document-message", "Documento Obrigatório")
      }
 
-    let body = {name, id:userId,  document, bulkDiscount : parseInt(bulkDiscount), isActive: isActive == "on", pixKey, isManager: isManager == "on", pictureUrl, profile}
+    let body = {name, id:userId, title:title, document, bulkDiscount : parseInt(bulkDiscount), isActive: isActive == "on", pixKey, isManager: isManager == "on", pictureUrl, profile}
 
     const response = await Astro.locals.fetchWithResult("professionals", {method:'POST', body:JSON.stringify(body)});
     if(response.success){
       data = response.data;
     }
     else{
-      let msg = await response.text()
+      let msg = await response.message;
       return new Response(toaster.error("Erro ao salvar - " + msg), {
         status: 203,
         headers: { "Content-Type": "text/html" }
@@ -67,8 +68,9 @@ if (Astro.request.method === "POST") {
 <div class="page">
   <BreadCrumbs path='management/professionals,management/professionals/add' name="Profissionais, Adicionar" />
 
-  <h1 class="text-3xl font-semibold">Usuários</h1>
+  <h1 class="text-3xl font-semibold">Profissionais</h1>
   <Link url="/management/professionals" cl="btn-neutral mt-8">Voltar</Link>
+  <button  class="btn-primary mt-8" type="submit" form="create" >Salvar</button>
 
   <form id="create" class="mt-8 grid grid-cols-1 gap-x-4 md:grid-cols-2 " hx-post="/management/professionals/add" hx-target="#message" hx-disinherit="*" >
 
@@ -79,6 +81,12 @@ if (Astro.request.method === "POST") {
       <input type="text" class="input" name="name" placeholder="Insira o nome" />
       <p id="name-message"></p>
     </fieldset>
+
+    <fieldset class="fieldset">
+         <legend class="fieldset-legend">Título</legend>
+         <input type="text" class="input" name="title" placeholder="ex: Produtor Musical" />
+         <p id="name-message"></p>
+       </fieldset>
 
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Documento</legend>
@@ -115,16 +123,17 @@ if (Astro.request.method === "POST") {
     <div class="col-span-2">
 
       <h4 class="font-semibold text-lg">Perfil</h4>
+      <p id="profile-message"></p>
 
     <Editor
       client:load
       name="profile"
     />
+
     </div>
 
 
   </form>
-  <button  class="btn-primary mt-8" type="submit" form="create" >Salvar</button>
 
   <p id="message"></p>
 </div>
