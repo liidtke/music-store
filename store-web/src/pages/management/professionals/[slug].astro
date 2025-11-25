@@ -3,7 +3,7 @@ import Management from '@layouts/Management.astro';
 import toaster from '@utils/toaster'
 import Link from "@components/Link.astro";
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
-import Editor from "@components/Editor.svelte";
+import QuillEditor from "@components/QuillEditor.svelte";
 
 let data = {};
 
@@ -57,7 +57,6 @@ if (Astro.request.method === "PUT") {
      }
 
     let body = {name, id:userId, title:title, document, bulkDiscount : parseInt(bulkDiscount), isActive: isActive == "on", pixKey, isManager: isManager == "on", pictureUrl, profile}
-    console.log(body)
 
     const response = await Astro.locals.fetchWithResult("professionals/" + body.id, {method:'PUT', body:JSON.stringify(body)});
     if(response.success){
@@ -147,15 +146,13 @@ if (Astro.request.method === "PUT") {
 
     <div></div>
 
-
     <div class="col-span-2">
-
       <h4 class="font-semibold text-lg">Perfil</h4>
       <p id="profile-message"></p>
 
-    <Editor
+    <QuillEditor
       client:load
-      raw={data.profile}
+      value={data.profile}
       name="profile"
     />
 

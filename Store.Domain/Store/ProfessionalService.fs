@@ -48,6 +48,7 @@ let update (us: UserSession) (saveEffect: SaveEffect) (fetchEffect: FetchEffect)
             pixKey = input.pixKey
             title = input.title
             pictureUrl = input.pictureUrl
+            profile = input.profile
             isManager = input.isManager
             isActive = input.isActive }
         |> validation)

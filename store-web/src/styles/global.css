@@ -231,3 +231,22 @@ select::after {
   pointer-events: none; /* Ensures it doesn't interfere with clicks */
   transition: border-color 0.2s ease; /* Optional: Smooth color change on focus */
 }
+
+.quill > h1{
+  font-size: 18px;
+  font-weight: 700
+}
+
+.quill > h2{
+  font-size: 16px;
+  font-weight: 600
+}
+
+.quill > h3{
+  font-size: 14px;
+  font-weight: 600
+}
+
+.quill > p {
+  font-size: 13px;
+}

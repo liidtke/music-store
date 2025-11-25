@@ -3,7 +3,7 @@ import Management from '@layouts/Management.astro';
 import toaster from '@utils/toaster'
 import Link from "@components/Link.astro";
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
-import Editor from "@components/Editor.svelte";
+import QuillEditor from "@components/QuillEditor.svelte";
 
 let data = null;
 
@@ -125,7 +125,7 @@ if (Astro.request.method === "POST") {
       <h4 class="font-semibold text-lg">Perfil</h4>
       <p id="profile-message"></p>
 
-    <Editor
+    <QuillEditor
       client:load
       name="profile"
     />
