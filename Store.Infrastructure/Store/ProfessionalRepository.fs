@@ -3,6 +3,7 @@ module Store.Infrastructure.Store.ProfessionalRepository
 open Microsoft.Extensions.Logging
 open MongoDB.Bson
 open MongoDB.Driver
+open MongoDB.Driver.Linq
 open Store.Domain.Store.Interfaces
 open Store.Infrastructure.Context
 open Store.Infrastructure.Store.Models
@@ -50,6 +51,11 @@ type ProfessionalRepository(ctx: IMongoContext, logger: ILogger<ProfessionalRepo
       query |> parseExec id
 
     member this.All() =
+      let effect () =
+        collection.AsQueryable().ToListAsync()
+
+      mapFetch logger ProfessionalMapping.toProfessional "Error listing all professionals" effect
+    member this.AllActive() =
       let effect () =
         collection.Find(Builders<ProfessionalData>.Filter.Eq((fun p -> p.isActive), true)).ToListAsync()
 

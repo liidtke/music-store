@@ -46,6 +46,8 @@ let update (us: UserSession) (saveEffect: SaveEffect) (fetchEffect: FetchEffect)
             name = input.name.Trim()
             document = input.document
             pixKey = input.pixKey
+            title = input.title
+            pictureUrl = input.pictureUrl
             isManager = input.isManager
             isActive = input.isActive }
         |> validation)

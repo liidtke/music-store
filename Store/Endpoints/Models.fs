@@ -43,6 +43,7 @@ type ProfessionalPublicModel =
   { id: string
     name: string
     pictureUrl: string option
+    title:string
     profile: string }
 
 module ProfessionalPublicModel =
@@ -50,6 +51,7 @@ module ProfessionalPublicModel =
     { id = p.id
       name = p.name
       pictureUrl = p.pictureUrl
+      title = p.title
       profile = p.profile }
 
 // let toDomain (m: ProfessionalPublicModel) : Professional =

@@ -39,7 +39,8 @@ let mapInsert
       return mapperOut data |> succeed 
     with ex ->
       logger.LogError(ex, message) |> ignore
-      return fail message
+      if ex.InnerException <> null && ex.InnerException.Message.ToLower().Contains("duplicate") then return fail "Duplicate Item"
+        else return fail message
   }
 
 let mapUpdate

@@ -38,6 +38,7 @@ module ProductTypeMapping =
 type ProfessionalData =
   { id: BsonObjectId
     name: string
+    title: string
     document: string
     bulkDiscount: decimal
     isActive: bool
@@ -58,6 +59,7 @@ module ProfessionalMapping =
 
     { id = bsonId
       name = professional.name
+      title = professional.title
       document = professional.document
       bulkDiscount = professional.bulkDiscount
       isActive = professional.isActive
@@ -68,6 +70,7 @@ module ProfessionalMapping =
 
   let toProfessional (data: ProfessionalData) : Professional =
     { id = data.id.ToString()
+      title = data.title
       name = data.name
       document = data.document
       bulkDiscount = data.bulkDiscount

@@ -10,6 +10,7 @@ type IProductTypeRepository =
 type IProfessionalRepository =
   inherit IRepository<Professional>
   abstract member All: unit -> Async<ServiceOutput<Professional list>>
+  abstract member AllActive: unit -> Async<ServiceOutput<Professional list>>
 
 type ProductSearchCriteria = {
   search:string option

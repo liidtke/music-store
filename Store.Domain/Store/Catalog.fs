@@ -18,6 +18,7 @@ type ProductType =
 type Professional =
   { id: Id //same as user id
     name: string
+    title: string
     document: string
     bulkDiscount: decimal
     isActive: bool
