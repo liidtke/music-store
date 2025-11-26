@@ -12,7 +12,7 @@ let private validation (us:UserSession) (input: ProductType) =
     invalidate "Name cannot be empty"
   elif input.name.Length > 50 then
     invalidate "Name cannot be longer than 50 characters"
-  elif input.pictureUrl = "" then
+  elif input.imageUrl = "" then
     invalidate "Picture URL cannot be empty"
   else
     succeed input

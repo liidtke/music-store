@@ -9,7 +9,7 @@ open Store.Domain.Store.Catalog
 type ProductTypeData =
   { id: BsonObjectId
     name: string
-    pictureUrl: string
+    imageUrl: string
     isActive: bool }
 
 module ProductTypeMapping =
@@ -24,13 +24,13 @@ module ProductTypeMapping =
 
     { id = id
       name = productType.name
-      pictureUrl = productType.pictureUrl
+      imageUrl = productType.imageUrl
       isActive = productType.isActive }
 
   let toProductType (data: ProductTypeData) : ProductType =
     { id = data.id.ToString()
       name = data.name
-      pictureUrl = data.pictureUrl
+      imageUrl = data.imageUrl
       isActive = data.isActive }
 
 
@@ -44,7 +44,7 @@ type ProfessionalData =
     isActive: bool
     pixKey: string option
     isManager: bool
-    pictureUrl: string option
+    imageUrl: string option
     profile: string }
 
 // === Mapping Module ===
@@ -65,7 +65,7 @@ module ProfessionalMapping =
       isActive = professional.isActive
       pixKey = professional.pixKey
       isManager = professional.isManager
-      pictureUrl = professional.pictureUrl
+      imageUrl = professional.imageUrl
       profile = professional.profile }
 
   let toProfessional (data: ProfessionalData) : Professional =
@@ -77,7 +77,7 @@ module ProfessionalMapping =
       isActive = data.isActive
       pixKey = data.pixKey
       isManager = data.isManager
-      pictureUrl = data.pictureUrl
+      imageUrl = data.imageUrl
       profile = data.profile }
 
 [<CLIMutable>]
@@ -89,6 +89,7 @@ type ProductData =
     productType: ProductTypeData
     description: string option
     unitPrice: decimal
+    imageUrl: string option
     oldUnitPrice: decimal
     effort: int
     minDeadLine: int
@@ -115,6 +116,7 @@ module ProductMapping =
       productType = ProductTypeMapping.toProductTypeData product.productType
       professionalName = product.professionalName
       description = product.description
+      imageUrl = product.imageUrl
       unitPrice = product.unitPrice
       oldUnitPrice = product.oldUnitPrice
       effort = product.effort
@@ -126,6 +128,7 @@ module ProductMapping =
       name = data.name
       professionalId = data.professionalId.ToString()
       productType = ProductTypeMapping.toProductType data.productType
+      imageUrl = data.imageUrl
       description = data.description
       professionalName = data.professionalName
       unitPrice = data.unitPrice

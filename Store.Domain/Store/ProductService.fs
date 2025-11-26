@@ -39,6 +39,7 @@ type ProductServiceInput =
     description: string option
     unitPrice: decimal
     oldUnitPrice: decimal
+    imageUrl: string option
     effort: int
     minDeadLine: int
     isActive: bool }
@@ -56,6 +57,7 @@ let create
       name = input.name
       minDeadLine = input.minDeadLine
       professionalName = professional.name
+      imageUrl = input.imageUrl
       productType = pt
       oldUnitPrice = input.oldUnitPrice
       unitPrice = input.unitPrice
@@ -88,6 +90,7 @@ let update
       minDeadLine = input.minDeadLine
       productType = pt
       professionalName = professional.name
+      imageUrl = input.imageUrl
       oldUnitPrice = input.oldUnitPrice
       unitPrice = input.unitPrice
       description = input.description
@@ -101,6 +104,7 @@ let update
         minDeadLine = input.minDeadLine
         effort = input.effort
         productType = existing.productType
+        imageUrl = input.imageUrl
         unitPrice = input.unitPrice
         oldUnitPrice = input.oldUnitPrice
         description = input.description

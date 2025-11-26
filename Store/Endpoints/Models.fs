@@ -42,7 +42,7 @@ module UserSession =
 type ProfessionalPublicModel =
   { id: string
     name: string
-    pictureUrl: string option
+    imageUrl: string option
     title:string
     profile: string }
 
@@ -50,7 +50,7 @@ module ProfessionalPublicModel =
   let map (p: Professional) : ProfessionalPublicModel =
     { id = p.id
       name = p.name
-      pictureUrl = p.pictureUrl
+      imageUrl = p.imageUrl
       title = p.title
       profile = p.profile }
 
@@ -62,5 +62,5 @@ module ProfessionalPublicModel =
 //     isActive = m.isActive
 //     pixKey = m.pixKey
 //     isManager = m.isManager
-//     pictureUrl = m.pictureUrl
+//     imageUrl = m.imageUrl
 //     profile = m.profile }

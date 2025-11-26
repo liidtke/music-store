@@ -1,9 +1,9 @@
 ---
-import Products from '@components/public/Products.svelte';
+import QuickProducts from '@components/public/QuickProducts.svelte';
 
 let data = []
 
-const result = await Astro.locals.fetchWithResult("products");
+const result = await Astro.locals.fetchWithResult("products?limit=8");
 if(result.success){
   data = result.data;
 }
@@ -11,4 +11,4 @@ if(result.success){
 ---
 
 
-<Products data={data}></Products>
+<QuickProducts data={data}></QuickProducts>

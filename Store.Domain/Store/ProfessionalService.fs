@@ -47,7 +47,7 @@ let update (us: UserSession) (saveEffect: SaveEffect) (fetchEffect: FetchEffect)
             document = input.document
             pixKey = input.pixKey
             title = input.title
-            pictureUrl = input.pictureUrl
+            imageUrl = input.imageUrl
             profile = input.profile
             isManager = input.isManager
             isActive = input.isActive }

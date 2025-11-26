@@ -1,0 +1,29 @@
+---
+export const partial = true;
+let data = [];
+
+const selected = Astro.url.searchParams.get("selected");
+
+if (Astro.request.method === "GET") {
+
+  const response = await Astro.locals.fetchWithResult("professionals");
+  if(response.success) {
+    data = await response.data;
+  }
+  else{
+    console.log('response is NOT ok', response)
+  }
+}
+
+---
+
+<fieldset class="fieldset">
+  <legend class="fieldset-legend">Profissional</legend>
+  <select class="select outline-none " name="professionalId" id="professional-select" >
+    <option disabled selected value="">Selecione</option>
+    {data.map(cat => (
+    <option selected={cat.id == selected} value={cat.id}>{cat.name}</option>
+    ))}
+  </select>
+  <p id="professional-msg"></p>
+</fieldset>

@@ -15,7 +15,8 @@ type IProfessionalRepository =
 type ProductSearchCriteria = {
   search:string option
   professionalId:string option
-  productTypeId:string option 
+  productTypeId:string option
+  limit: int
 }
 
 type IProductRepository =

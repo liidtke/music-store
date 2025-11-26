@@ -12,7 +12,7 @@ if (Astro.request.method === "POST") {
     const form = await Astro.request.formData();
     const id = form.get("id") as string;
     const name = form.get("name") as string;
-    const pictureUrl = form.get("pictureUrl") as string;
+    const imageUrl = form.get("imageUrl") as string;
     const isActive = form.get("isActive") as string;
 
     // Validação básica
@@ -20,11 +20,11 @@ if (Astro.request.method === "POST") {
       return toaster.inputValidation("name-message", "Nome Obrigatório")
     }
 
-    if (!pictureUrl) {
+    if (!imageUrl) {
       return toaster.inputValidation("pic-message", "Email Obrigatório")
     }
 
-    let body = {id, name, isActive:true, pictureUrl}
+    let body = {id, name, isActive:true, imageUrl}
 
     const response = await Astro.locals.fetchWithAuth("product-types", {method:'POST', body:JSON.stringify(body)});
     if(response.ok){
@@ -59,8 +59,9 @@ if (Astro.request.method === "POST") {
 
   <h1 class="text-3xl font-semibold">Categorias</h1>
   <Link url="/management/product-types" cl="btn-neutral mt-8">Voltar</Link>
+  <button  class="btn-primary mt-8" type="submit" form="f1" >Salvar</button>
 
-  <form class="mt-8" hx-post="/management/product-types/add" hx-target="#message">
+  <form id="f1" class="mt-8" hx-post="/management/product-types/add" hx-target="#message">
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Nome</legend>
       <input type="text" class="input" name="name" placeholder="Insira o nome" />
@@ -68,11 +69,10 @@ if (Astro.request.method === "POST") {
     </fieldset>
     <fieldset class="fieldset">
          <legend class="fieldset-legend">Url Interna</legend>
-         <input type="text" class="input" name="pictureUrl" placeholder="/image1.jpg" />
+         <input type="text" class="input" name="imageUrl" placeholder="/image1.jpg" />
          <p id="pic-message"></p>
        </fieldset>
 
-    <button  class="btn-primary mt-8" type="submit" >Salvar</button>
   </form>
 
   <p id="message"></p>

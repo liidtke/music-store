@@ -19,7 +19,7 @@ if (Astro.request.method === "POST") {
     const isActive = form.get("isActive") as string;
     const pixKey = form.get("pixKey") as string;
     const isManager = form.get("isManager") as string;
-    const pictureUrl = form.get("pictureUrl") as string;
+    const imageUrl = form.get("imageUrl") as string;
     const profile = form.get("profile") as string;
     const title = form.get("title") as string;
 
@@ -36,7 +36,7 @@ if (Astro.request.method === "POST") {
        return toaster.inputValidation("document-message", "Documento Obrigatório")
      }
 
-    let body = {name, id:userId, title:title, document, bulkDiscount : parseInt(bulkDiscount), isActive: isActive == "on", pixKey, isManager: isManager == "on", pictureUrl, profile}
+    let body = {name, id:userId, title:title, document, bulkDiscount : parseInt(bulkDiscount), isActive: isActive == "on", pixKey, isManager: isManager == "on", imageUrl, profile}
 
     const response = await Astro.locals.fetchWithResult("professionals", {method:'POST', body:JSON.stringify(body)});
     if(response.success){
@@ -102,7 +102,7 @@ if (Astro.request.method === "POST") {
 
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Url Imagem</legend>
-      <input type="text" class="input" name="pictureUrl" placeholder="" />
+      <input type="text" class="input" name="imageUrl" placeholder="" />
       <p id="pic-message"></p>
     </fieldset>
 

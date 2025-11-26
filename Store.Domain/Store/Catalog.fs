@@ -5,7 +5,7 @@ open System
 type ProductType =
   { id: Id
     name: string
-    pictureUrl: string
+    imageUrl: string
     isActive: bool }
 // gravação, mixagem, produção
 
@@ -24,7 +24,7 @@ type Professional =
     isActive: bool
     pixKey: string option //for direct pix payments
     isManager: bool //for managing delivery
-    pictureUrl: string option
+    imageUrl: string option
     //json from editor.js
     profile: string }
 
@@ -34,8 +34,9 @@ type Product =
     professionalId: Id
     professionalName: string
     productType: ProductType
-    description: string option //json from editor.js
+    description: string option 
     unitPrice: decimal
+    imageUrl: string option
     oldUnitPrice: decimal
     //effort for the completion of the work, est in hours
     effort: int

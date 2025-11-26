@@ -55,7 +55,9 @@ let httpHandler: HttpHandler =
   Request.mapQuery (fun q ->
     { professionalId = q.TryGetString("professionalId")
       productTypeId = q.TryGetString("productTypeId")
-      search = q.TryGetString("search") })
+      search = q.TryGetString("search")
+      limit = q.GetInt32("limit", 1000)
+       })
   <| runAnonAsync workflow
 
 let allEndpoint = get "/products" httpHandler

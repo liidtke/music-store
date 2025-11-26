@@ -1,0 +1,13 @@
+---
+const { name, value = 0 } = Astro.props;
+---
+<input
+    type="number"
+    name={name}
+    min="1"
+    step="1"
+    value={value}
+    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    class="input"
+    id="positive-num"
+  />

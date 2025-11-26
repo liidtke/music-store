@@ -68,5 +68,5 @@ type ProductRepository(ctx: IMongoContext, logger: ILogger<ProductRepository>) =
         else
           query
 
-      let effect () = query.ToListAsync()
+      let effect () = query.Take(crit.limit).ToListAsync()
       mapFetch logger ProductMapping.toProduct "Error listing products" effect

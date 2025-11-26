@@ -18,7 +18,7 @@ export let data;
           <div class="w-full lg:sticky top-0">
             <div class="flex flex-col gap-4">
               <div class="bg-white shadow-sm p-2">
-                <img src={data.productType.pictureUrl} alt="Product"
+                <img src={data.imageUrl ?? data.productType.imageUrl} alt="Product"
                   class="w-full aspect-[11/8] object-cover object-top" />
               </div>
             </div>

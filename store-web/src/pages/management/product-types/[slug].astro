@@ -36,7 +36,7 @@ if (Astro.request.method === "PUT") {
     const form = await Astro.request.formData();
     const id = form.get("id") as string;
     const name = form.get("name") as string;
-    const pictureUrl = form.get("pictureUrl") as string;
+    const imageUrl = form.get("imageUrl") as string;
     const isActive = form.get("isActive") as string;
 
     // Validação básica
@@ -47,7 +47,7 @@ if (Astro.request.method === "PUT") {
       });
     }
 
-    let body = {id, name, isActive: isActive == "on", pictureUrl}
+    let body = {id, name, isActive: isActive == "on", imageUrl}
 
     const response = await Astro.locals.fetchWithAuth("product-types/" + id, {method:'PUT', body:JSON.stringify(body)});
     if(response.ok){
@@ -83,7 +83,8 @@ if (Astro.request.method === "PUT") {
     <h1 class="text-3xl font-semibold">Editar Categoria</h1>
 
     <Link url="/management/product-types" cl="btn-neutral mt-8">Voltar</Link>
-    <form class="mt-8" hx-put={"/management/product-types/" + data.id} hx-target="#message">
+    <button class=" btn btn-primary mt-0" type="submit" form="f1" >Salvar</button>
+    <form id="f1" class="mt-8" hx-put={"/management/product-types/" + data.id} hx-target="#message">
 
       { () => {if (data) return (
 
@@ -95,7 +96,7 @@ if (Astro.request.method === "PUT") {
 
       <fieldset class="fieldset">
         <legend class="fieldset-legend">Url Interna</legend>
-        <input value={data.pictureUrl} type="text" class="input" name="pictureUrl" placeholder="/image1.jpg" />
+        <input value={data.imageUrl} type="text" class="input" name="imageUrl" placeholder="/image1.jpg" />
       </fieldset>
 
       <input value={data.id} type="hidden" class="input" name="id" />
@@ -108,7 +109,6 @@ if (Astro.request.method === "PUT") {
       )}
 
       }
-      <button class=" btn btn-primary mt-0" type="submit" >Salvar</button>
     </form>
 
     <p id="message"></p>
