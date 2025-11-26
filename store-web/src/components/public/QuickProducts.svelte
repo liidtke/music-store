@@ -29,16 +29,20 @@ const formatter = new Intl.NumberFormat("pt-BR", {
           </div> -->
 
           <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-md px-8 pb-8 pt-30 md:mx-auto mt-2">
-              <img src="{item.imageUrl ?? item.productType.imageUrl}"  class="absolute inset-0 h-full w-full object-cover">
+              <img src="{item.imageUrl ?? item.productType.imageUrl}" alt="imagem"  class="absolute inset-0 h-full w-full object-cover">
               <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
               <h3 class="z-10 mt-3 text-3xl font-bold text-white mr-auto">{item.name}</h3>
               <div class="z-10 gap-y-1 overflow-hidden text-left text-md leading-6 text-gray-300 mr-auto">{item.description}</div>
           </article>
         </button>
 
-          <div class="text-slate-600 text-md mr-100% font-semibold">
-          <p class="text-slate-600 text-[13px] mt-2">por</p>
-            {item.professionalName}</div>
+        <p class="text-slate-600 text-[13px] mt-2">por</p>
+          <div class="flex flex-row items-end gap-10px ">
+          <p class="font-lg font-semibold">
+            {item.professionalName}
+          </p>
+          </div>
+
           <div class="flex gap-2 mt-4">
             <h5 class="text-base font-semibold text-slate-900">Valor</h5>
             <h6 class="text-base text-slate-900 font-bold ml-auto">R$ {formatter.format(item.unitPrice)}</h6>

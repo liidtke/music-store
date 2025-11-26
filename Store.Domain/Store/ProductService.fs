@@ -106,6 +106,7 @@ let update
         productType = existing.productType
         imageUrl = input.imageUrl
         unitPrice = input.unitPrice
+        professionalName = input.professionalName
         oldUnitPrice = input.oldUnitPrice
         description = input.description
         isActive = input.isActive }
