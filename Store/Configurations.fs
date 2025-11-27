@@ -15,6 +15,7 @@ open Store.Infrastructure.Store
 open Store.Infrastructure.Store.ProductRepository
 open Store.Infrastructure.Store.ProductTypeRepository
 open Store.Infrastructure.Store.ProfessionalRepository
+open Store.Infrastructure.Store.SampleRepository
 open Store.Session
 open Microsoft.AspNetCore.Authentication.JwtBearer
 open Microsoft.AspNetCore.Authorization
@@ -123,4 +124,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services.AddScoped<IProductTypeRepository, ProductTypeRepository>() |> ignore
   services.AddScoped<IProfessionalRepository, ProfessionalRepository>() |> ignore
   services.AddScoped<IProductRepository, ProductRepository>() |> ignore
+  services.AddScoped<ISampleRepository, SampleRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore

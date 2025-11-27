@@ -9,6 +9,7 @@ open Store.Domain.Store
 open Store.Domain.Store.Catalog
 open Store.Domain.Store.Interfaces
 open Store.Domain.Store.SampleService
+open Store.Endpoints.Models
 open Store.Endpoints.Queries
 
 type SampleInputModel =
@@ -17,13 +18,7 @@ type SampleInputModel =
     description: string
     file: IFormFile option }
 
-module SampleType =
-  let mapString (s: string) =
-    match s with
-    | "Audio" -> SampleType.Audio
-    | "Image" -> SampleType.Image
-    | "Pdf" -> SampleType.Pdf
-    | _ -> failwith "Invalid sample type"
+
 
 module Create =
   let private workflow (stx: ServiceContext) (input: SampleInputModel) =
@@ -33,6 +28,7 @@ module Create =
     let readFile (file: IFormFile) =
       use ms = new System.IO.MemoryStream()
       file.CopyTo(ms)
+
       { productId = input.productId
         sampleType = SampleType.mapString input.sampleType
         description = input.description
@@ -46,9 +42,7 @@ module Create =
       | None -> invalidate "File not found"
       | Some value -> readFile value
 
-    async {
-      return! sp ?>< SampleService.create stx.userSession db_product.Find db.SaveAll
-    }
+    async { return! sp ?>< SampleService.create stx.userSession db_product.Find db.SaveAll }
 
   let handler: HttpHandler =
     Request.mapForm (fun q ->
@@ -63,20 +57,27 @@ module Create =
 module File =
   let private workflow (stx: ServiceContext) (productId: string) =
     let db = stx.context.Plug<ISampleRepository>()
-    db.Fetch(productId)
+    db.FetchFile(productId)
 
   let handler: HttpHandler =
     Request.mapRoute (fun q -> q.GetString("productId")) <| runAnonAsync workflow
 
   let endpoint = get "samples/{id}" handler
 
-let private workflow (stx: ServiceContext) (productId: string) =
+let private workflow (stx: ServiceContext) (input) =
   let db = stx.context.Plug<ISampleRepository>()
-  db.Fetch(productId)
+
+  async {
+    let! result = db.Fetch(input)
+    return result ?> (fun i -> i |> List.map SampleModel.map |> succeed)
+  }
 
 let handler: HttpHandler =
-  Request.mapQuery (fun q -> q.GetString("productId")) <| runAnonAsync workflow
+  Request.mapQuery (fun q ->
+    { productId = q.TryGetString("productId")
+      professionalId = q.TryGetString("professionalId") })
+  <| runAnonAsync workflow
 
 let allEndpoint = get "samples" handler
 
-let endpoints = [ allEndpoint ]
+let endpoints = [ allEndpoint; Create.endpoint; File.endpoint ] //todo delete

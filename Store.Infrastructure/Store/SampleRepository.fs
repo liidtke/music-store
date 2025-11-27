@@ -45,9 +45,14 @@ type SampleRepository(ctx: IMongoContext, logger: ILogger<SampleRepository>) =
 
       mapFind logger SampleMapping.toSample "Error finding sample" effect
 
-    member this.Fetch(productId: string) =
+    member this.Fetch(input: SampleSearchCriteria) =
       let filter =
-        Builders<SampleData>.Filter.Eq((fun s -> s.productId), BsonObjectId.Create(productId))
+        if input.productId.IsSome then
+          Builders<SampleData>.Filter.Eq((fun s -> s.productId), BsonObjectId.Create(input.productId.Value))
+        elif input.professionalId.IsSome then
+          Builders<SampleData>.Filter.Eq((fun s -> s.professionalId), BsonObjectId.Create(input.professionalId.Value))
+        else
+          raise (System.Exception("Invalid search criteria"))
 
       let effect () = collection.Find(filter).ToListAsync()
 

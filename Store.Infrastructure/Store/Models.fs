@@ -142,6 +142,7 @@ type SampleData =
   { id: BsonObjectId
     sampleType: int
     description: string
+    professionalId: BsonObjectId
     productId: BsonObjectId }
 
 [<CLIMutable>]
@@ -168,6 +169,7 @@ module SampleMapping =
 
     { id = id
       sampleType = int sample.sampleType
+      professionalId = BsonObjectId.Create(sample.professionalId)
       description = sample.description
       productId = productId }
 
@@ -175,6 +177,7 @@ module SampleMapping =
     { id = data.id.ToString()
       sampleType = enum<SampleType> data.sampleType
       description = data.description
+      professionalId = data.professionalId.ToString()
       productId = data.productId.ToString() }
 
   let toSampleFileData (file: SampleFile) : SampleFileData =

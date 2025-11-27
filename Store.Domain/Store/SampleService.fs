@@ -33,6 +33,7 @@ let create
     ({ id = ""
        sampleType = input.sampleType
        description = input.description
+       professionalId = product.professionalId
        productId = product.id },
      { id = ""
        fileName = input.fileName

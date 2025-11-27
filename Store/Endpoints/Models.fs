@@ -43,7 +43,7 @@ type ProfessionalPublicModel =
   { id: string
     name: string
     imageUrl: string option
-    title:string
+    title: string
     profile: string }
 
 module ProfessionalPublicModel =
@@ -64,3 +64,36 @@ module ProfessionalPublicModel =
 //     isManager = m.isManager
 //     imageUrl = m.imageUrl
 //     profile = m.profile }
+
+
+module SampleType =
+  let mapString (s: string) =
+    match s with
+    | "Audio" -> SampleType.Audio
+    | "Image" -> SampleType.Image
+    | "Pdf" -> SampleType.Pdf
+    | _ -> SampleType.Audio
+
+  let map (s: SampleType) =
+    match s with
+    | SampleType.Audio -> "Audio"
+    | SampleType.Pdf -> "Pdf"
+    | SampleType.Video -> "Video"
+    | SampleType.Image -> "Image"
+    | _ -> "Audio"
+
+type SampleModel =
+  { id: string
+    sampleType: string
+    description: string
+    productId: string
+    professionalId: string }
+
+
+module SampleModel =
+  let map (s: Sample) : SampleModel =
+    { id = s.id
+      sampleType = SampleType.map s.sampleType
+      description = s.description
+      productId = s.productId
+      professionalId = s.professionalId }

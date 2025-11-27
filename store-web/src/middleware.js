@@ -45,9 +45,31 @@ export async function onRequest(context, next) {
 
     }
 
+  };
+
+  locals.fetchWithResultCrude = async (part, options = {}) => {
+    const url = `${apiKey}/${part}`;
+    const token = context.cookies.get('auth_token')?.value;
+
+    try {
+      var response = await fetch(url, {
+        ...options,
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+          'X-Requested-With': 'Astro-SSR',
+          ...options.headers
+        }
+      });
+
+      return await Result.ParseResponse(response)
+
+    }
+    catch (e) {
+      return Result.ParseError(e);
+
+    }
 
   };
 
   return next();
 }
-

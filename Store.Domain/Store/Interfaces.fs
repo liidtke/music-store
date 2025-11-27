@@ -24,9 +24,14 @@ type IProductRepository =
   abstract member All: unit -> Async<ServiceOutput<Product list>>
   abstract member Fetch: ProductSearchCriteria -> Async<ServiceOutput<Product list>>
 
+type SampleSearchCriteria = {
+  professionalId:string option
+  productId:string option
+}
+
 type ISampleRepository =
   inherit IRepository<Sample>
   abstract member SaveAll: Sample * SampleFile -> Async<ServiceOutput<Sample>>
-  abstract member Fetch: string -> Async<ServiceOutput<Sample list>>
+  abstract member Fetch: SampleSearchCriteria -> Async<ServiceOutput<Sample list>>
   abstract member FetchFile: string -> Async<ServiceOutput<SampleFile>>
   abstract member Delete: string -> Async<ServiceOutput<unit>>

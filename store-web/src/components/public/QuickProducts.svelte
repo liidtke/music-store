@@ -47,11 +47,11 @@ const formatter = new Intl.NumberFormat("pt-BR", {
             <h5 class="text-base font-semibold text-slate-900">Valor</h5>
             <h6 class="text-base text-slate-900 font-bold ml-auto">R$ {formatter.format(item.unitPrice)}</h6>
           </div>
-        <div class="flex items-center gap-2 mt-6 align-bottom">
+        <div class="flex flex-col items-center gap-2 mt-6 align-bottom">
             <button
               hx-get={"/partials/public/product?id="+ item.id}
               hx-target="#details"
-              type="button" class="btn-secondary w-full">Mais Detalhes</button>
+              type="button" class="btn-ghost w-full">Mais Detalhes</button>
             <button type="button" class="btn-primary w-full">Adicionar ao Carrinho</button>
         </div>
       </div>

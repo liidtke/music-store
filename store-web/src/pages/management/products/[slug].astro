@@ -177,6 +177,12 @@ if (Astro.request.method === "PUT") {
   </form>
 
   <p id="message"></p>
+
+  <div class="border-b"></div>
+  <div class="mt-8" hx-get={"samples?productId=" + data.id} hx-swap="innerHTML" hx-trigger="load delay:1s" >
+
+  </div>
+
 </div>
 
 
