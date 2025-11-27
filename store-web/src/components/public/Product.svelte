@@ -12,7 +12,7 @@
 
 </script>
 
-<div class="p-4 bg-gray-100">
+<div class="p-4">
   <div class="lg:max-w-6xl max-w-xl mx-auto">
     <div class="grid items-start grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
       <div class="w-full lg:sticky top-0">

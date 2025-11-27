@@ -13,22 +13,20 @@ const { title = "Modal", form, showSave = "" } = Astro.props;
   <div
     class="w-full absolute mt-2"
   >
-    <div class="rounded-lg p-6 shadow-lg  bg-white md:m-6 m-2">
+    <div class="rounded-lg  shadow-lg  bg-white md:m-6 m-2">
 
-
-    <h2 id="modalTitle" class="text-md font-bold text-slate-700 sm:text-2xl">
+    <h2 id="modalTitle" class="text-md font-bold text-slate-700 sm:text-2xl p-6 pb-4 ">
       {title}
     </h2>
-    <span class="flex items-center">
-      <span class="h-px flex-1 bg-gray-300"></span>
-      <span class="h-px flex-1 bg-gray-300"></span>
-    </span>
+
+    <div class="modal-body pt-2 p-6 border-t bcolor bg-gray-100">
+
     <div class="mt-4">
       <slot />
     </div>
 
     <footer class="mt-6 flex justify-end w-full gap-2">
-      <button type="button" _="on click remove #modal" class="btn-cancel">
+      <button type="button" _="on click remove #modal" class="btn-neutral">
         Fechar
       </button>
 
@@ -45,6 +43,7 @@ const { title = "Modal", form, showSave = "" } = Astro.props;
       }
     </footer>
 
+    </div>
     </div>
 
   </div>

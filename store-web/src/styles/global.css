@@ -250,3 +250,8 @@ select::after {
 .quill > p {
   font-size: 13px;
 }
+
+.modal-body{
+  overflow-x: scroll;
+  max-height: 90vh;
+}
