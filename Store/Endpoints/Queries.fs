@@ -10,6 +10,12 @@ type ProfessionalQuery(repo: IProfessionalRepository) =
     else
       async { return invalidate "Access Denied" }
 
+  member _.GetOnePublic (us: UserSession) (id: string) =
+    async {
+      let! result = repo.Find(id)
+      return result ?> (fun r -> r |> Models.ProfessionalPublicModel.map |> succeed)
+    }
+
   member _.GetAllPrivate(us: UserSession) =
     try
       if us.role = Role.AdminRole || us.role = Role.ProfessionalRole then
@@ -19,7 +25,8 @@ type ProfessionalQuery(repo: IProfessionalRepository) =
         }
       else
         async { return invalidate "Access Denied" }
-    with ex -> async { return invalidate ex.Message }
+    with ex ->
+      async { return invalidate ex.Message }
 
   member _.GetAllPublic(us: UserSession) =
     async {

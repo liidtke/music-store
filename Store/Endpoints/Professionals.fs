@@ -39,6 +39,17 @@ module Details =
   
   let endpoint = get "professionals/{id}" handler
 
+
+module PublicDetails =
+  let private workflow (stx: ServiceContext) (id:string) =
+    let db = stx.context.Plug<ProfessionalQuery>()
+
+    async { return! db.GetOnePublic stx.userSession id }
+
+  let handler : HttpHandler = Request.mapRoute(fun r -> r.GetString("id")) <| runAnonAsync workflow
+  
+  let endpoint = get "/public/professionals/{id}" handler
+
 module Private =
 
   let private workflow (stx: ServiceContext) () =
@@ -57,4 +68,4 @@ module Public =
   let allEndpoint = get "public/professionals" (runAnonAsync workflow ())
 
 let endpoints =
-  [ Public.allEndpoint; Private.allEndpoint; Create.endpoint; Update.endpoint; Details.endpoint ]
+  [ Public.allEndpoint; Private.allEndpoint; Create.endpoint; Update.endpoint; Details.endpoint; PublicDetails.endpoint ]

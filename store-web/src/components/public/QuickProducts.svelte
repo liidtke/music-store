@@ -10,10 +10,9 @@ const formatter = new Intl.NumberFormat("pt-BR", {
 </script>
 
 <div class="mt-4">
-  <div class="md:mx-auto lg:max-w-7xl md:max-w-4xl sm:max-w-xl max-sm:max-w-md">
     <h2 class="text-2xl sm:text-xl font-semibold mb-6 sm:mb-8">Produtos</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 sm:gap-1 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 sm:gap-1 gap-6">
 
       {#each data as item }
       <div id="item" class="bg-white shadow-sm border border-gray-200 rounded-lg p-3 flex flex-col justify-between">
@@ -56,9 +55,6 @@ const formatter = new Intl.NumberFormat("pt-BR", {
         </div>
       </div>
       {/each}
-
-    </div>
-
 
   </div>
 </div>

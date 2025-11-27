@@ -42,11 +42,13 @@
             <h4 class="text-hs text-2xl sm:text-3xl ml-auto font-semibold">R$ {formatter.format(data.unitPrice)} </h4>
           </div>
 
-          <div>
             <h4 class="text-base mt-4 text-slate-500 font-semibold">Prazo</h4>
             <p class="text-sm text-slate-500">{data.minDeadLine} dias úteis</p>
+
+            <h1 class="text-xl font-semibold mt-8">Samples</h1>
+            <div id="s-wrapper" class="mt-4" hx-get={"/partials/public/samples-small?limit=12&productId=" + data.id} hx-trigger="load" hx-swap="innerHTML" >
+            </div>
           </div>
-        </div>
 
         <hr class="my-6 border-gray-300" />
 

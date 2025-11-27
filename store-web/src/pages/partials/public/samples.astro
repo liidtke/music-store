@@ -1,0 +1,96 @@
+---
+export const prerender = false;
+import toaster from '@utils/toaster'
+import Link from '@components/Link.astro';
+import SearchInput from '@components/SearchInput.astro'
+import BreadCrumbs from "@components/BreadCrumbs.svelte";
+import Management from '@layouts/Management.astro';
+
+let data = [];
+
+let productId = Astro.url.searchParams.get('productId');
+let professionalId = Astro.url.searchParams.get('professionalId');
+
+let p = new URLSearchParams({productId, professionalId});
+let add = p.toString();
+
+const response = await Astro.locals.fetchWithResult("samples?" + add);
+
+if(response.success){
+  data = response.data;
+}
+
+---
+
+<h1 class="text-xl font-semibold">Samples</h1>
+
+<div class="mt-8 grid grid-cols-1 gap-2 md:grid-cols-2">
+</div>
+
+<table id="tb" class="mt-8 table">
+  <!-- head -->
+  <thead>
+    <tr>
+      <th class="th">Tipo</th>
+      <th class="th">Descrição</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+    () => {if (data.length == 0) return (
+    <tr class="tr text-center">
+      <td class="td" colspan="7">Sem itens para exibir</td>
+    </tr>
+    )}
+    }
+    {
+    data.map((sample) => (
+    <tr class="tr">
+      <td class="td">{sample.sampleType}</td>
+      <td class="td">{sample.description}</td>
+
+      <td class="td">
+              {sample.sampleType === "Audio" && (
+                <div class="flex items-center gap-3">
+                  <!-- Native HTML5 audio with controls -->
+                  <audio
+                    controls
+                    controlsList="nodownload"
+                    class="h-9">
+                    <source
+                      src={`/api/samples/${sample.id}`}
+                      type="audio/mpeg" />
+                    Seu navegador não suporta áudio.
+                  </audio>
+
+                  <!-- Download button (separate request) -->
+                  <a
+                    href={`/api/samples/${sample.id}`}
+                    download={sample.fileName || `sample-${sample.id}`}
+                    class="btn-primary text-sm px-3 py-1">
+                    Download
+                  </a>
+                </div>
+              )}
+
+              {sample.sampleType !== "Audio" && (
+                <span class="text-gray-500 italic">Não é áudio</span>
+              )}
+            </td>
+
+
+      <td class="td">
+        <!-- <Link url=`/management/products/${u.id}` cl="table-action">Editar</Link> -->
+
+
+
+      </td>
+
+    </tr>
+    )
+
+    )}
+
+  </tbody>
+</table>

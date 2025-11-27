@@ -111,8 +111,8 @@ let private workflow (stx: ServiceContext) (input) =
 
 let handler: HttpHandler =
   Request.mapQuery (fun q ->
-    { productId = q.TryGetString("productId")
-      professionalId = q.TryGetString("professionalId") })
+    { productId = q.TryGetString("productId") |> fromString
+      professionalId = q.TryGetString("professionalId") |> fromString })
   <| runAnonAsync workflow
 
 let allEndpoint = get "samples" handler

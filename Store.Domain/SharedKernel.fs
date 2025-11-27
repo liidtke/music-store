@@ -64,7 +64,9 @@ let fromException (ex: Exception) =
       ex = ex |> Some
       errorMessages = [ ex.Message ] }
 
-let validation<'t> message = fromError Validation message :> ServiceOutput<'t>
+let validation<'t> message =
+  fromError Validation message :> ServiceOutput<'t>
+
 let notFound message = fromError NotFound message
 
 let formValidation html =
@@ -257,6 +259,17 @@ let raiseOutput (o: 't ServiceOutput) =
     else
       ()
 
+
+let fromString (str: string option) =
+  match str with
+  | None -> None
+  | Some value ->
+    match value with
+    | "" -> None
+    | "undefined" -> None
+    | "null" -> None
+    | _ -> Some value
+
 let stringToDisplay (str: string option) =
   match str with
   | None -> ""
@@ -350,7 +363,7 @@ type DomainOutput<'T> =
   | SendEvent of 'T * DomainEvent
   | SendEvents of 'T * DomainEvent list
   | Obj of 'T
-  
+
 let optionToString (s: string option) =
   match s with
   | None -> ""

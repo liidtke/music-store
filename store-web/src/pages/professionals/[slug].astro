@@ -1,12 +1,17 @@
 ---
 import Store from "@layouts/Store.astro"
+import Card from "@components/placeholders/Card.astro";
 
-let data = {
-  name:"Carlos Maia",
-  title:"Compositor",
-  profile:"<p>Carlos Maia é um grande compositor brasileiro que se brincar é o melhor do worship</p>",
-  imageUrl:"/image5.jpg"
+let data = {};
+
+const { slug } = Astro.params;
+const response = await Astro.locals.fetchWithResult("public/professionals/" + slug );
+console.log(response);
+
+if(response.success){
+  data = response.data;
 }
+
 ---
 
 <Store>
@@ -59,8 +64,22 @@ let data = {
         </div>
       </div>
 
-      <div id="pr-wrapper" class="mt-8" hx-get="/partials/public/products?limit=8" hx-trigger="load delay:1s" hx-swap="innerHTML" ></div>
+      <div id="pr-wrapper" class="mt-12" hx-get="/partials/public/products?limit=8" hx-trigger="load delay:100ms" hx-swap="innerHTML" >
+        <Card>
+          <h1 class="text-xl font-semibold mb-8">
+            Produtos
+          </h1>
+        </Card>
+      </div>
 
+      <div id="s-wrapper" class="mt-12" hx-get={"/partials/public/samples?limit=12&professionalId=" + slug} hx-trigger="load delay:1s" hx-swap="innerHTML" >
+        <Card>
+          <h1 class="text-xl font-semibold mb-8">
+            Samples
+          </h1>
+        </Card>
+
+      </div>
 
     </div>
 
