@@ -1,5 +1,6 @@
 module Store.Endpoints.Samples
 
+open System.IO
 open Application
 open Falco
 open Falco.Routing
@@ -11,13 +12,13 @@ open Store.Domain.Store.Interfaces
 open Store.Domain.Store.SampleService
 open Store.Endpoints.Models
 open Store.Endpoints.Queries
+open System.Threading.Tasks
 
 type SampleInputModel =
   { productId: string
     sampleType: string
     description: string
     file: IFormFile option }
-
 
 
 module Create =
@@ -55,14 +56,50 @@ module Create =
   let endpoint = post "samples" handler
 
 module File =
-  let private workflow (stx: ServiceContext) (productId: string) =
-    let db = stx.context.Plug<ISampleRepository>()
-    db.FetchFile(productId)
 
-  let handler: HttpHandler =
-    Request.mapRoute (fun q -> q.GetString("productId")) <| runAnonAsync workflow
 
-  let endpoint = get "samples/{id}" handler
+  let private workflow (sampleId: string) : HttpHandler =
+    fun (ctx: HttpContext) ->
+      let db = ctx.Plug<ISampleRepository>()
+
+      let s (file: SampleFile) =
+        task {
+          ctx.Response.Headers.Append("Content-Disposition", $"inline; filename=\"{file.fileName}\"")
+          ctx.Response.ContentType <- file.mimeType
+          do! ctx.Response.Body.WriteAsync(file.contents, 0, file.contents.Length)
+          return Response.ofJson file
+        }
+
+      task {
+        let! fileOpt = db.FetchFile(sampleId)
+
+        match fileOpt with
+        | Failure errorResult -> return Application.errorHandler errorResult
+        | Success sampleFile -> return! s sampleFile
+      }
+
+  let handler: HttpHandler = Request.mapRoute (fun q -> q.GetString("id")) workflow
+
+
+  let endpoint = get "/samples/{id}" handler
+
+// module File =
+//   let private workflow (stx: ServiceContext) (productId: string) =
+//     let db = stx.context.Plug<ISampleRepository>()
+//     db.FetchFile(productId)
+//
+//   let handler: HttpHandler =
+//     Request.mapRoute (fun q -> q.GetString("productId")) <| runAnonAsync workflow
+//
+//   let endpoint = get "samples/{id}" handler
+//
+// let private workflow (stx: ServiceContext) (input) =
+//   let db = stx.context.Plug<ISampleRepository>()
+//
+//   async {
+//     let! result = db.Fetch(input)
+//     return result ?> (fun i -> i |> List.map SampleModel.map |> succeed)
+//   }
 
 let private workflow (stx: ServiceContext) (input) =
   let db = stx.context.Plug<ISampleRepository>()

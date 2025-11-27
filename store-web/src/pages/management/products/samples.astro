@@ -52,12 +52,46 @@ console.log(data)
     )}
     }
     {
-    data.map((u) => (
+    data.map((sample) => (
     <tr class="tr">
-      <td class="td">{u.sampleType}</td>
-      <td class="td">{u.description}</td>
+      <td class="td">{sample.sampleType}</td>
+      <td class="td">{sample.description}</td>
+
+      <td class="td">
+              {sample.sampleType === "Audio" && (
+                <div class="flex items-center gap-3">
+                  <!-- Native HTML5 audio with controls -->
+                  <audio
+                    controls
+                    controlsList="nodownload"
+                    class="h-9">
+                    <source
+                      src={`/api/samples/${sample.id}`}
+                      type="audio/mpeg" />
+                    Seu navegador não suporta áudio.
+                  </audio>
+
+                  <!-- Download button (separate request) -->
+                  <a
+                    href={`/api/samples/${sample.id}`}
+                    download={sample.fileName || `sample-${sample.id}`}
+                    class="btn-primary text-sm px-3 py-1">
+                    Download
+                  </a>
+                </div>
+              )}
+
+              {sample.sampleType !== "Audio" && (
+                <span class="text-gray-500 italic">Não é áudio</span>
+              )}
+            </td>
+
+
       <td class="td">
         <!-- <Link url=`/management/products/${u.id}` cl="table-action">Editar</Link> -->
+
+
+
       </td>
 
     </tr>
