@@ -1,9 +1,15 @@
 ---
 import QuickProducts from '@components/public/QuickProducts.svelte';
 
+const limit = Astro.url.searchParams.get("query") || 8;
+const professional = Astro.url.searchParams.get("query") || "";
+
+let p = new URLSearchParams({limit,professional});
+let add = p.toString();
+
 let data = []
 
-const result = await Astro.locals.fetchWithResult("products?limit=8");
+const result = await Astro.locals.fetchWithResult("products?"+add);
 if(result.success){
   data = result.data;
 }

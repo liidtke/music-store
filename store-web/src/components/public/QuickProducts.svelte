@@ -9,9 +9,9 @@ const formatter = new Intl.NumberFormat("pt-BR", {
 
 </script>
 
-<div class="bg-white md:p-8 p-4 mt-4">
+<div class="mt-4">
   <div class="md:mx-auto lg:max-w-7xl md:max-w-4xl sm:max-w-xl max-sm:max-w-md">
-    <h2 class="text-2xl sm:text-3xl font-semibold mb-6 sm:mb-8">Produtos</h2>
+    <h2 class="text-2xl sm:text-xl font-semibold mb-6 sm:mb-8">Produtos</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 sm:gap-1 gap-6">
 

@@ -23,14 +23,14 @@ let image = "image" + number + ".jpg"
                 <Link cl="btn-ghost" url="/professionals">Profissionais</Link>
               </div>
             </div>
-            <div class="lgw-full aspect-[12/9]">
-              <img src={image} class="md:w-full md:h-full w-sm h-sm ml-auto mr-auto object-cover rounded-lg shadow-xl" alt="hero-img" />
+            <div class="lg:lgw-full lg:aspect-[12/9]">
+              <img src={image} class="md:w-full lg:h-full w-sm h-sm ml-auto mr-auto object-cover rounded-lg shadow-xl" alt="hero-img" />
             </div>
           </div>
         </div>
       </div>
 
-      <div id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" ></div>
+      <div class="md:p-8 p-4" id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" hx-swap="innerHTML" ></div>
 
 
 </Store>
