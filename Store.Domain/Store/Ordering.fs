@@ -21,7 +21,7 @@ type Address = {
 type Customer = {
   //same as userid
   id: Id
-  name: string
+  name: string //same 
   phones: Phone list
   addresses: Address list
   document:string //cpf or cnpj

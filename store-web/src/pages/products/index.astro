@@ -1,0 +1,21 @@
+---
+import Store from "@layouts/Store.astro"
+
+---
+
+<Store>
+
+  <div class="flex flex-col items-center text-center mt-8">
+      <h1 class="text-3xl md:text-4xl font-semibold mb-4 text-gray-800">Catálogo de Produtos</h1>
+      <p class="w-3/5 mb-14 text-gray-500 text-sm">Conheça nossa seleção de produtos e serviços</p>
+      <div class="flex flex-wrap gap-6 items-center justify-center">
+
+
+        <div class="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 md:p-8 mt-4">
+        <div hx-get="/partials/public/products?show-title=false" hx-trigger="load"></div>
+        </div>
+
+      </div>
+  </div>
+
+</Store>

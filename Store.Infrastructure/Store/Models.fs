@@ -197,3 +197,70 @@ module SampleMapping =
       fileName = data.fileName
       mimeType = data.mimeType
       contents = data.contents }
+
+
+[<CLIMutable>]
+type PhoneData = { number: string }
+
+[<CLIMutable>]
+type AddressData =
+  { street: string
+    number: string
+    complement: string
+    zipCode: string
+    city: string
+    state: string
+    isBillingAddress: bool }
+
+[<CLIMutable>]
+type CustomerData =
+  { id: BsonObjectId
+    name: string
+    phones: PhoneData list
+    addresses: AddressData list
+    document: string }
+
+module CustomerMapping =
+  open Store.Domain.Store.Entities
+
+  let toPhoneData (phone: Phone) : PhoneData = { number = phone.number }
+
+  let toPhone (data: PhoneData) : Phone = { number = data.number }
+
+  let toAddressData (address: Address) : AddressData =
+    { street = address.street
+      number = address.number
+      complement = address.complement
+      zipCode = address.zipCode
+      city = address.city
+      state = address.state
+      isBillingAddress = address.isBillingAddress }
+
+  let toAddress (data: AddressData) : Address =
+    { street = data.street
+      number = data.number
+      complement = data.complement
+      zipCode = data.zipCode
+      city = data.city
+      state = data.state
+      isBillingAddress = data.isBillingAddress }
+
+  let toCustomerData (customer: Customer) : CustomerData =
+    let id =
+      if String.IsNullOrEmpty(customer.id) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(customer.id)
+
+    { id = id
+      name = customer.name
+      phones = customer.phones |> List.map toPhoneData
+      addresses = customer.addresses |> List.map toAddressData
+      document = customer.document }
+
+  let toCustomer (data: CustomerData) : Customer =
+    { id = data.id.ToString()
+      name = data.name
+      phones = data.phones |> List.map toPhone
+      addresses = data.addresses |> List.map toAddress
+      document = data.document }

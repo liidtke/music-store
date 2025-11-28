@@ -1,6 +1,9 @@
 <script>
 
 export let data;
+export let showTitle;
+
+console.log(showTitle);
 
 const formatter = new Intl.NumberFormat("pt-BR", {
   minimumFractionDigits: 2,
@@ -10,8 +13,9 @@ const formatter = new Intl.NumberFormat("pt-BR", {
 </script>
 
 <div class="mt-4">
+  {#if showTitle !== "false"}
     <h2 class="text-2xl sm:text-xl font-semibold mb-6 sm:mb-8">Produtos</h2>
-
+    {/if}
     <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 sm:gap-1 gap-6">
 
       {#each data as item }

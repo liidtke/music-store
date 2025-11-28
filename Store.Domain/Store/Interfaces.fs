@@ -2,6 +2,7 @@ module Store.Domain.Store.Interfaces
 
 open Store.Domain.Interfaces
 open Store.Domain.Store.Catalog
+open Store.Domain.Store.Entities
 
 type IProductTypeRepository =
   inherit IRepository<ProductType>
@@ -35,3 +36,7 @@ type ISampleRepository =
   abstract member Fetch: SampleSearchCriteria -> Async<ServiceOutput<Sample list>>
   abstract member FetchFile: string -> Async<ServiceOutput<SampleFile>>
   abstract member Delete: string -> Async<ServiceOutput<unit>>
+  
+  
+type ICustomerRepository =
+  inherit IRepository<Customer>

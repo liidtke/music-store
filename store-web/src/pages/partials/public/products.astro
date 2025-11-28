@@ -3,6 +3,7 @@ import QuickProducts from '@components/public/QuickProducts.svelte';
 
 const limit = Astro.url.searchParams.get("query") || 8;
 const professional = Astro.url.searchParams.get("query") || "";
+const showTitle = Astro.url.searchParams.get("show-title") || "true";
 
 let p = new URLSearchParams({limit,professional});
 let add = p.toString();
@@ -16,5 +17,4 @@ if(result.success){
 
 ---
 
-
-<QuickProducts data={data}></QuickProducts>
+<QuickProducts data={data} showTitle={showTitle}></QuickProducts>

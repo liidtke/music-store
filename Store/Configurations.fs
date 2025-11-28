@@ -7,11 +7,10 @@ open Store.Domain.Email
 open Store.Domain.Interfaces
 open Store.Domain.Store.Interfaces
 open Store.Endpoints.Queries
-open Store.Infrastructure.Access
 open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
-open Store.Infrastructure.Store
+open Store.Infrastructure.Store.CustomerRepository
 open Store.Infrastructure.Store.ProductRepository
 open Store.Infrastructure.Store.ProductTypeRepository
 open Store.Infrastructure.Store.ProfessionalRepository
@@ -125,4 +124,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services.AddScoped<IProfessionalRepository, ProfessionalRepository>() |> ignore
   services.AddScoped<IProductRepository, ProductRepository>() |> ignore
   services.AddScoped<ISampleRepository, SampleRepository>() |> ignore
+  services.AddScoped<ICustomerRepository, CustomerRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore
