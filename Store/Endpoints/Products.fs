@@ -53,10 +53,10 @@ let private workflow (stx: ServiceContext) (input) =
 
 let httpHandler: HttpHandler =
   Request.mapQuery (fun q ->
-    { professionalId = q.TryGetString("professionalId")
-      productTypeId = q.TryGetString("productTypeId")
+    { professionalId = q.TryGetString("professionalId") |> fromString
+      productTypeId = q.TryGetString("productTypeId") |> fromString
       search = q.TryGetString("search")
-      limit = q.GetInt32("limit", 1000)
+      limit = q.GetInt32("limit", 100)
        })
   <| runAnonAsync workflow
 

@@ -39,7 +39,7 @@ const formatter = new Intl.NumberFormat("pt-BR", {
           </article>
         </button>
 
-        <p class="text-slate-600 text-[13px] mt-2">por</p>
+        <p class="text-slate-600 text-[13px] mt-2 mr-auto">por</p>
           <div class="flex flex-row items-end gap-10px ">
           <p class="font-lg font-semibold">
             {item.professionalName}

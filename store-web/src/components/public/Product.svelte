@@ -12,7 +12,7 @@
 
 </script>
 
-<div class="p-4">
+<div class="p-4" id="from-product">
   <div class="lg:max-w-6xl max-w-xl mx-auto">
     <div class="grid items-start grid-cols-1 lg:grid-cols-2 gap-8 max-lg:gap-12 max-sm:gap-8">
       <div class="w-full lg:sticky top-0">
@@ -30,7 +30,7 @@
           <div class="mt-4">
             <p class="text-slate-500 mt-1 text-sm">{data.description}</p>
 
-            <h4 class="text-base mt-4 text-slate-500 font-semibold">por</h4>
+            <h4 class="text-base mt-4 text-slate-500 font-semibold mr-auto">por</h4>
             <p class="text-lg text-slate-500">{data.professionalName}</p>
             <a class="table-action" href={"/professionals/"+data.professionalId}>Mais Detalhes</a>
           </div>

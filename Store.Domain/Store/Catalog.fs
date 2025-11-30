@@ -5,6 +5,7 @@ open System
 type ProductType =
   { id: Id
     name: string
+    description: string option
     imageUrl: string
     isActive: bool }
 // gravação, mixagem, produção

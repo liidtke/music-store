@@ -1,6 +1,7 @@
 ---
 import Store from "@layouts/Store.astro"
-
+const professional = Astro.url.searchParams.get("professional");
+const productType = Astro.url.searchParams.get("product-type");
 ---
 
 <Store>
@@ -10,9 +11,22 @@ import Store from "@layouts/Store.astro"
       <p class="w-3/5 mb-14 text-gray-500 text-sm">Conheça nossa seleção de produtos e serviços</p>
       <div class="flex flex-wrap gap-6 items-center justify-center">
 
+        <div class="max-w-6xl max-lg:max-w-2xl mx-auto p-4 md:p-8">
 
-        <div class="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 md:p-8 mt-4">
-        <div hx-get="/partials/public/products?show-title=false" hx-trigger="load"></div>
+          { () => {
+          if(professional || productType){
+            return (
+            <button
+                                    hx-get={"/products"}
+                                    hx-target="main"
+                                    hx-select="main"
+                                    hx-push-url="true"
+                                    class="mt-2 block text-[13px]
+                                    text-blue-600 font-medium">Ver Todos →</button>
+            ) }
+          }}
+
+          <div hx-get=`/partials/public/products?show-title=false&professional=${professional}&product-type=${productType}` hx-trigger="load"></div>
         </div>
 
       </div>

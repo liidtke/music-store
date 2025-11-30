@@ -9,6 +9,7 @@ open Store.Domain.Store.Catalog
 type ProductTypeData =
   { id: BsonObjectId
     name: string
+    description: string option
     imageUrl: string
     isActive: bool }
 
@@ -24,12 +25,14 @@ module ProductTypeMapping =
 
     { id = id
       name = productType.name
+      description = productType.description
       imageUrl = productType.imageUrl
       isActive = productType.isActive }
 
   let toProductType (data: ProductTypeData) : ProductType =
     { id = data.id.ToString()
       name = data.name
+      description = data.description
       imageUrl = data.imageUrl
       isActive = data.isActive }
 
