@@ -23,7 +23,9 @@ if(response.success){
       </div>
   </div>
 
-  <div id="main-prof" class="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 md:p-8 mt-4 rounded-md">
+  <div id="main-prof" class="max-w-6xl w-full max-lg:max-w-2xl mx-auto  mt-4">
+    <div class="p-4 md:p-8 bg-white rounded-md">
+
     <div class="border-b border-gray-300 pb-4">
       <div class="flex gap-4">
         <div>
@@ -40,9 +42,10 @@ if(response.success){
         <img class="w-md rounded-sm" src={data.imageUrl} alt="image">
         <div class="quill" set:html={data.profile} ></div>
     </div>
+    </div>
 
     <div class="mt-8">
-      <div class="bg-gray-100 p-6 rounded-md">
+      <!-- <div class="bg-gray-100 p-6 rounded-md">
         <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
           <div class="max-md:flex max-md:justify-between max-md:gap-4">
             <h6 class="text-[15px] font-medium text-slate-900">Purchase Date</h6>
@@ -62,9 +65,15 @@ if(response.success){
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div id="pr-wrapper" class="mt-12" hx-get="/partials/public/products?limit=8" hx-trigger="load delay:100ms" hx-swap="innerHTML" >
+      <div id="s-wrapper" class="p-4 md:p-8 mt-8" hx-get={"/partials/public/samples?limit=12&professionalId=" + slug} hx-trigger="load delay:100ms" hx-swap="innerHTML" >
+         <Card>
+         </Card>
+
+       </div>
+
+      <div id="pr-wrapper" class="p-4 md:p-8 mt-8" hx-get="/partials/public/products?limit=8" hx-trigger="load delay:100ms" hx-swap="innerHTML" >
         <Card>
           <h1 class="text-xl font-semibold mb-8">
             Produtos
@@ -72,14 +81,7 @@ if(response.success){
         </Card>
       </div>
 
-      <div id="s-wrapper" class="mt-12" hx-get={"/partials/public/samples?limit=12&professionalId=" + slug} hx-trigger="load delay:1s" hx-swap="innerHTML" >
-        <Card>
-          <h1 class="text-xl font-semibold mb-8">
-            Samples
-          </h1>
-        </Card>
 
-      </div>
 
     </div>
 
