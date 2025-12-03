@@ -1,22 +1,38 @@
 ---
+export const prerender = false; // Not needed in 'server' mode
 import "../styles/global.css";
 import '@unocss/reset/normalize.css';
 import Masthead from "@components/Masthead.astro";
 import Link from "@components/Link.astro";
+import ObjectID from 'bson-objectid';
 const { content } = Astro.props;
 
 let data = {};
 let isAdmin = false;
 
+function setCookie() {
+  if(Astro.cookies.has('guest_id')){
+    return;
+  }
+  console.log('setting');
+   console.log('setting');
+    Astro.cookies.set("guest_id", ObjectID().toString() , {
+      secure: true, // Use secure cookies in production (HTTPS)
+      httpOnly: true,
+      sameSite: "strict", // Prevent CSRF
+      path: "/",
+    });
+  };
+
 
 if (Astro.request.method === "GET") {
+  setCookie()
   try{
     const hxRequest = Astro.request.headers.get('HX-Request');
     const hxTarget = Astro.request.headers.get('HX-Target');
 
     if(!hxTarget){
       const result = await Astro.locals.fetchWithResult("users/current");
-      //todo add redirect if not admin or professional
       if (result.success) {
         data = result.data;
         isAdmin = result.isAdmin;
@@ -27,6 +43,8 @@ if (Astro.request.method === "GET") {
   catch(err){
 
   }
+
+
 }
 
 ---

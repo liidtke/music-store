@@ -40,3 +40,6 @@ type ISampleRepository =
   
 type ICustomerRepository =
   inherit IRepository<Customer>
+
+type IBasketRepository =
+  inherit IRepository<Basket>

@@ -16,8 +16,7 @@
         <Compile Include="Store\ProductRepository.fs" />
         <Compile Include="Store\CustomerRepository.fs" />
         <Compile Include="Store\SampleRepository.fs" />
-        <Compile Include="AccountsPayable\PartialPaymentData.fs" />
-        <Compile Include="AccountsPayable\PaymentData.fs" />
+        <Compile Include="Store\BasketRepository.fs" />
         <Compile Include="Integrations.fs" />
         <Compile Include="MailSender.fs" />
     </ItemGroup>

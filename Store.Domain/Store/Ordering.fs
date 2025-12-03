@@ -31,7 +31,7 @@ type BasketItem = { product: Product; quantity: int }
 
 type Basket =
   { id: Id
-    userId: int
+    userId: Id
     items: BasketItem list
     occurred: DateTime }
 

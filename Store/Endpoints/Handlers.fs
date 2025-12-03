@@ -7,5 +7,6 @@ let all =
     Professionals.endpoints
     Products.endpoints
     Samples.endpoints
+    Baskets.endpoints
     ]
   |> List.concat

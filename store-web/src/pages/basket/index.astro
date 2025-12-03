@@ -1,0 +1,25 @@
+---
+import Store from "@layouts/Store.astro";
+import Basket from "@components/Basket.svelte";
+let data = [{},{}];
+
+if (Astro.request.method === "GET") {
+
+    const result = await Astro.locals.fetchWithResult("my-basket");
+    if(result.success){
+      data = result.data;
+    }
+    else {
+      console.log(result);
+      // return new Response("/app", {
+      //   status: 307,
+      //   headers: { "Content-Type": "text/html", "Location": "/app" }
+      // });
+  }
+}
+
+---
+
+<Store>
+  <Basket data={data}></Basket>
+</Store>

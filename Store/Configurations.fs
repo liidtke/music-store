@@ -10,6 +10,8 @@ open Store.Endpoints.Queries
 open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
+open Store.Infrastructure.Store
+open Store.Infrastructure.Store.BasketRepository
 open Store.Infrastructure.Store.CustomerRepository
 open Store.Infrastructure.Store.ProductRepository
 open Store.Infrastructure.Store.ProductTypeRepository
@@ -125,4 +127,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services.AddScoped<IProductRepository, ProductRepository>() |> ignore
   services.AddScoped<ISampleRepository, SampleRepository>() |> ignore
   services.AddScoped<ICustomerRepository, CustomerRepository>() |> ignore
+  services.AddScoped<IBasketRepository, BasketRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore
