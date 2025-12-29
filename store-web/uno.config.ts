@@ -47,7 +47,7 @@ const shortcuts = [
     "btn-negative":
       "appearance-none cursor-pointer py-2 px-4 bg-hs-negative text-white font-semibold rounded-sm shadow-sm hover:bg-hs-negative-600 focus:outline-none focus:ring-2 focus:ring-hs-negative  focus:ring-opacity-75",
     "btn-ghost":
-      "appearance-none text-gray-700 cursor-pointer py-2 px-4 bg-white hover:text-white font-semibold rounded-sm shadow-sm hover:bg-hs focus:outline-none focus:ring-2 focus:ring-hs-secondary focus:ring-opacity-75",
+      "appearance-none text-gray-700 cursor-pointer py-2 px-4 bg-white hover:text-white font-semibold rounded-sm shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-hs-secondary focus:ring-opacity-75",
     "btn-icon":
       "appearance-none p-0  bg-white hover:text-white font-semibold rounded-sm shadow-sm hover:bg-hs-600 focus:outline-none focus:ring-2 focus:ring-hs-secondary  focus:ring-opacity-75",
     "btn-sm":
