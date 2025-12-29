@@ -10,17 +10,35 @@ open Store.Domain.Store.BasketService
 open Store.Domain.Store.Interfaces
 
 
+let convertBasketActionType (str: string) : BasketActionType =
+  match str with
+  | "AddItem" -> AddItem
+  | "RemoveItem" -> RemoveItem
+  | "RemoveAll" -> RemoveAll
+  | _ -> failwith "todo"
+
+type BasketInputModel =
+  { productId: string
+    quantity: int
+    action: string }
+
+let mapBasketInputModel (model: BasketInputModel) : BasketInput =
+  { productId = model.productId
+    quantity = model.quantity
+    action = convertBasketActionType model.action }
+
 module Update =
-  let private workflow (stx: ServiceContext) (input: BasketInput) =
+  let private workflow (stx: ServiceContext) (input: BasketInputModel) =
     let db = stx.context.Plug<IBasketRepository>()
     let productRepo = stx.context.Plug<IProductRepository>()
 
     let service =
       BasketService.createOrUpdate stx.userSession db.Add db.Find productRepo.Find
 
-    async { return! service input }
+    async { return! service <| mapBasketInputModel input }
 
-  let handler: HttpHandler = Request.mapJson<BasketInput> <| runAsync workflow
+  let handler: HttpHandler =
+    Request.mapJson<BasketInputModel> <| runAnonAsync workflow
 
   let endpoint = put "/my-basket/" handler
 

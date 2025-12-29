@@ -1,7 +1,7 @@
 ---
-import QuickCategories from "@components/public/QuickCategories.svelte";
+import QuickCategories from "@components/public/QuickCategories.astro";
 
-let data = {}
+let data = []
 
 const result = await Astro.locals.fetchWithResult("product-types/");
 if(result.success){

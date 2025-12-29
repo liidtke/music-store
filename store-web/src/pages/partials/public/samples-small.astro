@@ -23,25 +23,22 @@ if(response.success){
 ---
 
 
-<table id="tb" class="mt-0 table">
-  <!-- head -->
-  <thead>
-    <tr>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="grid grid-cols-2 gap-2">
+
     {
     () => {if (data.length == 0) return (
-    <tr class="tr text-center">
-      <td class="td" colspan="7">Sem itens para exibir</td>
-    </tr>
+    <div>
+      Sem itens para exibir
+    </div>
     )}
     }
     {
     data.map((sample) => (
-    <tr class="tr">
-      <td class="td">
+    <div>
+        {sample.description}
+    </div>
+    <div>
+
               {sample.sampleType === "Audio" && (
                 <div class="flex items-center gap-3">
                   <!-- Native HTML5 audio with controls -->
@@ -61,20 +58,9 @@ if(response.success){
               {sample.sampleType !== "Audio" && (
                 <span class="text-gray-500 italic">Não é áudio</span>
               )}
-            </td>
-
-
-      <td class="td">
-        <!-- <Link url=`/management/products/${u.id}` cl="table-action">Editar</Link> -->
-
-
-
-      </td>
-
-    </tr>
+    </div>
     )
 
     )}
 
-  </tbody>
-</table>
+</div>

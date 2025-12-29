@@ -32,7 +32,7 @@
 
             <h4 class="text-base mt-4 text-slate-500 font-semibold mr-auto">por</h4>
             <p class="text-lg text-slate-500">{data.professionalName}</p>
-            <a class="table-action" href={"/professionals/"+data.professionalId}>Mais Detalhes</a>
+            <a class="table-action" href={"/professionals/"+data.professionalId}>Detalhes do Profissional</a>
           </div>
 
           <div class="flex items-center flex-wrap gap-2 mt-6">
@@ -45,7 +45,7 @@
             <h4 class="text-base mt-4 text-slate-500 font-semibold">Prazo</h4>
             <p class="text-sm text-slate-500">{data.minDeadLine} dias úteis</p>
 
-            <h1 class="text-xl font-semibold mt-8">Samples</h1>
+            <h1 id="ps1" class="text-xl font-semibold mt-8">Samples</h1>
             <div id="s-wrapper" class="mt-4" hx-get={"/partials/public/samples-small?limit=12&productId=" + data.id} hx-trigger="load" hx-swap="innerHTML" >
             </div>
           </div>

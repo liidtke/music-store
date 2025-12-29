@@ -2,7 +2,6 @@
 
 export let data = [];
 
-
 </script>
 
 
