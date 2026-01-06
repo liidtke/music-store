@@ -2,7 +2,10 @@
 const { data } = Astro.props;
 import { Image } from "astro:assets";
 import Link from "@components/Link.astro";
+
+let authenticated = Astro.cookies.get('auth_token') != null;
 ---
+
 
 <header
 class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4 px-4 bg-hs"
@@ -24,14 +27,21 @@ class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py
       class="flex flex-row items-center gap-5 mt-5 sm:justify-end sm:mt-0 sm:ps-5"
       >
         <a class="nav-item" href="/" aria-current="page">Início</a>
-        <Link cl="nav-item" url="/products">Produtos</Link>
-        <Link cl="nav-item" url="/basket">Carrinho</Link>
-        <a class="nav-item" href="/app/orders">Pedidos</a>
-        <a class="nav-item" href="/login/new-account">Cadastrar</a>
-        <a class="nav-item" href="/app/profile">Perfil</a>
+        <a class="nav-item" href="/products">Produtos</a>
+        <a class="nav-item" href="/basket">Carrinho</a>
         <a class="nav-item" href="/login">Entrar</a>
 
-        <a class="nav-item" href="#">Sair</a>
+        {
+          () => {
+          if (authenticated){
+          return (
+          <a class="nav-item" href="/app/orders">Pedidos</a>
+          <a class="nav-item" href="/app/profile">Perfil</a>
+          <a class="nav-item" href="#">Sair</a>)
+          }
+
+          }
+        }
       </div>
     </a>
   </nav>

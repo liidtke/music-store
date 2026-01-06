@@ -26,7 +26,7 @@ function setCookie() {
 
 
 if (Astro.request.method === "GET") {
-  setCookie()
+  // setCookie()
   try{
     const hxRequest = Astro.request.headers.get('HX-Request');
     const hxTarget = Astro.request.headers.get('HX-Target');

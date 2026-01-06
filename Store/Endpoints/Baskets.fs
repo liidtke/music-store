@@ -38,7 +38,7 @@ module Update =
     async { return! service <| mapBasketInputModel input }
 
   let handler: HttpHandler =
-    Request.mapJson<BasketInputModel> <| runAnonAsync workflow
+    Request.mapJson<BasketInputModel> <| runAsync workflow
 
   let endpoint = put "/my-basket/" handler
 
@@ -51,6 +51,6 @@ module Mine =
   // let handler: HttpHandler =
   //   Request.mapRoute (fun r -> r.GetString("id")) <| runAsync workflow
 
-  let endpoint = get "/my-basket/" (runAnonAsync workflow ())
+  let endpoint = get "/my-basket/" (runAsync workflow ())
 
 let endpoints = [ Update.endpoint; Mine.endpoint ]

@@ -3,6 +3,11 @@ import Store from "@layouts/Store.astro";
 import Basket from "@components/Basket.svelte";
 let data = [{},{}];
 
+  let c = Astro.cookies.get('auth_token');
+  if(!c){
+    return Astro.redirect("/login");
+  }
+
 if (Astro.request.method === "GET") {
 
     const result = await Astro.locals.fetchWithResult("my-basket");
@@ -20,6 +25,6 @@ if (Astro.request.method === "GET") {
 
 ---
 
-<Store>
+<Store >
   <Basket data={data}></Basket>
 </Store>
