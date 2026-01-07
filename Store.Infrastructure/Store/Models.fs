@@ -274,7 +274,6 @@ type BasketItemData = { product: ProductData; quantity: int }
 [<CLIMutable>]
 type BasketData =
   { id: BsonObjectId
-    userId: BsonObjectId
     items: BasketItemData list
     occurred: DateTime }
 
@@ -296,19 +295,11 @@ module BasketMapping =
       else
         BsonObjectId.Create(basket.id)
 
-    let userId =
-      if String.IsNullOrEmpty(basket.userId) then
-        BsonObjectId.Empty
-      else
-        BsonObjectId.Create(basket.userId)
-
     { id = id
-      userId = userId
       items = basket.items |> List.map toBasketItemData
       occurred = basket.occurred }
 
   let toBasket (data: BasketData) : Basket =
     { id = data.id.ToString()
-      userId = data.userId.ToString()
       items = data.items |> List.map toBasketItem
       occurred = data.occurred }

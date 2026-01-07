@@ -60,8 +60,7 @@ let private removeItem (product: Product) (quantity: int) (basket: Basket) =
   { basket with items = updatedItems } |> succeed
 
 let private newBasket (userId: Id) =
-  { id = ""
-    userId = userId
+  { id = userId
     items = []
     occurred = DateTime.UtcNow }
 
@@ -80,8 +79,7 @@ let createOrUpdate
   =
 
   let newBasket product =
-    { id = ""
-      userId = us.userId
+    { id = us.userId
       items = []
       occurred = DateTime.UtcNow }
 

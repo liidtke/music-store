@@ -1,6 +1,7 @@
 // src/pages/api/basket/add.ts
 // Astro API Route (server-side endpoint)
 const apiKey = import.meta.env.API_URL;
+import toaster from '@utils/toaster';
 
 import type { APIRoute } from 'astro';
 
@@ -44,19 +45,25 @@ export const POST: APIRoute = async ({ url, request, redirect, cookies }) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Backend error:', response.status, errorText);
-      return new Response(
-        JSON.stringify({ error: 'Failed to update basket', details: errorText }),
-        { status: response.status, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(toaster.error("Erro ao adicionar item:" + errorText), {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      })
     }
 
     const data = await response.json();
 
-    // Optional: redirect back or return JSON
-    // If you want to use this with HTMX and swap content, return JSON or HTML
-    return new Response(JSON.stringify({ success: true, data }), {
+    let indicator = `
+      <span _="on load wait 3s then put 'Adicionar Produto' into me">
+      Produto Adicionado
+      </span>
+        <span id="basket-indicator" hx-swap-oob="true" class="rounded-full bg-blue-100 px-2.5 py-0.5 text-sm whitespace-nowrap text-blue-700">
+          ${data?.items?.length}
+        </span>
+      `;
+    return new Response(indicator, {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { "Content-Type": "text/html" }
     });
 
   } catch (err) {

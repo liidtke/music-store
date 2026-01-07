@@ -255,3 +255,7 @@ select::after {
   overflow-x: scroll;
   max-height: 90vh;
 }
+
+#toaster-wrapper{
+  z-index: 4;
+}

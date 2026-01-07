@@ -6,7 +6,7 @@ import Link from "@components/Link.astro";
 // let number = Math.floor(Math.random() * 15) + 1;
 
 // let image = "image" + number + ".jpg"
-let image = "image9.jpg"
+let image = "image10.jpg"
 
 ---
 
@@ -15,9 +15,9 @@ let image = "image9.jpg"
         <div class="max-w-screen-xl max-lg:max-w-3xl mx-auto">
           <div class="grid lg:grid-cols-1 items-center gap-x-12 gap-y-16">
             <div class="z-2 max-lg:text-center">
-              <h1 class="lg:text-5xl text-4xl !leading-tight font-bold border-black text-white mb-6">
+              <h1 class="lg:text-5xl text-4xl !leading-tight text-shadow-md font-bold border-black text-white mb-6">
                 Conheça o Futuro da Produção Musical</h1>
-              <p class="text-base text-gray-100 leading-relaxed w-1/2">Descubra a melhor forma de contratar serviços para músicos de músicos adventistas. Confira nosso catálogo de serviços e inicie seu projeto musical com os melhores consultores do mercado.</p>
+              <p class="text-base text-slate-100 text-shadow-md text-left leading-relaxed w-3/4 md:w-1/2">Descubra a melhor forma de contratar serviços para músicos de músicos adventistas. Confira nosso catálogo de serviços e inicie seu projeto musical com os melhores consultores do mercado.</p>
 
               <div class="mt-12 flex flex-wrap max-lg:justify-center gap-4">
                 <Link cl="btn-secondary" url="/products">Produtos</Link>
@@ -26,12 +26,20 @@ let image = "image9.jpg"
             </div>
           </div>
         </div>
-        <img src={image} class="z-0 absolute ml-auto top-8 inset-10 h-full w-1/2 object-cover rounded-md" alt="hero-img" />
+        <img src={image} class="z-0 shadow-md absolute ml-auto top-8 inset-10 h-full w-1/2 object-cover rounded-md" alt="hero-img" />
       </div>
 
-      <div class="md:p-8 p-4" id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" hx-swap="innerHTML" ></div>
+      <div class="md:p-8 p-4" id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" hx-swap="innerHTML" >
+      </div>
 
       <div class="md:p-8 p-4" id="pr-wrapper" hx-get="/partials/public/categories?limit=8" hx-trigger="load" hx-swap="innerHTML" ></div>
+
+
+
+
+
+
+
 
 
 </Store>

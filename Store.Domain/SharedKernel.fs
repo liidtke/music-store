@@ -67,6 +67,9 @@ let fromException (ex: Exception) =
 let validation<'t> message =
   fromError Validation message :> ServiceOutput<'t>
 
+let validationAsync<'t> message =
+  async { return fromError Validation message :> ServiceOutput<'t>}
+  
 let notFound message = fromError NotFound message
 
 let formValidation html =

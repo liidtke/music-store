@@ -3,6 +3,6 @@ const { id, cl } = Astro.props;
 
 ---
 <button type="button" class={cl}
-  hx-post=`/api/basket/add?productId=${id}` hx-target="#cart-indicator" >
+  hx-post=`/api/basket/add?productId=${id}` >
   <slot/>
 </button>
