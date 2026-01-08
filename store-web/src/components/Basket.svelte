@@ -133,25 +133,24 @@ const formatter = new Intl.NumberFormat("pt-BR", {
   </div>
 
   <div class="mt-8">
-    <div class="bg-gray-100 p-6 rounded-md">
-      <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
-        <div class="max-md:flex max-md:justify-between max-md:gap-4">
+    <div class="bg-zinc-800 p-6 rounded-md">
+      <div class="grid md:grid-cols-2 grid-gap-2">
           <a
             href="/products"
             type="button"
-            class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full"
+            class="btn-ghost"
           >
             Continuar Comprando
           </a>
-        </div>
-        <div class="md:ml-auto">
+
+          {#if data && data.quantity > 0}
           <button
             type="button"
-            class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full"
+            class="btn-primary"
           >
             Finalizar Compra
           </button>
-        </div>
+          {/if}
       </div>
     </div>
   </div>
