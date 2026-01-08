@@ -1,7 +1,10 @@
 <script>
 
-export let data = [];
-
+export let data = {};
+const formatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  })
 </script>
 
 
@@ -19,28 +22,28 @@ export let data = [];
     </div>
   </div>
 
-
   <div class="bg-gray-100 p-6 rounded-md mt-8">
     <div class="space-y-4">
 
-      {#each data as items}
+      {#each data.items as item}
 
       <div class="flex gap-4 max-sm:flex-col">
         <div class="w-24 h-24 shrink-0 bg-white p-2 rounded-md">
           <img
-            src="https://readymadeui.com/images/product14.webp"
-            class="w-full h-full object-contain"
+            src={item.product.imageUrl}
+            class="w-full h-full object-cover"
+            alt="imagem"
           />
         </div>
         <div class="w-full flex justify-between gap-4">
           <div>
             <h3 class="text-[15px] font-medium text-slate-900">
-              Velvet Sneaker
+              {item.product.name}
             </h3>
             <h6
               class="text-[15px] text-slate-900 font-semibold cursor-pointer mt-4"
             >
-              $18.00
+              R$ {formatter.format(item.product.unitPrice * item.quantity)}
             </h6>
           </div>
           <div class="flex flex-col justify-between items-end gap-4">
@@ -73,7 +76,7 @@ export let data = [];
                 </svg>
               </span>
 
-              <span class="mx-3">2</span>
+              <span class="mx-3">{item.quantity}</span>
               <span class="cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +96,10 @@ export let data = [];
       <hr class="border-gray-300 mb-4" />
       {/each}
     </div>
+    <div class="max-md:flex max-md:justify-between max-md:gap-4">
+    <h6 class="text-[15px] font-medium text-slate-900">Total a Pagar</h6>
+    <p class="text-sm text-slate-500 font-medium md:mt-2">R$ {formatter.format(data.price)}</p>
+    </div>
   </div>
 
   <div class="mt-8">
@@ -106,10 +113,6 @@ export let data = [];
           >
             Continuar Comprando
           </a>
-        </div>
-        <div class="max-md:flex max-md:justify-between max-md:gap-4">
-          <h6 class="text-[15px] font-medium text-slate-900">Total a Pagar</h6>
-          <p class="text-sm text-slate-500 font-medium md:mt-2">R$ 78.00</p>
         </div>
         <div class="md:ml-auto">
           <button

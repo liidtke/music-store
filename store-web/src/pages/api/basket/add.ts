@@ -58,7 +58,7 @@ export const POST: APIRoute = async ({ url, request, redirect, cookies }) => {
       Produto Adicionado
       </span>
         <span id="basket-indicator" hx-swap-oob="true" class="rounded-full bg-blue-100 px-2.5 py-0.5 text-sm whitespace-nowrap text-blue-700">
-          ${data?.items?.length}
+          ${data?.quantity}
         </span>
       `;
     return new Response(indicator, {

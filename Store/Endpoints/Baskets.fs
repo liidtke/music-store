@@ -1,14 +1,31 @@
 module Store.Endpoints.Baskets
 
+open System
 open Application
 open Falco
 open Falco.Routing
+open Microsoft.AspNetCore.Mvc.ModelBinding.Binders
 open Store
 open Store.Domain
 open Store.Domain.Store
 open Store.Domain.Store.BasketService
+open Store.Domain.Store.Entities
 open Store.Domain.Store.Interfaces
 
+type BasketModel =
+  { id: Id
+    items: BasketItem list
+    occurred: DateTime
+    price: decimal
+    quantity: decimal }
+
+
+let toModel (basket: Basket) : BasketModel =
+  { id = basket.id
+    items = basket.items
+    occurred = basket.occurred
+    price = basket.items |> List.sumBy (fun i -> i.product.unitPrice * decimal i.quantity)
+    quantity = basket.items |> List.sumBy (fun i -> decimal i.quantity) }
 
 let convertBasketActionType (str: string) : BasketActionType =
   match str with
@@ -35,10 +52,12 @@ module Update =
     let service =
       BasketService.createOrUpdate stx.userSession db.Add db.Find productRepo.Find
 
-    async { return! service <| mapBasketInputModel input }
+    async {
+      let! output = service <| mapBasketInputModel input
+      return output ?> (fun i -> toModel i |> succeed)
+    }
 
-  let handler: HttpHandler =
-    Request.mapJson<BasketInputModel> <| runAsync workflow
+  let handler: HttpHandler = Request.mapJson<BasketInputModel> <| runAsync workflow
 
   let endpoint = put "/my-basket/" handler
 
@@ -46,7 +65,10 @@ module Mine =
   let private workflow (stx: ServiceContext) () =
     let db = stx.context.Plug<IBasketRepository>()
 
-    async { return! db.Find(stx.userSession.userId) }
+    async {
+      let! b = db.Find(stx.userSession.userId)
+      return b ?> (fun i -> toModel i |> succeed)
+    }
 
   // let handler: HttpHandler =
   //   Request.mapRoute (fun r -> r.GetString("id")) <| runAsync workflow
