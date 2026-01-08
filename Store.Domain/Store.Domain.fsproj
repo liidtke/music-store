@@ -26,6 +26,7 @@
         <Compile Include="Store\SampleService.fs" />
         <Compile Include="Store\CustomerService.fs" />
         <Compile Include="Store\BasketService.fs" />
+        <Compile Include="Store\OrderService.fs" />
     </ItemGroup>
 
     <ItemGroup>

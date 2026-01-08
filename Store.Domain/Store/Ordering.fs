@@ -37,7 +37,9 @@ type Basket =
 type OrderItem =
   { id: Guid
     product: Product
-    quantity: int }
+    quantity: int
+    price: decimal
+     }
 
 type OrderStatus =
   | Submitted = 1

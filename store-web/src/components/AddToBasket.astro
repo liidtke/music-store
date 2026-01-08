@@ -1,8 +1,16 @@
 ---
 const { id, cl } = Astro.props;
 
+const elementId = 'hid' + id;
+
 ---
-<button type="button" class={cl}
-  hx-post=`/api/basket/add?productId=${id}` >
+
+<button
+type="submit"
+hx-post=`/api/basket`
+hx-include=`.${elementId}`
+form=`f_${id}` class={cl} >
   <slot/>
 </button>
+<input class={elementId} type="hidden" name="productId" value={id}></input>
+<input class={elementId} type="hidden" name="action" value="AddItem"></input>

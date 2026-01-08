@@ -1,12 +1,17 @@
 // src/pages/api/basket/add.ts
 // Astro API Route (server-side endpoint)
 const apiKey = import.meta.env.API_URL;
-import toaster from '@utils/toaster';
+import toaster from '@utils/toaster'
 
 import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ url, request, redirect, cookies }) => {
-  const productId = url.searchParams.get('productId');
+  const form = await request.formData();
+  const productId = form.get("productId");
+  const quantity = form.get("quantity") ?? 1;
+  const action = form.get("action") ?? 'AddItem';
+
+  // const productId = url.searchParams.get('productId');
 
   if (!productId) {
     return new Response(
@@ -14,10 +19,6 @@ export const POST: APIRoute = async ({ url, request, redirect, cookies }) => {
       { status: 400, headers: { 'Content-Type': 'application/json' } }
     );
   }
-
-  // Default values
-  const quantity = 1;
-  const action: 'AddItem' | 'RemoveItem' | 'RemoveAll' = 'AddItem'; // Adjust if you support other actions later
 
   const body = {
     productId,

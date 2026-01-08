@@ -104,12 +104,12 @@ let createOrUpdate
 
       { basket with items = updatedItems } |> succeed
 
-    elif input.quantity < 0 then //REMOVE ITEM
+    elif input.quantity < 0 || input.action.IsRemoveAll then //REMOVE ITEM
       let existingItem = basket.items |> List.tryFind (fun i -> i.product.id = product.id)
 
       let updatedItems =
         match existingItem with
-        | Some item when item.quantity > input.quantity ->
+        | Some item when item.quantity > input.quantity && input.action.IsRemoveAll |> not ->
           basket.items
           |> List.map (fun i ->
             if i.product.id = product.id then

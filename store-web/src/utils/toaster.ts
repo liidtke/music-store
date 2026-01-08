@@ -29,9 +29,11 @@ ${obj}
 
 `
   }
-  successMessage(msg = "Salvo com Sucesso") {
+  successMessage(msg, url, target = "main", select = "main") {
     return `
- ${this.baseToaster(msg)}
+${this.baseToaster(msg)}
+<div hx-get="${url}" hx-replace-url="true" hx-target="${target}" hx-select="${select}" hx-swap="outerHTML" hx-trigger="load delay:300ms"   >
+</div>
 `
   }
 
@@ -56,7 +58,7 @@ ${this.baseToaster(msg)}
     return `
 <div hx-swap-oob="beforeend:#toaster-wrapper" >
 <div _="on load wait 4s then remove me" hx-ext="class-tools" classes="add done" class="fade-in max-w-xs bg-white border border-gray-200 rounded-md shadow-lg dark:bg-neutral-800 dark:border-neutral-700" role="alert" tabindex="-1" aria-labelledby="hs-toast-normal-example-label">
-     
+
     <div class="flex p-4">
       <div class="shrink-0">
         <svg class="shrink-0 size-4 text-hs-negative mt-0.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -100,7 +102,7 @@ ${alert}
     let el = `
 <p class="prose text-xs mt-1 uppercase text-red-600 mb-0" hx-swap-oob="true" id=${id} _="on load add .error to the previous <${tag}/> "> ${message} </p>
 `;
-    return new Response(el, { 
+    return new Response(el, {
       status: 200,
       headers: { "Content-Type": "text/html" }
     });

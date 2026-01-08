@@ -1,31 +1,80 @@
 ---
 import Store from "@layouts/Store.astro";
 import Basket from "@components/Basket.svelte";
+import toaster from '@utils/toaster'
 
 let data = [{},{}];
 
-  let c = Astro.cookies.get('auth_token');
-  if(!c){
-    return Astro.redirect("/login");
-  }
+let c = Astro.cookies.get('auth_token');
+if(!c){
+  return Astro.redirect("/login");
+}
 
 if (Astro.request.method === "GET") {
 
-    const result = await Astro.locals.fetchWithResult("my-basket");
-    if(result.success){
-      data = result.data;
-    }
-    else {
-      console.log(result);
-      // return new Response("/app", {
-      //   status: 307,
-      //   headers: { "Content-Type": "text/html", "Location": "/app" }
-      // });
+  console.log("GETTING");
+  const result = await Astro.locals.fetchWithResult("my-basket");
+  if(result.success){
+    data = result.data;
+  }
+  else {
+    console.log(result);
+    // return new Response("/app", {
+    //   status: 307,
+    //   headers: { "Content-Type": "text/html", "Location": "/app" }
+    // });
   }
 }
+
+if (Astro.request.method === "POST") {
+  const form = await Astro.request.formData();
+
+  const productId = form.get("productId");
+  const quantity = form.get("quantity") ?? 1;
+  const action = form.get("action") ?? 'AddItem';
+
+  if (!productId) {
+    return new Response(toaster.alert("Erro ao salvar - " + msg), {
+      status: 203,
+      headers: {"Content-Type": "text/html"}
+    })
+  }
+
+  const body = {
+    productId,
+    quantity:parseInt(quantity),
+    action
+  };
+
+  try {
+    const response = await Astro.locals.fetchWithResult("my-basket", {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    })
+
+    if (!response.success) {
+      return new Response(toaster.error("Erro:" + response.message), {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      })
+    }
+  }
+  catch(err){
+    return new Response(toaster.error("Erro:" + err), {
+      status: 203,
+      headers: { "Content-Type": "text/html" }
+    })
+  }
+
+  return new Response(toaster.successMessage("Carrinho Atualizado", "/basket"), {
+      status: 200,
+      headers: { "Content-Type": "text/html" }
+    });
+
+  }
 
 ---
 
 <Store >
-  <Basket data={data}></Basket>
+    <Basket data={data}></Basket>
 </Store>
