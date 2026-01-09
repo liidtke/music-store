@@ -109,12 +109,12 @@ let createOrUpdate
 
       let updatedItems =
         match existingItem with
-        | Some item when item.quantity > input.quantity && input.action.IsRemoveAll |> not ->
+        | Some item when item.quantity > 1 && not input.action.IsRemoveAll ->
           basket.items
           |> List.map (fun i ->
             if i.product.id = product.id then
               { i with
-                  quantity = i.quantity - input.quantity }
+                  quantity = i.quantity - (input.quantity * -1) }
             else
               i)
         | Some _ -> basket.items |> List.filter (fun i -> i.product.id <> product.id)

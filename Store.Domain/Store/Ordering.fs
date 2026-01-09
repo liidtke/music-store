@@ -73,8 +73,8 @@ type Order =
   { id: Id
     occurred: DateTime
     status: OrderStatus
-    bulkDiscount: int //ex 10%
     totalValue: decimal
+    netValue: decimal
     items: OrderItem
     dueDate: DateTime
     user: UserOrderData
