@@ -8,7 +8,6 @@ const formatter = new Intl.NumberFormat("pt-BR", {
   })
 </script>
 
-
 <div id="wrapper" class="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 md:p-8 mt-4">
   <div class="border-b border-gray-300 pb-4">
     <div class="flex gap-4">
@@ -127,6 +126,9 @@ const formatter = new Intl.NumberFormat("pt-BR", {
 
           {#if data && data.quantity > 0}
           <button
+            hx-get="/basket/checkout"
+            hx-target="main"
+            hx-select="main"
             type="button"
             class="btn-primary"
           >

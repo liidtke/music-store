@@ -12,7 +12,7 @@ type CustomerServiceInput =
   { id: Id
     name: string
     phone: Phone
-    address: Address option
+    // address: Address option
     document: string }
 
 let private maxStringSize = 200
@@ -52,10 +52,14 @@ let private validateAddress (address: Address) =
         ex = None
         errorMessages = errors }
 
-let private validateCustomer (input: Customer) =
-  succeed input
-  //todo
- 
+let private validateCustomer (input: Customer) = succeed input
+//todo
+
+
+let unboxUserId input (us:UserSession) =
+  match box input.id with
+  | null -> us.userId.ToString()
+  | _ -> input.id
 
 let private validateUserExists (userResult: ServiceOutput<User>) (customer: Customer) =
   match userResult with
@@ -64,15 +68,15 @@ let private validateUserExists (userResult: ServiceOutput<User>) (customer: Cust
 
 let create (us: UserSession) (saveEffect: SaveEffect) (fetchUserEffect: FetchUserEffect) (input: CustomerServiceInput) =
   let customer: Customer =
-    { id = input.id
+    { id = unboxUserId input us
       name = input.name.Trim()
       phone = input.phone
-      address = input.address
+      address = None //input.address
       document = input.document.Trim() }
 
   let work =
     async {
-      let! userResult = fetchUserEffect input.id
+      let! userResult = fetchUserEffect customer.id
 
       return! customer |> validateUserExists userResult ?> validateCustomer ?>< saveEffect
     }
@@ -93,13 +97,13 @@ let update
     { existing with
         name = input.name.Trim()
         phone = input.phone
-        address = input.address
+        address = None //input.address
         document = input.document.Trim() }
     |> succeed
 
   let work =
     async {
-      let! existingResult = fetchEffect input.id
+      let! existingResult = fetchEffect <| unboxUserId input us
       let! userResult = fetchUserEffect input.id
 
       return!

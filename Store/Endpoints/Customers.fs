@@ -3,6 +3,7 @@ module Store.Endpoints.Customers
 open Application
 open Falco
 open Falco.Routing
+open Microsoft.Extensions.Logging
 open Store
 open Store.Domain
 open Store.Domain.Interfaces
@@ -12,6 +13,7 @@ open Store.Domain.Store.Interfaces
 module Create =
   let private workflow (stx: ServiceContext) (input: CustomerService.CustomerServiceInput) =
     let db = stx.context.Plug<ICustomerRepository>()
+    stx.logger.LogInformation "Creating customer" |> ignore
     let userRepo = stx.context.Plug<IUserRepository>()
     let service = CustomerService.create stx.userSession db.Add userRepo.Find
 
@@ -25,6 +27,7 @@ module Create =
 module Update =
   let private workflow (stx: ServiceContext) (input: CustomerService.CustomerServiceInput) =
     let db = stx.context.Plug<ICustomerRepository>()
+    stx.logger.LogInformation "Updating customer" |> ignore
     let userRepo = stx.context.Plug<IUserRepository>()
     let service = CustomerService.update stx.userSession db.Update db.Find userRepo.Find
 
@@ -34,6 +37,20 @@ module Update =
     Request.mapJson<CustomerService.CustomerServiceInput> <| runAsync workflow
 
   let endpoint = put "/customers/{id}" handler
+
+
+
+module Current =
+  let private workflow (stx: ServiceContext) _  =
+    let db = stx.context.Plug<ICustomerRepository>()
+
+    async {
+        return! db.Find(stx.userSession.userId.ToString())
+    }
+
+
+  let endpoint = get "/customers/current" (runAsync workflow ())
+
 
 module Details =
   let private workflow (stx: ServiceContext) (id: string) =
@@ -47,7 +64,7 @@ module Details =
       then
         return! db.Find(id)
       else
-        return invalidate "Access Denied"
+        return! db.Find(stx.userSession.userId.ToString())
     }
 
   let handler: HttpHandler =
@@ -55,4 +72,4 @@ module Details =
 
   let endpoint = get "/customers/{id}" handler
 
-let endpoints = [ Create.endpoint; Update.endpoint; Details.endpoint ]
+let endpoints = [ Create.endpoint; Update.endpoint; Details.endpoint; Current.endpoint ]
