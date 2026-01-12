@@ -3,7 +3,7 @@ module Store.Domain.Store.BasketService
 open System
 open Store.Domain
 open Store.Domain.Store.Catalog
-open Store.Domain.Store.Entities
+open Store.Domain.Store.Ordering
 
 type SaveEffect = Effect<Basket>
 type FetchEffect = FetchSingleEffect<string, Basket>

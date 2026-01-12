@@ -2,7 +2,7 @@ module Store.Domain.Store.Interfaces
 
 open Store.Domain.Interfaces
 open Store.Domain.Store.Catalog
-open Store.Domain.Store.Entities
+open Store.Domain.Store.Ordering
 
 type IProductTypeRepository =
   inherit IRepository<ProductType>

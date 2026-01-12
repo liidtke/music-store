@@ -4,6 +4,7 @@ module Store.Infrastructure.Store.Models
 open System
 open MongoDB.Bson
 open Store.Domain.Store.Catalog
+open Store.Domain.Store.Ordering
 
 [<CLIMutable>]
 type ProductTypeData =
@@ -212,43 +213,49 @@ type AddressData =
     complement: string
     zipCode: string
     city: string
-    state: string
-    isBillingAddress: bool }
+    state: string }
 
 [<CLIMutable>]
 type CustomerData =
   { id: BsonObjectId
     name: string
-    phones: PhoneData list
-    addresses: AddressData list
+    phone: PhoneData
+    address: AddressData option
     document: string }
 
 module CustomerMapping =
-  open Store.Domain.Store.Entities
+  open Store.Domain.Store
 
-  let toPhoneData (phone: Phone) : PhoneData = { number = phone.number }
+  let toPhoneData (phone: Ordering.Phone) : PhoneData = { number = phone.number }
 
-  let toPhone (data: PhoneData) : Phone = { number = data.number }
+  let toPhone (data: PhoneData) : Ordering.Phone = { number = data.number }
 
-  let toAddressData (address: Address) : AddressData =
-    { street = address.street
-      number = address.number
-      complement = address.complement
-      zipCode = address.zipCode
-      city = address.city
-      state = address.state
-      isBillingAddress = address.isBillingAddress }
+  let toAddressData (addressOpt: Ordering.Address option) : AddressData option =
+    match addressOpt with
+    | None -> None
+    | Some address ->
+      { street = address.street
+        number = address.number
+        complement = address.complement
+        zipCode = address.zipCode
+        city = address.city
+        state = address.state }
+      |> Some
 
-  let toAddress (data: AddressData) : Address =
-    { street = data.street
-      number = data.number
-      complement = data.complement
-      zipCode = data.zipCode
-      city = data.city
-      state = data.state
-      isBillingAddress = data.isBillingAddress }
+  let toAddress (ad: AddressData option) : Ordering.Address option =
+    match ad with
+    | None -> None
+    | Some data ->
+      ({ street = data.street
+         number = data.number
+         complement = data.complement
+         zipCode = data.zipCode
+         city = data.city
+         state = data.state }
+      : Ordering.Address)
+      |> Some
 
-  let toCustomerData (customer: Customer) : CustomerData =
+  let toCustomerData (customer: Ordering.Customer) : CustomerData =
     let id =
       if String.IsNullOrEmpty(customer.id) then
         BsonObjectId.Empty
@@ -257,15 +264,15 @@ module CustomerMapping =
 
     { id = id
       name = customer.name
-      phones = customer.phones |> List.map toPhoneData
-      addresses = customer.addresses |> List.map toAddressData
+      phone = customer.phone |> toPhoneData
+      address = customer.address |> toAddressData
       document = customer.document }
 
-  let toCustomer (data: CustomerData) : Customer =
+  let toCustomer (data: CustomerData) : Ordering.Customer =
     { id = data.id.ToString()
       name = data.name
-      phones = data.phones |> List.map toPhone
-      addresses = data.addresses |> List.map toAddress
+      phone = data.phone |> toPhone
+      address = data.address |> toAddress
       document = data.document }
 
 
@@ -278,7 +285,6 @@ type BasketData =
     occurred: DateTime }
 
 module BasketMapping =
-  open Store.Domain.Store.Entities
 
   let toBasketItemData (item: BasketItem) : BasketItemData =
     { product = ProductMapping.toProductData item.product

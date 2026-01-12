@@ -4,13 +4,12 @@ open System
 open Application
 open Falco
 open Falco.Routing
-open Microsoft.AspNetCore.Mvc.ModelBinding.Binders
 open Store
 open Store.Domain
 open Store.Domain.Store
 open Store.Domain.Store.BasketService
-open Store.Domain.Store.Entities
 open Store.Domain.Store.Interfaces
+open Store.Domain.Store.Ordering
 
 type BasketModel =
   { id: Id

@@ -1,0 +1,61 @@
+---
+import toaster from '@utils/toaster'
+
+if (Astro.request.method === "POST") {
+    const form = await Astro.request.formData();
+
+    const body = {
+            id: parseInt(form.get("id") as string),
+            name: form.get("name"),
+            phone: {
+                number: form.get("phone")
+            },
+            address: {
+                street: form.get("street"),
+                number: form.get("number"),
+                complement: form.get("complement"),
+                zipCode: form.get("zipCode"),
+                city: form.get("city"),
+                state: form.get("state")
+            },
+            document: form.get("document")
+        };
+
+
+    if (!body.name) {
+      return toaster.inputValidation("name-message", "Nome Obrigatório")
+    }
+    if (!body.document) {
+      return toaster.inputValidation("document-message", "Documento Obrigatório")
+    }
+
+    try {
+        const response = await Astro.locals.fetchWithResult("customers", {
+          method: 'POST',
+          body: JSON.stringify(body)
+        })
+
+        if (!response.success) {
+          return new Response(toaster.error("Erro:" + response.message), {
+            status: 203,
+            headers: { "Content-Type": "text/html" }
+          })
+        }
+      }
+      catch(err){
+        return new Response(toaster.error("Erro:" + err), {
+          status: 203,
+          headers: { "Content-Type": "text/html" }
+        })
+      }
+
+      return new Response(toaster.successMessage("Carrinho Atualizado", "/basket"), {
+          status: 200,
+          headers: { "Content-Type": "text/html" }
+        });
+
+
+
+}
+
+---

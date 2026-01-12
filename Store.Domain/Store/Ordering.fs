@@ -1,4 +1,4 @@
-module Store.Domain.Store.Entities
+module Store.Domain.Store.Ordering
 
 open System
 
@@ -15,15 +15,14 @@ type Address = {
   zipCode: string
   city: string
   state: string
-  isBillingAddress: bool
 }
 
 type Customer = {
   //same as userid
   id: Id
   name: string //same 
-  phones: Phone list
-  addresses: Address list
+  phone: Phone
+  address: Address option
   document:string //cpf or cnpj
 }
 

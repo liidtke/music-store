@@ -2,7 +2,7 @@ module Store.Domain.Store.CustomerService
 
 open System
 open Store.Domain
-open Store.Domain.Store.Entities
+open Store.Domain.Store.Ordering
 
 type SaveEffect = Effect<Customer>
 type FetchEffect = FetchSingleEffect<string, Customer>
@@ -11,8 +11,8 @@ type FetchUserEffect = FetchSingleEffect<string, User>
 type CustomerServiceInput =
   { id: Id
     name: string
-    phones: Phone list
-    addresses: Address list
+    phone: Phone
+    address: Address option
     document: string }
 
 let private maxStringSize = 200
@@ -53,45 +53,9 @@ let private validateAddress (address: Address) =
         errorMessages = errors }
 
 let private validateCustomer (input: Customer) =
-  // Validate name
-  match validateStringField "Name" input.name with
-  | Failure e -> Failure e
-  | Success _ ->
-    // Validate document
-    match validateStringField "Document" input.document with
-    | Failure e -> Failure e
-    | Success _ ->
-      // Validate phones
-      let phoneErrors =
-        input.phones
-        |> List.choose (fun p ->
-          match validatePhone p with
-          | Failure e -> Some e.errorMessages
-          | Success _ -> None)
-        |> List.concat
-
-      if not phoneErrors.IsEmpty then
-        Failure
-          { errorType = InvalidInput
-            ex = None
-            errorMessages = phoneErrors }
-      else
-        // Validate addresses
-        let addressErrors =
-          input.addresses
-          |> List.choose (fun a ->
-            match validateAddress a with
-            | Failure e -> Some e.errorMessages
-            | Success _ -> None)
-          |> List.concat
-
-        if not addressErrors.IsEmpty then
-          Failure
-            { errorType = InvalidInput
-              ex = None
-              errorMessages = addressErrors }
-        else
-          succeed input
+  succeed input
+  //todo
+ 
 
 let private validateUserExists (userResult: ServiceOutput<User>) (customer: Customer) =
   match userResult with
@@ -102,8 +66,8 @@ let create (us: UserSession) (saveEffect: SaveEffect) (fetchUserEffect: FetchUse
   let customer: Customer =
     { id = input.id
       name = input.name.Trim()
-      phones = input.phones
-      addresses = input.addresses
+      phone = input.phone
+      address = input.address
       document = input.document.Trim() }
 
   let work =
@@ -128,8 +92,8 @@ let update
   let updateCustomer (existing: Customer) =
     { existing with
         name = input.name.Trim()
-        phones = input.phones
-        addresses = input.addresses
+        phone = input.phone
+        address = input.address
         document = input.document.Trim() }
     |> succeed
 

@@ -7,7 +7,6 @@ open Store
 open Store.Domain
 open Store.Domain.Interfaces
 open Store.Domain.Store
-open Store.Domain.Store.Entities
 open Store.Domain.Store.Interfaces
 
 module Create =
