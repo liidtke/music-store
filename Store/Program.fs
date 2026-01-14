@@ -1,5 +1,6 @@
 module Store.Program
 
+open MongoDB.Bson.Serialization
 open Store.Configurations
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
@@ -7,6 +8,7 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Hosting
 open Falco
 open Falco.Routing
+open Store.Infrastructure.Serializers
 
 
 let configureCors (corsBuilder: CorsPolicyBuilder) : unit =
@@ -36,6 +38,7 @@ let main args =
   configureServices bldr.Configuration bldr.Services |> ignore
   Configurations.configureEventBus bldr |> ignore
 
+  BsonSerializer.RegisterSerializer(StringOptionSerializer())
   let wapp = bldr.Build()
 
   // let conf =

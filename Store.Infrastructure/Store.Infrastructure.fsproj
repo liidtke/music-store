@@ -19,6 +19,7 @@
         <Compile Include="Store\BasketRepository.fs" />
         <Compile Include="Integrations.fs" />
         <Compile Include="MailSender.fs" />
+        <Compile Include="Serializers.fs" />
     </ItemGroup>
 
     <ItemGroup>
