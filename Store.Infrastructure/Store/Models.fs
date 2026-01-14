@@ -281,7 +281,7 @@ type BasketItemData = { product: ProductData; quantity: int }
 [<CLIMutable>]
 type BasketData =
   { id: BsonObjectId
-    items: System.Collections.Generic.List<BasketItemData>
+    items: BasketItemData list
     occurred: DateTime }
 
 module BasketMapping =
@@ -302,10 +302,10 @@ module BasketMapping =
         BsonObjectId.Create(basket.id)
 
     { id = id
-      items = basket.items |> List.map toBasketItemData |> ResizeArray
+      items = basket.items |> List.map toBasketItemData
       occurred = basket.occurred }
 
   let toBasket (data: BasketData) : Basket =
     { id = data.id.ToString()
-      items = data.items.ToArray() |> List.ofArray |> List.map toBasketItem
+      items = data.items |> List.map toBasketItem
       occurred = data.occurred }
