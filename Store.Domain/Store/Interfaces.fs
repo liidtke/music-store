@@ -1,5 +1,6 @@
 module Store.Domain.Store.Interfaces
 
+open System
 open Store.Domain.Interfaces
 open Store.Domain.Store.Catalog
 open Store.Domain.Store.Ordering
@@ -43,3 +44,14 @@ type ICustomerRepository =
 
 type IBasketRepository =
   inherit IRepository<Basket>
+
+type OrderSearchCriteria = {
+  userId:string option
+  startDate:DateTime option
+  status:OrderStatus option
+  paymentStatus:PaymentStatus option
+}
+
+type IOrderRepository =
+  inherit IRepository<Order>
+  abstract member Fetch: OrderSearchCriteria -> Async<ServiceOutput<Order list>>

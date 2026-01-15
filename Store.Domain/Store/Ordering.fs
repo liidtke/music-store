@@ -42,45 +42,53 @@ type OrderItem =
 
 type OrderStatus =
   | Submitted = 1
-  | AwaitingValidation = 2
-  | Confirmed = 3
-  | Paid = 4
-  | InProgress = 5
-  | Fulfilled = 7
-  | Cancelled = 9
+  | Confirmed = 2
+  | InProgress = 3
+  | Fulfilled = 4
+  | Cancelled = 5
 
-type UserOrderData =
-  { userId: int
+type PaymentStatus =
+  | Pending = 1
+  | Paid = 2
+  | Refunded = 3
+  
+type CustomerOrderData =
+  { userId: string
     name: string
+    email: string
     document: string
-    address: string
-    zipCode: string
     phone: string }
 
 type PaymentMethod =
-  | Pix
-  | Money //maybe used in future
-  | CreditCard //maybe used in future
+  | Direct = 0
+  | Pix = 1
+  | Money = 2//maybe used in future
+  | CreditCard = 3 //maybe used in future
 
-type Invoice =
-  { beneficiary: Professional
-    paymentMethod: PaymentMethod
-    value: decimal
-    fileId: Id option } //id for file metadata
 
 type Order =
   { id: Id
     occurred: DateTime
     status: OrderStatus
-    totalValue: decimal
-    netValue: decimal
-    items: OrderItem
-    dueDate: DateTime
-    user: UserOrderData
-    invoices: Invoice list
-    receiptId: Id option  //receipt attached by user
+    value: decimal
+    items: OrderItem list
+    customer: CustomerOrderData
+    deliveryDate: DateTime
+    paymentStatus: PaymentStatus
+    paymentMethod: PaymentMethod
   }
 
+//v2
+type Invoice =
+  {
+    id:Id
+    OrderId:Id
+    beneficiary: Professional
+    paymentMethod: PaymentMethod
+    value: decimal
+    fileId: Id option } //id for file metadata
+
+//v2
 type OrderHistory =
   { id: Id
     orderId: Id

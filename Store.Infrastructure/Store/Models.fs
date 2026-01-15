@@ -309,3 +309,41 @@ module BasketMapping =
     { id = data.id.ToString()
       items = data.items |> List.map toBasketItem
       occurred = data.occurred }
+
+
+type OrderData =
+  { id: BsonObjectId
+    occurred: DateTime
+    status: OrderStatus
+    value: decimal
+    items: OrderItem
+    customer: CustomerOrderData
+    paymentStatus: PaymentStatus
+    paymentMethod: PaymentMethod }
+
+module OrderMapping =
+  let toOrderData (order: Order) : OrderData =
+    let id =
+      if String.IsNullOrEmpty(order.id) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(order.id)
+
+    { id = id
+      occurred = order.occurred
+      status = order.status
+      customer = order.customer
+      items = order.items
+      paymentMethod = order.paymentMethod
+      paymentStatus = order.paymentStatus
+      value = order.value }
+
+  let toOrder (data: OrderData) : Order =
+    { id = data.id.ToString()
+      occurred = data.occurred
+      status = data.status
+      customer = data.customer
+      items = data.items
+      paymentMethod = data.paymentMethod
+      paymentStatus = data.paymentStatus
+      value = data.value }
