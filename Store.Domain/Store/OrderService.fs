@@ -11,7 +11,7 @@ type SaveEffect = Effect<Order>
 type FetchEffect = FetchSingleEffect<string, Order>
 type FetchCustomerEffect = FetchSingleEffect<string, Customer>
 type FetchBasketEffect = FetchSingleEffect<string, Basket>
-type DeleteBasketEffect = FetchSingleEffect<string, Basket>
+type DeleteBasketEffect = string -> Async<ServiceOutput<bool>>
 
 
 type CreateOrderInput = { paymentMethod: PaymentMethod }
@@ -80,5 +80,54 @@ let createOrder (us: UserSession) (effects: OrderEffects) (input: CreateOrderInp
   async {
     let! result = basicFetch
     let order = result ?> createOrder
-    return! order ?>< effects.save
+    let! saveResult = order ?>< effects.save
+    let! deleteResult = saveResult ?>< (fun _ -> effects.deleteBasket us.userId)
+
+    return saveResult
   }
+
+
+module Update =
+
+  let validateStatus (status: OrderStatus) (order: Order) =
+    if order.status = OrderStatus.Cancelled || order.status = OrderStatus.Fulfilled then
+      invalidate "Order already processed"
+    elif status = OrderStatus.Cancelled && order.paymentStatus <> PaymentStatus.Paid then
+      invalidate "Order paid"
+    else
+      succeed order
+
+  let validatePermission us (order: Order) =
+    if us.role = AdminRole || us.role = ProfessionalRole then
+      succeed order
+    else
+      invalidate "Permission denied"
+
+  let updateOrderStatus (us: UserSession) (effects: OrderEffects) (orderId: string) (status: OrderStatus) =
+    async {
+      let! result = effects.fetch orderId
+
+      let order =
+        result
+        ?> validatePermission us
+        ?> validateStatus status
+        ?> (fun order -> { order with status = status } |> succeed)
+
+      let! saveResult = order ?>< effects.save
+
+      return saveResult
+    }
+
+  let updateOrderPayment (us: UserSession) (effects: OrderEffects) (orderId: string) (status: PaymentStatus) =
+    async {
+      let! result = effects.fetch orderId
+
+      let order =
+        result
+        ?> validatePermission us
+        ?> (fun order -> { order with paymentStatus = status } |> succeed)
+
+      let! saveResult = order ?>< effects.save
+
+      return saveResult
+    }

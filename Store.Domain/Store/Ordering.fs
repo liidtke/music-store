@@ -3,6 +3,7 @@ module Store.Domain.Store.Ordering
 open System
 
 open Catalog
+open Store.Domain.Store.Catalog
 
 type Phone = {
   number: string
@@ -72,6 +73,7 @@ type Order =
     status: OrderStatus
     value: decimal
     items: OrderItem list
+    // responsibleId: Id
     customer: CustomerOrderData
     deliveryDate: DateTime
     paymentStatus: PaymentStatus
@@ -82,7 +84,7 @@ type Order =
 type Invoice =
   {
     id:Id
-    OrderId:Id
+    orderId:Id
     beneficiary: Professional
     paymentMethod: PaymentMethod
     value: decimal
