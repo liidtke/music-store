@@ -44,6 +44,7 @@ type ICustomerRepository =
 
 type IBasketRepository =
   inherit IRepository<Basket>
+  abstract member Delete: string -> Async<ServiceOutput<unit>>
 
 type OrderSearchCriteria = {
   userId:string option

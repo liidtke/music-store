@@ -32,6 +32,7 @@
         <Compile Include="Endpoints\Samples.fs" />
         <Compile Include="Endpoints\Baskets.fs" />
         <Compile Include="Endpoints\Handlers.fs" />
+        <Compile Include="Endpoints\Orders.fs" />
         <Compile Include="Tests.fs"/>
         <Compile Include="Configurations.fs" />
         <Compile Include="Program.fs"/>

@@ -57,7 +57,6 @@ module Create =
 
 module File =
 
-
   let private workflow (sampleId: string) : HttpHandler =
     fun (ctx: HttpContext) ->
       let db = ctx.Plug<ISampleRepository>()

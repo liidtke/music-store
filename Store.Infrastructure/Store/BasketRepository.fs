@@ -15,8 +15,13 @@ type BasketRepository(ctx: IMongoContext, logger: ILogger<BasketRepository>) =
 
   interface IBasketRepository with
     member this.Add(product) =
-      
-      let basket = if product.id = "" then {product with id = BsonObjectId.Empty.ToString()} else product
+
+      let basket =
+        if product.id = "" then
+          { product with
+              id = BsonObjectId.Empty.ToString() }
+        else
+          product
 
       let filter =
         Builders<BasketData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(basket.id))
@@ -44,7 +49,9 @@ type BasketRepository(ctx: IMongoContext, logger: ILogger<BasketRepository>) =
       mapUpdate logger BasketMapping.toBasketData "Error updating customer info" replaceAsync filter product
 
     member this.Find(id: string) =
-      if id = "" then validationAsync "Basket id cannot be empty" else
+      if id = "" then
+        validationAsync "Basket id cannot be empty"
+      else
         let filter =
           Builders<BasketData>.Filter.Eq((fun p -> p.id), BsonObjectId.Create(id))
 
@@ -52,3 +59,16 @@ type BasketRepository(ctx: IMongoContext, logger: ILogger<BasketRepository>) =
           collection.Find(filter).FirstOrDefaultAsync()
 
         mapFind logger BasketMapping.toBasket "Error finding customer info" effect
+
+    member this.Delete(id) =
+      let filter =
+        Builders<BasketData>.Filter.Eq((fun f -> f.id), BsonObjectId.Create(id))
+
+      async {
+        try
+          let! _ = collection.DeleteOneAsync(filter) |> Async.AwaitTask
+          return succeed ()
+        with ex ->
+          logger.LogError(ex, "Error deleting basket") |> ignore
+          return fail "Error deleting"
+      }

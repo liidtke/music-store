@@ -11,7 +11,7 @@ type SaveEffect = Effect<Order>
 type FetchEffect = FetchSingleEffect<string, Order>
 type FetchCustomerEffect = FetchSingleEffect<string, Customer>
 type FetchBasketEffect = FetchSingleEffect<string, Basket>
-type DeleteBasketEffect = string -> Async<ServiceOutput<bool>>
+type DeleteBasketEffect = string -> Async<ServiceOutput<unit>>
 
 
 type CreateOrderInput = { paymentMethod: PaymentMethod }
