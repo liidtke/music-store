@@ -34,3 +34,15 @@ type ProfessionalQuery(repo: IProfessionalRepository) =
       return result ?> (fun r -> r |> List.map Models.ProfessionalPublicModel.map |> succeed)
 
     }
+
+
+type OrderQuery(repo: IOrderRepository) =
+  member _.GetMine(us: UserSession) = repo.Find(us.userId)
+
+  member _.GetAll(input: OrderSearchCriteria, us: UserSession) =
+    if input.userId.IsSome && input.userId.Value = us.userId then
+      repo.Fetch(input)
+    elif us.role = Role.AdminRole || us.role = Role.ProfessionalRole then
+      repo.Fetch(input)
+    else
+      async { return invalidate "Access Denied" }

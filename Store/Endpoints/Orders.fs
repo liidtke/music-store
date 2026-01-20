@@ -8,6 +8,7 @@ open Store.Domain.Store
 open Store.Domain.Store.Interfaces
 open Store.Domain.Store.OrderService
 open Store.Domain.Store.Ordering
+open Store.Endpoints.Queries
 
 module Factory =
   type Mode =
@@ -79,10 +80,10 @@ module Create =
 module Search =
 
   let workflow (stx: ServiceContext) (input: OrderSearchCriteria) =
-    let repo = stx.context.Plug<IOrderRepository>()
+    let query = stx.context.Plug<OrderQuery>()
 
     async {
-      let! result = repo.Fetch input
+      let! result = query.GetAll(input, stx.userSession)
       return result
     }
 
@@ -96,4 +97,4 @@ module Search =
 
   let endpoint = get "/orders/" handler
 
-let endpoints = [ Create.endpoint ]
+let endpoints = [ Create.endpoint; Search.endpoint ]

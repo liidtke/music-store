@@ -129,3 +129,4 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services.AddScoped<ICustomerRepository, CustomerRepository>() |> ignore
   services.AddScoped<IBasketRepository, BasketRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore
+  services.AddScoped<OrderQuery>() |> ignore

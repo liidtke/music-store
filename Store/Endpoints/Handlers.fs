@@ -9,5 +9,6 @@ let all =
     Samples.endpoints
     Baskets.endpoints
     Customers.endpoints
+    Orders.endpoints
     ]
   |> List.concat
