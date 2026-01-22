@@ -6,10 +6,7 @@ open System.Security.Claims
 open System.Security.Cryptography
 open System.Text
 open Store.Domain
-open Store.Domain.Health
-open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Authentication
-open Microsoft.AspNetCore.Authentication.Cookies
 open Microsoft.IdentityModel.Tokens
 
 module Crypto =
@@ -36,8 +33,7 @@ module Crypto =
 
   /// Performs key derivation using the provided algorithm.
   let pbkdf2 (algo: HashAlgorithmName) (iterations: int) (numBytesRequested: int) (salt: byte[]) (input: byte[]) =
-    let pbkdf2 = new Rfc2898DeriveBytes(input, salt, iterations, algo)
-    let bytes = pbkdf2.GetBytes numBytesRequested
+    let bytes = Rfc2898DeriveBytes.Pbkdf2(input, salt, iterations, algo, numBytesRequested)
     bytesToBase64 bytes
 
   /// Performs PBKDF2 key derivation using HMACSHA256.

@@ -15,7 +15,7 @@ type IMongoContext =
   abstract member Query<'a> : string -> IQueryable<'a>
 
 type MongoContext(settings: DatabaseSettings) =
-  let client: MongoClient = MongoClient(settings.connectionString)
+  let client: MongoClient = new MongoClient(settings.connectionString)
   let database: IMongoDatabase = client.GetDatabase(settings.databaseName)
 
   interface IMongoContext with

@@ -316,8 +316,9 @@ type OrderData =
     occurred: DateTime
     status: OrderStatus
     value: decimal
-    items: OrderItem
+    items: OrderItem list
     customer: CustomerOrderData
+    deliveryDate: DateTime
     paymentStatus: PaymentStatus
     paymentMethod: PaymentMethod }
 
@@ -333,6 +334,7 @@ module OrderMapping =
       occurred = order.occurred
       status = order.status
       customer = order.customer
+      deliveryDate = order.deliveryDate
       items = order.items
       paymentMethod = order.paymentMethod
       paymentStatus = order.paymentStatus
@@ -342,6 +344,7 @@ module OrderMapping =
     { id = data.id.ToString()
       occurred = data.occurred
       status = data.status
+      deliveryDate = data.deliveryDate
       customer = data.customer
       items = data.items
       paymentMethod = data.paymentMethod
