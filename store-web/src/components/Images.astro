@@ -1,0 +1,37 @@
+---
+import images from "@utils/images";
+import Modal from "@components/Modal.astro";
+
+const items = images.allImages();
+
+---
+
+<Modal title="Imagens">
+<div
+        class={`
+          grid gap-3 sm:gap-4 md:gap-5
+          grid-cols-1
+          sm:grid-cols-2
+          md:grid-cols-3
+          lg:grid-cols-4
+          xl:grid-cols-5
+        `}
+      >
+        {items.map((src, index) => (
+        <div>
+
+          <div class="group aspect-square overflow-hidden rounded-xl bg-gray-900/5">
+            <img
+              src={src}
+              alt={`Gallery image ${index + 1}`}
+              class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <p>{src}</p>
+        </div>
+        ))}
+      </div>
+
+</Modal>

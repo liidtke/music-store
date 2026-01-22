@@ -3,6 +3,7 @@ export const prerender = false;
 import Management from '@layouts/Management.astro';
 import Link from '@components/Link.astro';
 import toaster from '@utils/toaster'
+import images from '@utils/images'
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
 
 let data = null;
@@ -47,7 +48,7 @@ if (Astro.request.method === "PUT") {
       });
     }
 
-    let body = {id, name, isActive: isActive == "on", imageUrl}
+    let body = {id, name, isActive: isActive == "on", imageUrl: images.parse(imageUrl)}
 
     const response = await Astro.locals.fetchWithAuth("product-types/" + id, {method:'PUT', body:JSON.stringify(body)});
     if(response.ok){
@@ -95,8 +96,9 @@ if (Astro.request.method === "PUT") {
 
 
       <fieldset class="fieldset">
-        <legend class="fieldset-legend">Url Interna</legend>
+        <legend class="fieldset-legend">Url Imagem</legend>
         <input value={data.imageUrl} type="text" class="input" name="imageUrl" placeholder="/image1.jpg" />
+        <button class="btn-ghost btn-sm mt-2" hx-get="/partials/images" hx-target="#image-modal" >Ver Todas</button>
       </fieldset>
 
       <input value={data.id} type="hidden" class="input" name="id" />
@@ -113,6 +115,7 @@ if (Astro.request.method === "PUT") {
 
     <p id="message"></p>
 
+    <div id="image-modal"></div>
   </div>
 
 </Management>

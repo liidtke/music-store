@@ -1,6 +1,7 @@
 ---
 import Management from '@layouts/Management.astro';
 import toaster from '@utils/toaster'
+import images from '@utils/images';
 import Link from "@components/Link.astro";
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
 import CurrencyInput from '@components/CurrencyInput.astro';
@@ -76,7 +77,7 @@ if (Astro.request.method === "PUT") {
         oldUnitPrice: parseFloat(oldUnitPrice)??0,
         effort: parseInt(effort)??0,
         minDeadLine: parseInt(minDeadLine)??0,
-        imageUrl,
+        imageUrl: images.parse(imageUrl),
         description
       }
 
@@ -148,6 +149,7 @@ if (Astro.request.method === "PUT") {
          <legend class="fieldset-legend">Url Imagem</legend>
          <input type="text" class="input" name="imageUrl" value={data.imageUrl} />
          <p id="image-msg"></p>
+         <button class="btn-ghost btn-sm mt-2" hx-get="/partials/images" hx-target="#image-modal" >Ver Todas</button>
        </fieldset>
 
     <fieldset class="fieldset">
@@ -177,6 +179,7 @@ if (Astro.request.method === "PUT") {
   </form>
 
   <p id="message"></p>
+  <div id="image-modal"></div>
 
   <div class="border-b"></div>
   <div class="mt-8" hx-get={"samples?productId=" + data.id} hx-swap="innerHTML" hx-trigger="load delay:1s" >

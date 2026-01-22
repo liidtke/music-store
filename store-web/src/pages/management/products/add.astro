@@ -5,6 +5,7 @@ import Link from "@components/Link.astro";
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
 import CurrencyInput from '@components/CurrencyInput.astro';
 import NumberInput from '@components/NumberInput.astro';
+import images from '@utils/images';
 
 let data = [];
 
@@ -48,7 +49,7 @@ if (Astro.request.method === "POST") {
         oldUnitPrice: parseFloat(oldUnitPrice)??0,
         effort: parseInt(effort)??0,
         minDeadLine: parseInt(minDeadLine)??0,
-        imageUrl,
+        imageUrl: images.parse(imageUrl),
         description
       }
 
@@ -118,6 +119,7 @@ if (Astro.request.method === "POST") {
          <legend class="fieldset-legend">Url Imagem</legend>
          <input type="text" class="input" name="imageUrl" />
          <p id="image-msg"></p>
+         <button class="btn-ghost btn-sm mt-2" hx-get="/partials/images" hx-target="#image-modal" >Ver Todas</button>
        </fieldset>
 
     <fieldset class="fieldset">
@@ -147,6 +149,7 @@ if (Astro.request.method === "POST") {
   </form>
 
   <p id="message"></p>
+  <div id="image-modal"></div>
 </div>
 
 

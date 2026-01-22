@@ -39,7 +39,7 @@ if(response.success){
 
 
     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <img class="w-md rounded-sm" src={data.imageUrl} alt="image">
+      <img class="w-md rounded-sm" src=`/${data.imageUrl}` alt="image">
         <div class="quill" set:html={data.profile} ></div>
     </div>
     </div>

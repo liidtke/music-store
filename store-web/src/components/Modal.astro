@@ -15,9 +15,15 @@ const { title = "Modal", form, showSave = "" } = Astro.props;
   >
     <div class="rounded-lg  shadow-lg  bg-white md:m-6 m-2">
 
+      <div class="flex justify-between items-center">
+
     <h2 id="modalTitle" class="text-md font-bold text-slate-700 sm:text-2xl p-6 pb-4 ">
       {title}
     </h2>
+    <button type="button" _="on click remove #modal" class="btn-neutral mr-6">
+      Fechar
+    </button>
+      </div>
 
     <div class="modal-body pt-2 p-6 border-t bcolor bg-gray-100">
 
@@ -26,9 +32,9 @@ const { title = "Modal", form, showSave = "" } = Astro.props;
     </div>
 
     <footer class="mt-6 flex justify-end w-full gap-2">
-      <button type="button" _="on click remove #modal" class="btn-neutral">
+      <!-- <button type="button" _="on click remove #modal" class="btn-neutral">
         Fechar
-      </button>
+      </button> -->
 
       {
         () => {

@@ -1,6 +1,7 @@
 ---
 import Management from '@layouts/Management.astro';
 import toaster from '@utils/toaster'
+import images from '@utils/images'
 import Link from "@components/Link.astro";
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
 
@@ -21,10 +22,10 @@ if (Astro.request.method === "POST") {
     }
 
     if (!imageUrl) {
-      return toaster.inputValidation("pic-message", "Email Obrigatório")
+      return toaster.inputValidation("pic-message", "Imagem Obrigatória")
     }
 
-    let body = {id, name, isActive:true, imageUrl}
+    let body = {id, name, isActive:true, imageUrl: images.parse(imageUrl)}
 
     const response = await Astro.locals.fetchWithAuth("product-types", {method:'POST', body:JSON.stringify(body)});
     if(response.ok){
@@ -68,14 +69,16 @@ if (Astro.request.method === "POST") {
       <p id="name-message"></p>
     </fieldset>
     <fieldset class="fieldset">
-         <legend class="fieldset-legend">Url Interna</legend>
-         <input type="text" class="input" name="imageUrl" placeholder="/image1.jpg" />
+         <legend class="fieldset-legend">Url Imagem</legend>
+         <input type="text" class="input" name="imageUrl" placeholder="image1.jpg" />
+         <button class="btn-ghost btn-sm mt-2" hx-get="/partials/images" hx-target="#image-modal" >Ver Todas</button>
          <p id="pic-message"></p>
-       </fieldset>
+    </fieldset>
 
   </form>
 
   <p id="message"></p>
+  <div id="image-modal"></div>
 </div>
 
 
