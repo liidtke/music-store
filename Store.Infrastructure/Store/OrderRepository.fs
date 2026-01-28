@@ -66,5 +66,5 @@ type OrderRepository(ctx: IMongoContext, logger: ILogger<OrderRepository>) =
       let query = if crit.startDate.IsSome then query.Where(fun p -> p.occurred >= crit.startDate.Value) else query
       let query = if crit.paymentStatus.IsSome then query.Where(fun p -> p.paymentStatus = crit.paymentStatus.Value) else query
       
-      let effect () = query.ToListAsync()
+      let effect () = query.OrderByDescending(fun x -> x.occurred).ToListAsync()
       mapFetch logger OrderMapping.toOrder "Error fetching orders" effect

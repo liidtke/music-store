@@ -4,9 +4,11 @@ open System
 open System.Text
 open Store.Domain
 open Store.Domain.Email
+open Store.Domain.EmailService
 open Store.Domain.Interfaces
 open Store.Domain.Store.Interfaces
 open Store.Endpoints.Queries
+open Store.Events
 open Store.Infrastructure.Access.UserRepository
 open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
@@ -131,3 +133,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services.AddScoped<IOrderRepository, OrderRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore
   services.AddScoped<OrderQuery>() |> ignore
+  services.AddScoped<OrderPlacedEvent>() |> ignore
+  services.AddScoped<EmailService>() |> ignore
