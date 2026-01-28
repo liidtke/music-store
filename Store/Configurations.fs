@@ -133,5 +133,5 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   services.AddScoped<IOrderRepository, OrderRepository>() |> ignore
   services.AddScoped<ProfessionalQuery>() |> ignore
   services.AddScoped<OrderQuery>() |> ignore
-  services.AddScoped<OrderPlacedEvent>() |> ignore
+  services.AddScoped<OrderPlacedEventHandler>() |> ignore
   services.AddScoped<EmailService>() |> ignore
