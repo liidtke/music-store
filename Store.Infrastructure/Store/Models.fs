@@ -311,6 +311,7 @@ module BasketMapping =
       occurred = data.occurred }
 
 
+[<CLIMutable>]
 type OrderData =
   { id: BsonObjectId
     occurred: DateTime

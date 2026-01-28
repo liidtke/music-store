@@ -3,7 +3,7 @@ import Store from "@layouts/Store.astro";
 import Basket from "@components/Basket.svelte";
 import toaster from '@utils/toaster'
 
-let data = [{},{}];
+let data = null;
 
 let c = Astro.cookies.get('auth_token');
 if(!c){
@@ -18,11 +18,7 @@ if (Astro.request.method === "GET") {
     data = result.data;
   }
   else {
-    console.log(result);
-    // return new Response("/app", {
-    //   status: 307,
-    //   headers: { "Content-Type": "text/html", "Location": "/app" }
-    // });
+    // data = null;
   }
 }
 

@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <Compile Include="Security.fs"/>
+        <Compile Include="Utils.fs" />
         <Compile Include="Models.fs"/>
         <Compile Include="Session.fs"/>
         <Compile Include="Context.fs" />

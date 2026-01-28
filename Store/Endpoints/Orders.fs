@@ -1,5 +1,6 @@
 module Store.Endpoints.Orders
 
+open System.Threading.Tasks
 open Application
 open Falco
 open Falco.Routing
@@ -63,6 +64,8 @@ let toStatus (input: string) : OrderStatus =
 
 
 module Create =
+  open Utils
+  
   type OrderInputModel = { paymentMethod: string }
 
   let private workflow (stx: ServiceContext) (input: OrderInputModel) =
@@ -70,6 +73,8 @@ module Create =
 
 
     async {
+      use! lock = NamedAsyncLock.AcquireAsync($"user:{stx.userSession.userId}") |> Async.AwaitTask
+      // do! Task.Delay(2000) |> Async.AwaitTask
       let! result = effects { paymentMethod = toPaymentMethod input.paymentMethod }
       return result
     }
