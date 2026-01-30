@@ -13,7 +13,6 @@ type FetchCustomerEffect = FetchSingleEffect<string, Customer>
 type FetchBasketEffect = FetchSingleEffect<string, Basket>
 type DeleteBasketEffect = string -> Async<ServiceOutput<unit>>
 
-
 type CreateOrderInput = { paymentMethod: PaymentMethod }
 
 type OrderEffects =
@@ -83,7 +82,9 @@ let createOrder (us: UserSession) (effects: OrderEffects) (input: CreateOrderInp
     let! saveResult = order ?>< effects.save
     let! deleteResult = saveResult ?>< (fun _ -> effects.deleteBasket us.userId)
 
-    return saveResult
+    match saveResult with
+    | Success order -> return DomainOutput.from saveResult <| Some { order = order }
+    | Failure errorResult -> return DomainOutput.from saveResult None
   }
 
 

@@ -96,3 +96,8 @@ type OrderHistory =
     orderId: Id
     description: string
     status: OrderStatus }
+
+
+//events
+  
+type OrderPlacedEvent = { order: Order }

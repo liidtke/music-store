@@ -277,11 +277,6 @@ module Professional =
 
                     p [] [ text $"Há um novo pedido para você!" ]
 
-                    div
-                      [ attr "class" "security-info" ]
-                      [ h3 [] [ text "🔒 Informações de Segurança" ]
-                        p [] [ text "Se você não reconhece esse acesso por favor entre em contato com nosso suporte." ] ]
-
                     p
                       [ attr
                           "style"

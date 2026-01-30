@@ -10,6 +10,7 @@ open Store.Domain.Store.Interfaces
 open Store.Domain.Store.OrderService
 open Store.Domain.Store.Ordering
 open Store.Endpoints.Queries
+open Wolverine
 
 module Factory =
   type Mode =
@@ -70,13 +71,15 @@ module Create =
 
   let private workflow (stx: ServiceContext) (input: OrderInputModel) =
     let effects = Factory.create stx
+    let bus = stx.context.Plug<IMessageBus>()
 
 
     async {
       use! lock = NamedAsyncLock.AcquireAsync($"user:{stx.userSession.userId}") |> Async.AwaitTask
       // do! Task.Delay(2000) |> Async.AwaitTask
       let! result = effects { paymentMethod = toPaymentMethod input.paymentMethod }
-      return result
+      let! _ = Events.send bus result
+      return result.result
     }
 
   let handler: HttpHandler = Request.mapJson<OrderInputModel> <| runAsync workflow

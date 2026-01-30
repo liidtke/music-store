@@ -10,30 +10,23 @@ open Store.Domain.Store.Ordering
 open Store.Infrastructure
 open Wolverine
 
-type SuccessEvent<'T, 'TEvent> = { obj: 'T; domainEvent: 'TEvent }
-
-let succeedWithEvent (createFunc: 'T -> 'TEvent) (func: ServiceOutput<'T>) : SuccessEvent<'T, 'TEvent> ServiceOutput =
-  func ?> (fun i -> { obj = i; domainEvent = createFunc i } |> Success)
-
-let send (bus: IMessageBus) (successEvent: SuccessEvent<'T, 'TEvent> ServiceOutput) =
+let send (bus: IMessageBus) (output: DomainOutput<'T, 'TEvent>) =
   let send e =
     async {
-      do! bus.PublishAsync(e.domainEvent).AsTask() |> Async.AwaitTask
-      return ()
+      do! bus.PublishAsync(e).AsTask() |> Async.AwaitTask
+      return output
     }
 
-  match successEvent with
-  | Success successEvent -> send successEvent
-  | Failure errorResult -> async { return () }
+  if output.SendEvent then
+    send output.event
+  else
+    async { return output }
 
-//events and handlers
-
-type OrderPlacedEvent = { order: Order }
 
 let sendToCreator (emailService: EmailService) (event: OrderPlacedEvent) =
   let baseEmail =
     { userName = event.order.customer.name
-      link = emailService.BaseUrl
+      link = "${emailService.BaseUrl}/orders/"
       email = event.order.customer.email
       companyName = "Music Store" }
 
@@ -62,7 +55,7 @@ let sendToProfessional (emailService: EmailService) (order: Order) (p: User) =
       companyName = "Music Store" }
 
   let mailSender = MailSender.sendEmailAsync
-  let body = EmailTemplate.orderPlacedEmail baseEmail
+  let body = EmailTemplate.Professional.orderPlacedEmail baseEmail
 
   let message =
     { from = ""
@@ -76,7 +69,7 @@ let sendToProfessional (emailService: EmailService) (order: Order) (p: User) =
     return succeed p
   }
 
-let sendToAllProfessionals (emailService: EmailService) (order: Order) (ur: IRepository<User>) =
+let sendToAllProfessionals (emailService: EmailService) (order: Order) (ur: IUserRepository) =
   let ids =
     order.items |> List.map (fun p -> p.product.professionalId) |> List.distinct
 
@@ -93,7 +86,7 @@ let sendToAllProfessionals (emailService: EmailService) (order: Order) (ur: IRep
   }
 
 type OrderPlacedEventHandler
-  (logger: ILogger<OrderPlacedEventHandler>, emailService: EmailService, ur: IRepository<User>) =
+  (logger: ILogger<OrderPlacedEventHandler>, emailService: EmailService, ur: IUserRepository) =
   member _.Handle(event: OrderPlacedEvent) =
 
     task {

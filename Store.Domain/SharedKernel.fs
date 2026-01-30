@@ -68,8 +68,8 @@ let validation<'t> message =
   fromError Validation message :> ServiceOutput<'t>
 
 let validationAsync<'t> message =
-  async { return fromError Validation message :> ServiceOutput<'t>}
-  
+  async { return fromError Validation message :> ServiceOutput<'t> }
+
 let notFound message = fromError NotFound message
 
 let formValidation html =
@@ -360,14 +360,16 @@ let fromOption result =
     | Some value -> value |> succeed)
 
 
-type DomainEvent = | UserChanged
-
-type DomainOutput<'T> =
-  | SendEvent of 'T * DomainEvent
-  | SendEvents of 'T * DomainEvent list
-  | Obj of 'T
-
 let optionToString (s: string option) =
   match s with
   | None -> ""
   | Some value -> value
+
+type DomainOutput<'T, 'TEvent> =
+  { result: ServiceOutput<'T>
+    event: 'TEvent option }
+  
+  member this.SendEvent = this.result.IsSuccess && this.event.IsSome
+
+module DomainOutput =
+  let from o ev = { result = o; event = ev } 
