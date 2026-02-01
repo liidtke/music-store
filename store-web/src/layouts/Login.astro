@@ -36,6 +36,9 @@ import "../styles/global.css";
         evt.detail.swapOverride = "#message";
         evt.detail.target = document.getElementById("message");
       }
+      if (evt.detail.xhr.status === 308) {
+        // evt.detail.target = document.getElementById("body");
+      }
     });
   </script>
 

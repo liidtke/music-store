@@ -78,7 +78,7 @@ module Create =
       use! lock = NamedAsyncLock.AcquireAsync($"user:{stx.userSession.userId}") |> Async.AwaitTask
       // do! Task.Delay(2000) |> Async.AwaitTask
       let! result = effects { paymentMethod = toPaymentMethod input.paymentMethod }
-      let! _ = Events.send bus result
+      do Events.send bus result
       return result.result
     }
 

@@ -67,9 +67,35 @@ if (Astro.request.method === "GET") {
   <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
   <meta name="generator" content={Astro.generator} />
   <title>{content?.title??"Sistema"}</title>
+
+
+  <script>
+    document.body.addEventListener("htmx:beforeSwap", function (evt) {
+      if (evt.detail.xhr.status === 302) {
+        // alert the user when a 404 occurs (maybe use a nicer mechanism than alert())
+      } else if (evt.detail.xhr.status === 422) {
+        // allow 422 responses to swap as we are using this as a signal that
+        // a form was submitted with bad data and want to rerender with the
+        // errors
+        //
+        // set isError to false to avoid error logging in console
+        evt.detail.shouldSwap = true;
+        evt.detail.isError = false;
+        evt.detail.swapOverride = "#message";
+        evt.detail.target = document.getElementById("message");
+      }
+      if (evt.detail.xhr.status === 308) {
+        // evt.detail.target = document.getElementById("body");
+      }
+    });
+  </script>
+
+
 </head>
 
 <div id="toaster-wrapper" class="space-y-3 absolute top-14 end-3"></div>
+
+
 <body class="bg-base-200">
   <div class="bg-gray-100 flex min-h-screen flex-col">
     <Masthead data={data}>

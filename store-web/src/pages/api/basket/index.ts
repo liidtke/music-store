@@ -46,10 +46,25 @@ export const POST: APIRoute = async ({ url, request, redirect, cookies }) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Backend error:', response.status, errorText);
-      return new Response(toaster.error("Erro ao adicionar item:" + errorText), {
-        status: 203,
-        headers: { "Content-Type": "text/html" }
-      })
+
+
+      if (response.status == 401) {
+
+        let indicator = `
+          <span _="on load go to url /login">
+          Adicionar ao Carrinho
+          </span>
+          `;
+        return new Response(indicator, {
+          status: 200,
+          headers: { "Content-Type": "text/html" }
+        });
+
+      }
+        return new Response(toaster.error("Erro ao adicionar item:" + errorText), {
+          status: 203,
+          headers: { "Content-Type": "text/html" }
+        })
     }
 
     const data = await response.json();

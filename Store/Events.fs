@@ -12,15 +12,16 @@ open Wolverine
 
 let send (bus: IMessageBus) (output: DomainOutput<'T, 'TEvent>) =
   let send e =
-    async {
-      do! bus.PublishAsync(e).AsTask() |> Async.AwaitTask
-      return output
-    }
+    bus.PublishAsync(e).AsTask() |> Async.AwaitTask |> Async.RunSynchronously
 
   if output.SendEvent then
-    send output.event
+    match output.event with
+    | None -> ()
+    | Some value ->
+      send value |> ignore
+      ()
   else
-    async { return output }
+    ()
 
 
 let sendToCreator (emailService: EmailService) (event: OrderPlacedEvent) =
@@ -85,8 +86,8 @@ let sendToAllProfessionals (emailService: EmailService) (order: Order) (ur: IUse
     return ()
   }
 
-type OrderPlacedEventHandler
-  (logger: ILogger<OrderPlacedEventHandler>, emailService: EmailService, ur: IUserRepository) =
+type OrderPlacedEventHandler(logger: ILogger<OrderPlacedEventHandler>, emailService: EmailService, ur: IUserRepository)
+  =
   member _.Handle(event: OrderPlacedEvent) =
 
     task {
