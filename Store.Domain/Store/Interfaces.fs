@@ -47,6 +47,7 @@ type IBasketRepository =
   abstract member Delete: string -> Async<ServiceOutput<unit>>
 
 type OrderSearchCriteria = {
+  order:string option
   userId:string option
   startDate:DateTime option
   status:OrderStatus option

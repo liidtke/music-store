@@ -10,7 +10,7 @@ let data = [];
 
 let add = "";
 let search = Astro.url.searchParams.get('search');
-console.log('search is ', search)
+// console.log('search is ', search)
 if(search){
   let p = new URLSearchParams({search:search});
   add = p.toString();

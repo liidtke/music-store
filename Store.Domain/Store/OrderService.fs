@@ -13,7 +13,7 @@ type FetchCustomerEffect = FetchSingleEffect<string, Customer>
 type FetchBasketEffect = FetchSingleEffect<string, Basket>
 type DeleteBasketEffect = string -> Async<ServiceOutput<unit>>
 
-type CreateOrderInput = { paymentMethod: PaymentMethod }
+type CreateOrderInput = { paymentMethod: PaymentMethod; message:string option }
 
 type OrderEffects =
   { save: SaveEffect
@@ -67,6 +67,7 @@ let createOrder (us: UserSession) (effects: OrderEffects) (input: CreateOrderInp
       paymentStatus = PaymentStatus.Pending
       status = OrderStatus.Submitted
       paymentMethod = input.paymentMethod
+      message = input.message
       value = basket.items |> List.sumBy (fun i -> i.product.unitPrice * decimal i.quantity)
       customer =
         { userId = customer.id

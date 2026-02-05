@@ -319,6 +319,7 @@ type OrderData =
     value: decimal
     items: OrderItem list
     customer: CustomerOrderData
+    message:string option
     deliveryDate: DateTime
     paymentStatus: PaymentStatus
     paymentMethod: PaymentMethod }
@@ -337,6 +338,7 @@ module OrderMapping =
       customer = order.customer
       deliveryDate = order.deliveryDate
       items = order.items
+      message = order.message
       paymentMethod = order.paymentMethod
       paymentStatus = order.paymentStatus
       value = order.value }
@@ -348,6 +350,7 @@ module OrderMapping =
       deliveryDate = data.deliveryDate
       customer = data.customer
       items = data.items
+      message = data.message
       paymentMethod = data.paymentMethod
       paymentStatus = data.paymentStatus
       value = data.value }

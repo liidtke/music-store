@@ -61,10 +61,38 @@ type OrderRepository(ctx: IMongoContext, logger: ILogger<OrderRepository>) =
 
     member this.Fetch(crit) =
       let query = collection.AsQueryable()
-      let query = if crit.status.IsSome then query.Where(fun p -> p.status = crit.status.Value) else query
-      let query = if crit.userId.IsSome then query.Where(fun p -> p.customer.userId = crit.userId.Value) else query
-      let query = if crit.startDate.IsSome then query.Where(fun p -> p.occurred >= crit.startDate.Value) else query
-      let query = if crit.paymentStatus.IsSome then query.Where(fun p -> p.paymentStatus = crit.paymentStatus.Value) else query
-      
-      let effect () = query.OrderByDescending(fun x -> x.occurred).ToListAsync()
+
+      let query =
+        if crit.status.IsSome then
+          query.Where(fun p -> p.status = crit.status.Value)
+        else
+          query
+
+      let query =
+        if crit.userId.IsSome then
+          query.Where(fun p -> p.customer.userId = crit.userId.Value)
+        else
+          query
+
+      let query =
+        if crit.startDate.IsSome then
+          query.Where(fun p -> p.occurred >= crit.startDate.Value)
+        else
+          query
+
+      let query =
+        if crit.paymentStatus.IsSome then
+          query.Where(fun p -> p.paymentStatus = crit.paymentStatus.Value)
+        else
+          query
+
+      let query =
+        if crit.order.IsSome then
+          query.Where(fun p -> p.id = BsonObjectId.Create(crit.order.Value))
+        else
+          query
+
+      let effect () =
+        query.OrderByDescending(fun x -> x.occurred).ToListAsync()
+
       mapFetch logger OrderMapping.toOrder "Error fetching orders" effect

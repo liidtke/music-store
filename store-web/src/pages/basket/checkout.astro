@@ -30,26 +30,24 @@ if (Astro.request.method === "GET") {
 if (Astro.request.method === "POST") {
   const form = await Astro.request.formData();
 
-  const productId = form.get("productId");
-  const quantity = form.get("quantity") ?? 1;
-  const action = form.get("action") ?? 'AddItem';
+  const paymentMethod = form.get("paymentMethod");
+  const message = form.get("message");
 
-  if (!productId) {
-    return new Response(toaster.alert("Erro ao salvar - " + msg), {
+  if (!paymentMethod) {
+    return new Response(toaster.alert("Forma de Pagamento Inválida"), {
       status: 203,
       headers: {"Content-Type": "text/html"}
     })
   }
 
   const body = {
-    productId,
-    quantity:parseInt(quantity),
-    action
+   message,
+   paymentMethod
   };
 
   try {
-    const response = await Astro.locals.fetchWithResult("my-basket", {
-      method: 'PUT',
+    const response = await Astro.locals.fetchWithResult("orders", {
+      method: 'POST',
       body: JSON.stringify(body)
     })
 
@@ -67,7 +65,7 @@ if (Astro.request.method === "POST") {
     })
   }
 
-  return new Response(toaster.successMessage("Carrinho Atualizado", "/basket"), {
+  return new Response(toaster.successMessage("Pedido Criado", "/orders"), {
       status: 200,
       headers: { "Content-Type": "text/html" }
     });
@@ -90,17 +88,26 @@ if (Astro.request.method === "POST") {
       Informações de Pagamento
     </h3>
 
-    <form>
-
+    <form hx-post="/basket/checkout" hx-target="#message" >
       <fieldset class="fieldset">
         <legend class="fieldset-legend">Forma de Pagamento</legend>
       <select id="select "
       name="paymentMethod"
       class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
         <option value="" disabled selected>Selecione</option>
-                    <option value="pix">PIX</option>
-                    <option value="agreement">A Combinar</option>
+                    <option value="Pix">PIX</option>
+                    <option value="Direct">A Combinar</option>
                   </select>
+      </fieldset>
+
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Mensagem (opcional)</legend>
+        <textarea
+          name="message"
+          rows="2"
+          class="input resize-vertical"
+          placeholder=""></textarea>
       </fieldset>
 
       <button class="btn-primary w-full mt-4">Confirmar Compra</button>
@@ -110,5 +117,7 @@ if (Astro.request.method === "POST") {
   </div>
 
   </div>
+
+  <div id="message"></div>
 
 </Store>

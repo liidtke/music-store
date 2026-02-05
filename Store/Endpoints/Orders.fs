@@ -66,8 +66,10 @@ let toStatus (input: string) : OrderStatus =
 
 module Create =
   open Utils
-  
-  type OrderInputModel = { paymentMethod: string }
+
+  type OrderInputModel =
+    { paymentMethod: string
+      message: string option }
 
   let private workflow (stx: ServiceContext) (input: OrderInputModel) =
     let effects = Factory.create stx
@@ -77,7 +79,11 @@ module Create =
     async {
       use! lock = NamedAsyncLock.AcquireAsync($"user:{stx.userSession.userId}") |> Async.AwaitTask
       // do! Task.Delay(2000) |> Async.AwaitTask
-      let! result = effects { paymentMethod = toPaymentMethod input.paymentMethod }
+      let! result =
+        effects
+          { paymentMethod = toPaymentMethod input.paymentMethod
+            message = input.message }
+
       do Events.send bus result
       return result.result
     }
@@ -99,6 +105,7 @@ module Search =
     Request.mapQuery (fun q ->
       { userId = q.TryGetString "userId"
         startDate = q.TryGetDateTime "startDate"
+        order = q.TryGetString "order" |> fromString
         status = q.TryGetString "status" |> maybeMap toStatus
         paymentStatus = q.TryGetString "paymentStatus" |> maybeMap toPaymentStatus })
     <| runAsync workflow

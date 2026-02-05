@@ -75,6 +75,7 @@ type Order =
     items: OrderItem list
     // responsibleId: Id
     customer: CustomerOrderData
+    message:string option
     deliveryDate: DateTime
     paymentStatus: PaymentStatus
     paymentMethod: PaymentMethod
