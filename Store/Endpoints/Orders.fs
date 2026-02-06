@@ -1,6 +1,5 @@
 module Store.Endpoints.Orders
 
-open System.Threading.Tasks
 open Application
 open Falco
 open Falco.Routing
@@ -75,7 +74,6 @@ module Create =
     let effects = Factory.create stx
     let bus = stx.context.Plug<IMessageBus>()
 
-
     async {
       use! lock = NamedAsyncLock.AcquireAsync($"user:{stx.userSession.userId}") |> Async.AwaitTask
       // do! Task.Delay(2000) |> Async.AwaitTask
@@ -91,6 +89,22 @@ module Create =
   let handler: HttpHandler = Request.mapJson<OrderInputModel> <| runAsync workflow
   let endpoint = post "/orders/" handler
 
+
+module Details =
+
+  let workflow (stx: ServiceContext) (input: string) =
+    let query = stx.context.Plug<OrderQuery>()
+
+    async {
+      let! result = query.Get(input, stx.userSession)
+      return result
+    }
+
+  let handler: HttpHandler =
+    Request.mapRoute (fun r -> r.GetString("id")) <| runAsync workflow
+
+  let endpoint = get "/orders/{id}" handler
+
 module Search =
 
   let workflow (stx: ServiceContext) (input: OrderSearchCriteria) =
@@ -103,13 +117,14 @@ module Search =
 
   let handler: HttpHandler =
     Request.mapQuery (fun q ->
-      { userId = q.TryGetString "userId"
+      { userId = q.TryGetString "userId" |> fromString
         startDate = q.TryGetDateTime "startDate"
         order = q.TryGetString "order" |> fromString
         status = q.TryGetString "status" |> maybeMap toStatus
+        limit = q.GetInt32("limit", 50)
         paymentStatus = q.TryGetString "paymentStatus" |> maybeMap toPaymentStatus })
     <| runAsync workflow
 
   let endpoint = get "/orders/" handler
 
-let endpoints = [ Create.endpoint; Search.endpoint ]
+let endpoints = [ Create.endpoint; Search.endpoint; Details.endpoint ]

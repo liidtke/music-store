@@ -39,10 +39,25 @@ type ProfessionalQuery(repo: IProfessionalRepository) =
 type OrderQuery(repo: IOrderRepository) =
   member _.GetMine(us: UserSession) = repo.Find(us.userId)
 
+  member _.Get(id: string, us: UserSession) =
+    async {
+      let! result = repo.Find(id)
+
+      match result with
+      | Success order ->
+        if us.role = Role.AdminRole || us.role = Role.ProfessionalRole then
+          return result
+        elif order.customer.userId = us.userId then
+          return result
+        else
+          return invalidate "Access Denied"
+      | Failure errorResult -> return result
+    }
+
   member _.GetAll(input: OrderSearchCriteria, us: UserSession) =
     if input.userId.IsSome && input.userId.Value = us.userId then
       repo.Fetch(input)
     elif us.role = Role.AdminRole || us.role = Role.ProfessionalRole then
       repo.Fetch(input)
     else
-      async { return invalidate "Access Denied" }
+      repo.Fetch({ input with userId = Some(us.userId) })

@@ -52,6 +52,7 @@ type OrderSearchCriteria = {
   startDate:DateTime option
   status:OrderStatus option
   paymentStatus:PaymentStatus option
+  limit: int
 }
 
 type IOrderRepository =

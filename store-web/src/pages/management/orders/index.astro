@@ -1,0 +1,132 @@
+---
+export const prerender = false;
+import toaster from '@utils/toaster'
+import Link from '@components/Link.astro';
+import SearchInput from '@components/SearchInput.astro'
+import BreadCrumbs from "@components/BreadCrumbs.svelte";
+import Management from '@layouts/Management.astro';
+import dateConverter from '@utils/date-converter'
+
+const formatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+let data = [];
+
+let add = "";
+let search = Astro.url.searchParams.get('search');
+let status = Astro.url.searchParams.get('status');
+
+if(status==""){
+  status = null;
+}
+
+if(search || status){
+  let p = new URLSearchParams({search:search, status:status});
+  add = p.toString();
+}
+ const response = await Astro.locals.fetchWithResult("orders?" + add);
+if(response.success){
+  data = response.data;
+}
+
+function orderStatusToString(status) {
+  const statusMap = {
+    1: "Criado",
+    2: "Confirmado",
+    3: "Em Andamento",
+    4: "Completo",
+    5: "Cancelado"
+  };
+
+  return statusMap[status] || "Unknown";
+}
+
+---
+<Management>
+
+<div class="page">
+  <BreadCrumbs path="management/orders" name="Pedidos" />
+
+	<h1 class="text-3xl font-semibold">Pedidos</h1>
+
+	<div class="mt-8 grid grid-cols-1 gap-2 md:grid-cols-2">
+      <SearchInput
+           get="/management/orders"
+           trigger="keyup changed delay:500ms queue:last"
+           target="#tb"
+           select="#tb"
+           swap="outerHTML"
+           push="true"
+           name="search"
+           placeholder="Buscar"
+           />
+
+
+  <select
+  class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md"
+  hx-get="/management/orders"
+  hx-trigger="change"
+  hx-target="#tb"
+  hx-select="#tb"
+  hx-swap="outerHTML"
+  name="status"
+  >
+    <option value="">Todos</option>
+           <option value="Submitted">Criado</option>
+           <option value="Confirmed">Confirmado</option>
+           <option value="Cancelled">Cancelado</option>
+           <option value="InProgress">Em Progresso</option>
+           <option value="Fulfilled">Completo</option>
+           </select>
+
+      </div>
+
+		<table id="tb" class="mt-8 table">
+			<!-- head -->
+			<thead>
+				<tr>
+				  <th class="th">Status</th>
+					<th class="th">Data</th>
+					<th class="th">Cliente</th>
+					<th class="th">Profissional</th>
+					<th class="th">Valor</th>
+					<th class="th">Identificador</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+        {
+() => {if (data.length == 0) return (
+					 <tr class="tr text-center">
+					 	<td class="td" colspan="7">Sem itens para exibir</td>
+					 </tr>
+        )}
+        }
+    {
+      data.map((o) => (
+					<tr class="tr">
+					  <td class="td">{orderStatusToString(o.status)}</td>
+						<td class="td">{dateConverter.toString(o.occurred)}</td>
+						<td class="td">{o.customer.email}</td>
+						<td class="td">{o.items[0].product.professionalName}</td>
+						<td class="td">{formatter.format(o.value)}</td>
+						<td class="td">{o.id}</td>
+          <td class="td">
+          <Link url=`/management/orders/${o.id}` cl="table-action">Detalhes</Link>
+          </td>
+
+					</tr>
+        )
+
+        )}
+
+			</tbody>
+		</table>
+
+    </div>
+
+
+
+</Management>

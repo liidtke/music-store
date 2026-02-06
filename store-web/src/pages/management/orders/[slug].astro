@@ -1,0 +1,202 @@
+---
+import Management from '@layouts/Management.astro';
+import toaster from '@utils/toaster'
+import Link from "@components/Link.astro";
+import BreadCrumbs from "@components/BreadCrumbs.svelte";
+import CurrencyInput from '@components/CurrencyInput.astro';
+import NumberInput from '@components/NumberInput.astro';
+import dateConverter from '@utils/date-converter'
+
+let data = [];
+
+if (Astro.request.method === "GET") {
+  const { slug } = Astro.params;
+  if(slug){
+    const result = await Astro.locals.fetchWithResult("orders/" + slug);
+    console.log(result)
+    if(result.success){
+      data = result.data;
+    }
+    else{
+      return new Response("/management/orders", {
+        status: 307,
+        headers: { "Content-Type": "text/html", "Location": "/management" }
+      });
+    }
+  }
+}
+
+function orderStatusToString(status) {
+  const statusMap = {
+    1: "Criado",
+    2: "Confirmado",
+    3: "Em Andamento",
+    4: "Completo",
+    5: "Cancelado"
+  };
+
+  return statusMap[status] || "Unknown";
+}
+
+
+function paymentStatusStatusToString(status) {
+  const statusMap = {
+    1: "Pendente",
+    2: "Pago",
+    3: "Estornado"
+  };
+
+  return statusMap[status] || "Unknown";
+}
+
+function paymentMethodToString(status) {
+  const statusMap = {
+    0: "Manual",
+    1: "Pagamento Direto",
+    2: "Pix",
+    3: "Dinheiro"
+  };
+
+  return statusMap[status] || status;
+}
+
+const formatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+---
+
+<Management>
+
+<div class="page">
+  <BreadCrumbs path='management/orders,management/orders' name="Pedidos, Editar" />
+
+  <h1 class="text-3xl font-semibold">Detalhes do Pedido</h1>
+  <Link url="/management/products" cl="btn-neutral mt-8">Voltar</Link>
+  <button  class="btn-primary mt-8" type="submit" form="f1" >Salvar</button>
+
+  <div class="mt-8 grid grid-cols-2 grid-gap-2">
+
+    <div class=" space-y-4 rounded-lg border border-gray-300 p-6">
+      <!-- <h2 class="text-2xl font-semibold mb-4">Pedido</h2> -->
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Status</label>
+        <p class="text-">{orderStatusToString(data.status)}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Data</label>
+        <p class="text-">{dateConverter.toString(data.occurred, 'L LT')}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Valor</label>
+        <p class="text-">{formatter.format(data.value)}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Forma de Pagamento</label>
+        <p class="text-">{paymentMethodToString(data.paymentMethod)}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Status de Pagamento</label>
+        <p class="text-">{paymentStatusStatusToString(data.paymentStatus)}</p>
+      </div>
+
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Data Prevista Entrega</label>
+        <p class="text-">{dateConverter.toString(data.deliveryDate)}</p>
+      </div>
+
+
+
+    </div>
+
+
+
+    <div class=" space-y-4 rounded-lg border border-gray-300 bg-gray-100 p-6">
+      <h2 class="text-2xl font-semibold mb-4">Cliente</h2>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Nome</label>
+        <p class="text-">{data.customer.name}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Email</label>
+        <p class="text-">{data.customer.email}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Telefone</label>
+        <p class="text-">{data.customer.phone}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Documento</label>
+        <p class="text-">{data.customer.document}</p>
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-900 font-semibold" for="">Mensagem</label>
+        <p class="text-">{data.message ?? '-'}</p>
+      </div>
+
+    </div>
+
+
+
+
+  </div>
+
+
+  <h1 class="text-2xl font-semibold mt-8">Itens do Pedido</h1>
+
+  <table id="tb" class="mt-8 table">
+    <thead>
+				<tr>
+				  <th class="th">Produto</th>
+					<th class="th">Quantidade</th>
+					<th class="th">Valor Unitário</th>
+					<th class="th">Profissional</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+    {data.items.map((item) => (
+
+    <tr class="tr">
+					  <td class="td"> {item.product.name} </td>
+					  <td class="td"> {item.quantity} </td>
+					  <td class="td"> {formatter.format(item.product.unitPrice)} </td>
+					  <td class="td"> {item.product.professionalName} </td>
+
+              <!-- <td class="td"> -->
+              <!-- <Link url=`/management/orders/${o.id}` cl="table-action">Detalhes</Link> -->
+              <!-- </td> -->
+
+					</tr>
+
+    )
+    )}
+			</tbody>
+		</table>
+
+
+  <form action="" class="f1"></form>
+
+  <p id="message"></p>
+  <div id="image-modal"></div>
+
+  <div class="border-b"></div>
+
+  </div>
+
+</div>
+
+
+</Management>

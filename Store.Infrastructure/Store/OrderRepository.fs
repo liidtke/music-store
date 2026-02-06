@@ -62,6 +62,7 @@ type OrderRepository(ctx: IMongoContext, logger: ILogger<OrderRepository>) =
     member this.Fetch(crit) =
       let query = collection.AsQueryable()
 
+      
       let query =
         if crit.status.IsSome then
           query.Where(fun p -> p.status = crit.status.Value)
@@ -93,6 +94,6 @@ type OrderRepository(ctx: IMongoContext, logger: ILogger<OrderRepository>) =
           query
 
       let effect () =
-        query.OrderByDescending(fun x -> x.occurred).ToListAsync()
+        query.OrderByDescending(fun x -> x.occurred).Take(crit.limit).ToListAsync()
 
       mapFetch logger OrderMapping.toOrder "Error fetching orders" effect
