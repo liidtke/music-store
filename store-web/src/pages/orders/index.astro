@@ -19,10 +19,13 @@ if (Astro.request.method === "GET") {
   console.log("GETTING orders");
 
   const orderId = Astro.url.searchParams.get("order") || null;
+  const status = Astro.url.searchParams.get("status") || null;
 
   let url = "orders?"
 
-  let p = new URLSearchParams({order:orderId});
+  let obj = {order:orderId, status}
+
+  let p = new URLSearchParams(obj);
   let add = p.toString();
 
   const result = await Astro.locals.fetchWithResult(url+add);
@@ -68,12 +71,11 @@ function orderStatusToStringSwitch(status) {
           <p class="text-[15px] text-slate-500 mt-3">Visualizar pedidos</p>
         </div>
         <div class="ml-auto">
-          <!-- <select class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
-          <option>All orders</option>
-          <option>Completed</option>
-          <option>Processing</option>
-          <option>Cancelled</option>
-          </select> -->
+          <select name="status" hx-get="" hx-target="main" class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
+            <option value="Every">Todas</option>
+          <option value="Fulfilled">Completas</option>
+          <option value="Cancelled">Canceladas</option>
+          </select>
         </div>
       </div>
     </div>

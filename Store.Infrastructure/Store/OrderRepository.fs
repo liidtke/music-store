@@ -41,8 +41,8 @@ type OrderRepository(ctx: IMongoContext, logger: ILogger<OrderRepository>) =
         order
 
     member this.Find(id) =
-      if id = "" then
-        validationAsync "Basket id cannot be empty"
+      if id |> isNullOrEmpty then
+        validationAsync "Order id cannot be empty"
       else
         let filter = filterBuilder.Eq((fun p -> p.id), BsonObjectId.Create(id))
 

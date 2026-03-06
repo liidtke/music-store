@@ -288,16 +288,16 @@ let maybeMapSo (func: 'a -> 'b) (value: Option<'a>) =
   | None -> None |> succeed
   | Some s -> func s |> Some |> succeed
 
-let optionMap (func: 'a -> 'a option) (value: 'a option) =
+let optionMap (func: 'a -> 'b option) (value: 'a option) =
   match value with
   | None -> None
   | Some item -> func item
 
 
-let optionMapSo func so =
-  match so with
-  | Success s -> optionMap func s |> succeed
-  | Failure e -> failure e
+// let optionMapSo func so =
+//   match so with
+//   | Success s -> optionMap func s |> succeed
+//   | Failure e -> failure e
 
 /// Apply a function to the success values of two service outputs, short-circuiting on the first failure.
 let may2 (f: 'a -> 'b -> ServiceOutput<'c>) (so1: ServiceOutput<'a>) (so2: ServiceOutput<'b>) : ServiceOutput<'c> =

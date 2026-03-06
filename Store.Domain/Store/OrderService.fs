@@ -13,7 +13,9 @@ type FetchCustomerEffect = FetchSingleEffect<string, Customer>
 type FetchBasketEffect = FetchSingleEffect<string, Basket>
 type DeleteBasketEffect = string -> Async<ServiceOutput<unit>>
 
-type CreateOrderInput = { paymentMethod: PaymentMethod; message:string option }
+type CreateOrderInput =
+  { paymentMethod: PaymentMethod
+    message: string option }
 
 type OrderEffects =
   { save: SaveEffect
@@ -120,6 +122,36 @@ module Update =
       return saveResult
     }
 
+  type OrderUpdateInput =
+    { orderId: string
+      status: OrderStatus
+      paymentStatus: PaymentStatus
+      deliveryDate: DateTime option }
+
+  let updateAdminOrder (us: UserSession) (effects: OrderEffects) (input: OrderUpdateInput) =
+    async {
+      let! result = effects.fetch input.orderId
+      
+      let order =
+        result
+        ?> validatePermission us
+        ?> (fun order ->
+          { order with
+              status = input.status
+              deliveryDate =
+                match input.deliveryDate with
+                | Some d -> d
+                | None -> order.deliveryDate
+              paymentStatus = input.paymentStatus }
+          |> succeed)
+
+      let! saveResult = order ?>< effects.save
+
+      match saveResult with
+      | Success order -> return DomainOutput.from saveResult <| Some { order = order }
+      | Failure errorResult -> return DomainOutput.from saveResult None
+    }
+
   let updateOrderPayment (us: UserSession) (effects: OrderEffects) (orderId: string) (status: PaymentStatus) =
     async {
       let! result = effects.fetch orderId
@@ -131,5 +163,8 @@ module Update =
 
       let! saveResult = order ?>< effects.save
 
-      return saveResult
+      match saveResult with
+      | Success order -> return DomainOutput.from saveResult <| Some { order = order }
+      | Failure errorResult -> return DomainOutput.from saveResult None
+
     }

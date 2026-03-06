@@ -7,6 +7,7 @@ open Store
 open Store.Domain.Store
 open Store.Domain.Store.Interfaces
 open Store.Domain.Store.OrderService
+open Store.Domain.Store.OrderService.Update
 open Store.Domain.Store.Ordering
 open Store.Endpoints.Queries
 open Wolverine
@@ -37,8 +38,8 @@ module Factory =
   let updateStatus (stx: ServiceContext) =
     Update.updateOrderStatus stx.userSession <| orderEffects stx Mode.Update
 
-  let updatePayment (stx: ServiceContext) =
-    Update.updateOrderPayment stx.userSession <| orderEffects stx Mode.Update
+  let updateForAdmin (stx: ServiceContext) =
+    Update.updateAdminOrder stx.userSession <| orderEffects stx Mode.Update
 
 
 let toPaymentMethod pm =
@@ -53,14 +54,14 @@ let toPaymentStatus (input: string) : PaymentStatus =
   | "Refunded" -> PaymentStatus.Refunded
   | _ -> PaymentStatus.Pending
 
-let toStatus (input: string) : OrderStatus =
+let toStatus (input: string) : OrderStatus option =
   match input with
-  | "Submitted" -> OrderStatus.Submitted
-  | "Confirmed" -> OrderStatus.Confirmed
-  | "InProgress" -> OrderStatus.InProgress
-  | "Fulfilled" -> OrderStatus.Fulfilled
-  | "Cancelled" -> OrderStatus.Cancelled
-  | _ -> failwith "Invalid order status"
+  | "Submitted" -> OrderStatus.Submitted |> Some
+  | "Confirmed" -> OrderStatus.Confirmed |> Some
+  | "InProgress" -> OrderStatus.InProgress |> Some
+  | "Fulfilled" -> OrderStatus.Fulfilled |> Some
+  | "Cancelled" -> OrderStatus.Cancelled |> Some
+  | _ -> None
 
 
 module Create =
@@ -88,6 +89,26 @@ module Create =
 
   let handler: HttpHandler = Request.mapJson<OrderInputModel> <| runAsync workflow
   let endpoint = post "/orders/" handler
+
+
+module Update =
+  open Utils
+  open System
+
+  let private workflow (stx: ServiceContext) (input: OrderUpdateInput) =
+    let effects = Factory.updateForAdmin stx
+    let bus = stx.context.Plug<IMessageBus>()
+
+    async {
+      use! lock = NamedAsyncLock.AcquireAsync($"user:{stx.userSession.userId}") |> Async.AwaitTask
+      let! result = effects input
+
+      do Events.send bus result
+      return result.result
+    }
+
+  let handler: HttpHandler = Request.mapJson<OrderUpdateInput> <| runAsync workflow
+  let endpoint = put "/orders/{id}" handler
 
 
 module Details =
@@ -120,11 +141,12 @@ module Search =
       { userId = q.TryGetString "userId" |> fromString
         startDate = q.TryGetDateTime "startDate"
         order = q.TryGetString "order" |> fromString
-        status = q.TryGetString "status" |> maybeMap toStatus
+        status = q.TryGetString "status" |> optionMap toStatus
         limit = q.GetInt32("limit", 50)
         paymentStatus = q.TryGetString "paymentStatus" |> maybeMap toPaymentStatus })
     <| runAsync workflow
 
   let endpoint = get "/orders/" handler
 
-let endpoints = [ Create.endpoint; Search.endpoint; Details.endpoint ]
+let endpoints =
+  [ Create.endpoint; Search.endpoint; Details.endpoint; Update.endpoint ]
