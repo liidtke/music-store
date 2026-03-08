@@ -1,9 +1,10 @@
 ---
 import Store from "@layouts/Store.astro"
-import Basket from "@components/Basket.svelte";
+import Nothing from "@components/placeholders/Nothing.astro"
 import toaster from '@utils/toaster'
 
 let data = null;
+let status = "All"
 
 const formatter = new Intl.NumberFormat("pt-BR", {
   minimumFractionDigits: 2,
@@ -19,11 +20,14 @@ if (Astro.request.method === "GET") {
   console.log("GETTING orders");
 
   const orderId = Astro.url.searchParams.get("order") || null;
-  const status = Astro.url.searchParams.get("status") || null;
+  const st = Astro.url.searchParams.get("status") || null;
+  if(st){
+  status = st;
+  }
 
   let url = "orders?"
 
-  let obj = {order:orderId, status}
+  let obj = {order:orderId, status:st}
 
   let p = new URLSearchParams(obj);
   let add = p.toString();
@@ -71,14 +75,31 @@ function orderStatusToStringSwitch(status) {
           <p class="text-[15px] text-slate-500 mt-3">Visualizar pedidos</p>
         </div>
         <div class="ml-auto">
-          <select name="status" hx-get="" hx-target="main" class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
-            <option value="Every">Todas</option>
-          <option value="Fulfilled">Completas</option>
-          <option value="Cancelled">Canceladas</option>
+          <select autocomplete="off" name="status" hx-get="" hx-target="main" hx-select="main" class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
+            <option value="All" selected={status == "All"} >Todos</option>
+          <option value="Fulfilled" selected={status == "Fulfilled"}>Completos</option>
+          <option value="Cancelled" selected={status == "Cancelled"} >Cancelados</option>
           </select>
         </div>
       </div>
     </div>
+
+    {
+    () => {
+    if(data === null || data.length == 0){
+    return (
+    <div class="mt-8">
+    <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
+
+    <Nothing></Nothing>
+    </div>
+    </div>
+    )
+    }
+
+    }
+
+    }
 
     {data.map((order) => (
     <div class="mt-8">
