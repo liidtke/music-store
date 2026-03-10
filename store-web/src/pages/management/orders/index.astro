@@ -92,7 +92,7 @@ function orderStatusToString(status) {
 					<th class="th">Cliente</th>
 					<th class="th">Profissional</th>
 					<th class="th">Valor</th>
-					<th class="th">Identificador</th>
+					<th class="th">Numero</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -112,7 +112,7 @@ function orderStatusToString(status) {
 						<td class="td">{o.customer.email}</td>
 						<td class="td">{o.items[0].product.professionalName}</td>
 						<td class="td">{formatter.format(o.value)}</td>
-						<td class="td">{o.id}</td>
+						<td class="td">{o.number}</td>
           <td class="td">
           <Link url=`/management/orders/${o.id}` cl="table-action">Detalhes</Link>
           </td>

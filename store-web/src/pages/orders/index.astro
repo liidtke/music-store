@@ -3,6 +3,7 @@ import Store from "@layouts/Store.astro"
 import Nothing from "@components/placeholders/Nothing.astro"
 import toaster from '@utils/toaster'
 
+const paymentEmail = "mailto:pagamento@store-m.com.br"
 let data = null;
 let status = "All"
 
@@ -64,6 +65,25 @@ function orderStatusToStringSwitch(status) {
   }
 }
 
+
+function paymentStatusToShow(status){
+  switch (status){
+    case 1: return "Pendente"
+    case 2: return "Pago"
+    case 3: return "Estornado"
+  }
+}
+
+
+function paymentMethodToShow(status){
+  switch (status){
+    case 0: return "Via profissional"
+    case 1: return "Pix"
+    case 2: return "Cartão"
+    case 3: return ""
+  }
+}
+
 ---
 <Store>
 
@@ -106,20 +126,16 @@ function orderStatusToStringSwitch(status) {
       <div class="bg-gray-100 p-6 rounded-md">
         <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
           <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-900">Número</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">{order.number}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
             <h6 class="text-[15px] font-medium text-slate-900">Data do Pedido</h6>
             <p class="text-sm text-slate-500 font-medium md:mt-2">{order.occurred}</p>
           </div>
-          <div class="max-md:flex max-md:justify-between max-md:gap-4">
-            <h6 class="text-[15px] font-medium text-slate-900">Identificador</h6>
-            <p class="text-sm text-slate-500 font-medium md:mt-2">{order.id}</p>
-          </div>
-          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+          <div class="max-md:flex max-md:justify-between max-md:gap-4 md:ml-auto">
             <h6 class="text-[15px] font-medium text-slate-900">Valor Total</h6>
             <p class="text-sm text-slate-500 font-medium md:mt-2">R$ {formatter.format(order.value)}</p>
-          </div>
-          <div class="max-md:flex max-md:justify-between max-md:gap-4">
-            <h6 class="text-[15px] font-medium text-slate-900">Status</h6>
-            <p class="text-sm text-slate-500 font-medium md:mt-2">{orderStatusToString(order.status)}</p>
           </div>
           <!-- <div class="md:ml-auto">
           <button type="button" class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full">
@@ -128,6 +144,36 @@ function orderStatusToStringSwitch(status) {
           </div> -->
         </div>
       </div>
+        <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6 mt-4 p-6 rounded-md bg-hs-secondary ">
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-100">Pagamento</h6>
+            <p
+            text={order.paymentStatus == 1 ? 'red!' : ''}
+            class="text-sm text-slate-300 font-medium md:mt-2">{paymentStatusToShow(order.paymentStatus)}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-100">Status</h6>
+            <p class="text-sm text-slate-300 font-medium md:mt-2">{orderStatusToString(order.status)}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-100">Forma de Pagamento</h6>
+            <p class="text-sm text-slate-300 font-medium md:mt-2">{paymentMethodToShow(order.paymentMethod)}</p>
+          </div>
+        </div>
+            {
+            () => {
+
+            if (order.paymentMethod == 0)
+            return (
+
+            <p class="p-2 text-md">Entrar em contato com o setor de pagamentos em
+              <a href={paymentEmail}>pagamento@store-m.com.br</a> </p>
+
+            )
+
+            }
+            }
+
 
 
       <!-- <div>

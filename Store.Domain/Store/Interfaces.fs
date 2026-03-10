@@ -12,6 +12,7 @@ type IProductTypeRepository =
 type IProfessionalRepository =
   inherit IRepository<Professional>
   abstract member All: unit -> Async<ServiceOutput<Professional list>>
+  abstract member FindMany: string list -> Async<ServiceOutput<Professional list>>
   abstract member AllActive: unit -> Async<ServiceOutput<Professional list>>
 
 type ProductSearchCriteria = {
@@ -58,3 +59,8 @@ type OrderSearchCriteria = {
 type IOrderRepository =
   inherit IRepository<Order>
   abstract member Fetch: OrderSearchCriteria -> Async<ServiceOutput<Order list>>
+  
+  
+
+type IPaymentProcessor =
+  abstract member Process: Order -> Async<ServiceOutput<Order>>

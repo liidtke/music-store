@@ -2,6 +2,8 @@ module Store.Domain.Interfaces
 
 open System.Linq
 
+
+
 type IRepository<'T> =
   abstract member Find: string -> Async<ServiceOutput<'T>>
   abstract member Add: 'T -> Async<ServiceOutput<'T>>

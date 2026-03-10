@@ -63,10 +63,16 @@ let createOrder (us: UserSession) (effects: OrderEffects) (input: CreateOrderInp
 
   let createOrder (basket: Basket, customer: Customer) =
     { id = ""
+      number = ""
       occurred = DateTime.UtcNow
       items = convertItems basket.items
       deliveryDate = calculateDeliveryDate basket
       paymentStatus = PaymentStatus.Pending
+      paymentProcessor =
+        if input.paymentMethod = PaymentMethod.Direct then
+          PaymentProcessor.Professional
+        else
+          PaymentProcessor.MercadoLivre
       status = OrderStatus.Submitted
       paymentMethod = input.paymentMethod
       message = input.message
@@ -131,7 +137,7 @@ module Update =
   let updateAdminOrder (us: UserSession) (effects: OrderEffects) (input: OrderUpdateInput) =
     async {
       let! result = effects.fetch input.orderId
-      
+
       let order =
         result
         ?> validatePermission us

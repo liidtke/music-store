@@ -63,16 +63,22 @@ type CustomerOrderData =
 type PaymentMethod =
   | Direct = 0
   | Pix = 1
-  | Money = 2//maybe used in future
-  | CreditCard = 3 //maybe used in future
+  | CreditCard = 3
+  
+type PaymentProcessor =
+  | Self = 0
+  | Professional = 1
+  | MercadoLivre = 2 
 
 
 type Order =
   { id: Id
+    number: string
     occurred: DateTime
     status: OrderStatus
     value: decimal
     items: OrderItem list
+    paymentProcessor: PaymentProcessor
     // responsibleId: Id
     customer: CustomerOrderData
     message:string option

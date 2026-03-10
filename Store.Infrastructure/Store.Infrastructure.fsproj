@@ -21,6 +21,8 @@
         <Compile Include="Integrations.fs" />
         <Compile Include="MailSender.fs" />
         <Compile Include="Serializers.fs" />
+        <Compile Include="PaymentProcessor.fs" />
+        <Content Include="mongoscript" />
     </ItemGroup>
 
     <ItemGroup>

@@ -315,7 +315,9 @@ module BasketMapping =
 type OrderData =
   { id: BsonObjectId
     occurred: DateTime
+    number:string
     status: OrderStatus
+    paymentProcessor: PaymentProcessor
     value: decimal
     items: OrderItem list
     customer: CustomerOrderData
@@ -334,8 +336,10 @@ module OrderMapping =
 
     { id = id
       occurred = order.occurred
+      number = order.number
       status = order.status
       customer = order.customer
+      paymentProcessor = order.paymentProcessor
       deliveryDate = order.deliveryDate
       items = order.items
       message = order.message
@@ -346,7 +350,9 @@ module OrderMapping =
   let toOrder (data: OrderData) : Order =
     { id = data.id.ToString()
       occurred = data.occurred
+      number = data.number
       status = data.status
+      paymentProcessor = data.paymentProcessor
       deliveryDate = data.deliveryDate
       customer = data.customer
       items = data.items

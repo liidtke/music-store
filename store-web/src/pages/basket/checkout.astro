@@ -94,9 +94,10 @@ if (Astro.request.method === "POST") {
       <select id="select "
       name="paymentMethod"
       class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
-        <option value="" disabled selected>Selecione</option>
-                    <option value="Pix">PIX</option>
+        <option value="" selected>Selecione</option>
                     <option value="Direct">A Combinar</option>
+                    <option disabled value="Pix">PIX</option>
+                    <option disabled value="CreditCard">Cartão de Crédito</option>
                   </select>
       </fieldset>
 
