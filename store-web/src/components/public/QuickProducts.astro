@@ -1,6 +1,7 @@
 ---
 import AddToBasket from "@components/AddToBasket.astro"
 import Nothing from "@components/placeholders/Nothing.astro";
+import images from "@utils/images"
 
 // ProductGrid.astro
 // Converted from Svelte
@@ -58,9 +59,9 @@ const formatter = new Intl.NumberFormat("pt-BR", {
           hx-target="#details"
           class="block"
         >
-          <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-md px-8 pb-8 pt-30 md:mx-auto mt-2">
+          <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-md px-4 pb-4 pt-20 md:mx-auto mt-2">
             <img
-              src={item.imageUrl ?? item.productType.imageUrl}
+              src={images.parse(item.imageUrl ?? item.productType.imageUrl)}
               alt="imagem"
               class="absolute inset-0 h-full w-full object-cover"
             />

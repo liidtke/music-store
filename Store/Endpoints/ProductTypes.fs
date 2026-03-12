@@ -1,5 +1,6 @@
 module Store.Endpoints.ProductTypes
 
+open System.Threading.Tasks
 open Application
 open Falco
 open Falco.Routing
@@ -43,7 +44,10 @@ module Details =
 let private workflow (stx: ServiceContext) () =
   let db = stx.context.Plug<IProductTypeRepository>()
 
-  async { return! db.All() }
+  async {
+    // do! Task.Delay(200) |> Async.AwaitTask
+    return! db.All()
+  }
 
 let allEndpoint = get "/product-types" (runAnonAsync workflow ())
 

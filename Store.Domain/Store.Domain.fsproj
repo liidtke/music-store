@@ -31,8 +31,8 @@
 
     <ItemGroup>
         <PackageReference Include="Falco.Markup" Version="1.4.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
-        <PackageReference Include="WolverineFx.MemoryPack" Version="5.11.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
+        <PackageReference Include="WolverineFx.MemoryPack" Version="5.18.2" />
     </ItemGroup>
 
 </Project>

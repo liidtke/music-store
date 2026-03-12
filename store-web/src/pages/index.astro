@@ -6,13 +6,13 @@ import Link from "@components/Link.astro";
 // let number = Math.floor(Math.random() * 15) + 1;
 
 // let image = "image" + number + ".jpg"
-let image = "image10.jpg"
+let image = "https://ik.imagekit.io/storee1lpoktk7/image10.jpg"
 
 ---
 
 <Store>
-  <div class="relative isolate  px-4 pt-12 pb-12 sm:px-10 py-6 bg-zinc-800">
-        <div class="max-w-screen-xl max-lg:max-w-3xl mx-auto">
+  <div class="relative md:px-4 lg:px-14vw pt-12 pb-12 py-6  isolate bg-zinc-800">
+        <div class="px-4">
           <div class="grid lg:grid-cols-1 items-center gap-x-12 gap-y-16">
             <div class="z-2 max-lg:text-center">
               <h1 class="lg:text-5xl text-4xl !leading-tight text-shadow-md font-bold border-black text-white mb-6">
@@ -25,14 +25,14 @@ let image = "image10.jpg"
               </div>
             </div>
           </div>
+        <img src={image} class="lg:mr-14vw z-0 shadow-md absolute ml-auto top-8 inset-10 h-full w-2/3 md:w-1/4 object-cover rounded-md" alt="hero-img" />
         </div>
-        <img src={image} class="z-0 shadow-md absolute ml-auto top-8 inset-10 h-full w-1/2 object-cover rounded-md" alt="hero-img" />
       </div>
 
-      <div class="md:p-8 p-4" id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" hx-swap="innerHTML" >
+      <div class="px-4 md:px-14vw! lg:px-14vw! mt-8" id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" hx-swap="innerHTML" >
       </div>
 
-      <div class="md:p-8 p-4" id="pr-wrapper" hx-get="/partials/public/categories?limit=8" hx-trigger="load" hx-swap="innerHTML" ></div>
+      <div class="px-4 md:px-14vw! lg:px-14vw! mt-8 mb-8" id="pr-wrapper" hx-get="/partials/public/categories?limit=8" hx-trigger="load" hx-swap="innerHTML" ></div>
 
 
 

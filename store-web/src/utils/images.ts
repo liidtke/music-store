@@ -1,6 +1,6 @@
 export class Images {
 
-  root: string = '/storee1lpoktk7/';
+  root: string = 'https://ik.imagekit.io/storee1lpoktk7/';
   limit = 13;
 
 
@@ -18,7 +18,7 @@ export class Images {
       return img;
     }
     else {
-      return `root/${img}`
+      return `${this.root}${img}`
     }
   }
 

@@ -48,15 +48,15 @@
         <PackageReference Include="Falco.Markup" Version="1.4.0" />
         <PackageReference Include="FSharp.SystemTextJson" Version="1.4.36" />
         <PackageReference Include="MemoryPack" Version="1.21.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-        <PackageReference Include="WolverineFx" Version="5.11.0" />
-        <PackageReference Include="WolverineFx.MemoryPack" Version="5.11.0" />
-        <PackageReference Include="WolverineFx.RabbitMQ" Version="5.11.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+        <PackageReference Include="WolverineFx" Version="5.18.2" />
+        <PackageReference Include="WolverineFx.MemoryPack" Version="5.18.2" />
+        <PackageReference Include="WolverineFx.RabbitMQ" Version="5.18.2" />
         <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Update="FSharp.Core" Version="10.0.102" />
+        <PackageReference Update="FSharp.Core" Version="11.0.100" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,6 +2,8 @@
 // CategoryGrid.astro
 // Converted from Svelte
 
+import images from "@utils/images"
+
 export interface Category {
   id: number | string;
   name: string;
@@ -30,7 +32,7 @@ const { data } = Astro.props;
       >
         <div class="aspect-square overflow-hidden mx-auto  ">
           <img
-            src={item.imageUrl}
+            src={images.parse(item.imageUrl)}
             alt={item.name}
             class="h-full w-full rounded-md object-cover object-top"
           />
