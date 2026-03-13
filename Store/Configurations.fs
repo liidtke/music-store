@@ -34,19 +34,33 @@ open MongoDB.Bson.Serialization.Serializers
 
 open Wolverine
 open Wolverine.MemoryPack
-open Wolverine.RabbitMQ
+// open Wolverine.RabbitMQ
+open Wolverine.AzureServiceBus
 
 
 let configureEventBus (host: WebApplicationBuilder) =
-  let rabbitUrl = host.Configuration.GetConnectionString("RabbitMqUrl")
+  // let configureRabbitMQ() =
+  //   let rabbitUrl = host.Configuration.GetConnectionString("RabbitMqUrl")
+  //
+  //   host.UseWolverine(fun w ->
+  //     w.UseRabbitMq(Uri(rabbitUrl)).EnableWolverineControlQueues().UseConventionalRouting().AutoProvision()
+  //     |> ignore
+  //
+  //     w.UseMemoryPackSerialization() |> ignore
+  //   )
+    
+  
+  let configureAzureServiceBus() =
+    let url = host.Configuration.GetConnectionString("AzureServiceBusUrl")
 
-  host.UseWolverine(fun w ->
-    w.UseRabbitMq(Uri(rabbitUrl)).EnableWolverineControlQueues().UseConventionalRouting().AutoProvision()
-    |> ignore
+    host.UseWolverine(fun w ->
+      w.UseAzureServiceBus(url).AutoProvision()
+      |> ignore
 
-    w.UseMemoryPackSerialization() |> ignore
-
-  )
+      w.UseMemoryPackSerialization() |> ignore
+    )
+  
+  configureAzureServiceBus()
 
 let configureServices (configuration: IConfiguration) (services: IServiceCollection) =
   // let currentUser = CurrentUser.standard
