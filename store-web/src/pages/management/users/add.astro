@@ -1,5 +1,5 @@
 ---
-import App from '../../../layouts/App.astro';
+import Management from '@layouts/Management.astro';
 import toaster from '@utils/toaster'
 import Link from "@components/Link.astro";
 import BreadCrumbs from "@components/BreadCrumbs.svelte";
@@ -38,7 +38,7 @@ if (Astro.request.method === "POST") {
       });
     }
 
-    return new Response(toaster.success( "/app/users"), {
+    return new Response(toaster.success( "/management/users"), {
         status: 200,
         headers: { "Content-Type": "text/html" }
       });
@@ -51,15 +51,15 @@ if (Astro.request.method === "POST") {
 
 ---
 
-<App>
+<Management>
 
 <div class="page">
   <BreadCrumbs path='users,users/add' name="Usuários, Adicionar" />
 
   <h1 class="text-3xl font-semibold">Usuários</h1>
-  <Link url="/app/users" cl="btn-neutral mt-8">Voltar</Link>
+  <Link url="/management/users" cl="btn-neutral mt-8">Voltar</Link>
 
-  <form class="mt-8" hx-post="/app/users/add" hx-target="#message">
+  <form class="mt-8" hx-post="/management/users/add" hx-target="#message">
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Nome</legend>
       <input type="text" class="input" name="name" placeholder="Insira o nome" />
@@ -78,4 +78,4 @@ if (Astro.request.method === "POST") {
 </div>
 
 
-</App>
+</Management>

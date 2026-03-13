@@ -27,24 +27,19 @@ export function formatDate(input) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    
+
     return `${day}/${month}/${year}`;
 }
 
 
 export const roles = [
-  {id:"CustomRole", name: "Acesso Personalizado"},
   {id:"AdminRole", name: "Admin"},
-  {id:"OwnerRole", name: "Gestor da Conta"},
-  {id:"BasicRole", name: "Usuário Básico"},
+  {id:"ProfessionalRole", name: "Profissional"},
+  {id:"CustomerRole", name: "Usuário"},
   {id:"Anon", name: "Não Registrado"},
 ];
 
-export function trRole(r, customRole){
-  if (r == "CustomRole" && customRole){
-    return customRole.name;
-  }
-
+export function trRole(r){
   let role = roles.find(x=> x.id == r);
   if(role){return role.name}
   else return r

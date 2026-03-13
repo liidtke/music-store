@@ -8,6 +8,7 @@ export async function onRequest(context, next) {
   locals.fetchWithAuth = async (part, options = {}) => {
     const url = `${apiKey}/${part}`;
     const token = context.cookies.get('auth_token')?.value;
+    const guestId = context.cookies.get('guest_id')?.value;
 
     return fetch(url, {
       ...options,
@@ -15,6 +16,7 @@ export async function onRequest(context, next) {
         'Authorization': token ? `Bearer ${token}` : '',
         'Content-Type': 'application/json',
         'X-Requested-With': 'Astro-SSR',
+        'X-Guest-Id': guestId,
         ...options.headers
       }
     });
@@ -25,6 +27,7 @@ export async function onRequest(context, next) {
   locals.fetchWithResult = async (part, options = {}) => {
     const url = `${apiKey}/${part}`;
     const token = context.cookies.get('auth_token')?.value;
+    const guestId = context.cookies.get('guest_id')?.value;
 
     try {
       var response = await fetch(url, {
@@ -32,6 +35,31 @@ export async function onRequest(context, next) {
         headers: {
           'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json',
+          'X-Requested-With': 'Astro-SSR',
+          'X-Guest-Id': guestId,
+          ...options.headers
+        }
+      });
+
+      return await Result.ParseResponse(response)
+
+    }
+    catch (e) {
+      return Result.ParseError(e);
+
+    }
+
+  };
+
+  locals.fetchWithResultCrude = async (part, options = {}) => {
+    const url = `${apiKey}/${part}`;
+    const token = context.cookies.get('auth_token')?.value;
+
+    try {
+      var response = await fetch(url, {
+        ...options,
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
           'X-Requested-With': 'Astro-SSR',
           ...options.headers
         }
@@ -45,9 +73,7 @@ export async function onRequest(context, next) {
 
     }
 
-
   };
 
   return next();
 }
-

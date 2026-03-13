@@ -50,7 +50,7 @@ module Update =
       subscription: string
       customRoleId: int option
       role: string
-      isDeleted: bool }
+      isActive: bool }
 
   let updateWorkflow (stx: ServiceContext) (input: UserInput) =
     let db = stx.context.Plug<IUserRepository>()
@@ -61,7 +61,7 @@ module Update =
         name = input.name
         password = None
         role = Models.Role.convert input.role
-        isDeleted = input.isDeleted
+        isActive = input.isActive
         isVerified = false }
 
     async {
@@ -85,7 +85,7 @@ module Create =
   let createWorkflow (stx: ServiceContext) user =
     let db = stx.context.Plug<IUserRepository>()
     let secSet = stx.securitySettings
-    let encryptEffect = hashPassword secSet
+    let encryptEffect = hashPassword secSet.Iterations
 
     async {
       let! result = UserService.Create.handle stx.userSession encryptEffect db user
@@ -108,11 +108,19 @@ let private workflow (stx: ServiceContext) (listInput: UserFetchParams) =
     return searchOutput ?> (fun users -> List.map UserModel.map users |> succeed)
   }
 
+open Models
+
+let private getRole (name: string option) =
+  match name with
+  | Some x -> x |> Role.convert |> Some
+  | None -> None
+
 let handler: HttpHandler =
   runAsync workflow
   |> Request.mapQuery (fun q ->
     { name = q.GetString("name", null)
-      email = q.GetString("email", null) })
+      email = q.GetString("email", null)
+      role = q.TryGetString("role") |> getRole })
 
 
 let usersEndpoint = get "/users" handler

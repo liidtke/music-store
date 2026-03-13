@@ -1,5 +1,5 @@
 ---
-const { title = "Modal", form, showSave = "show" } = Astro.props;
+const { title = "Modal", form, showSave = "" } = Astro.props;
 // var timestamp = new Date().getUTCMilliseconds();
 ---
 
@@ -11,23 +11,30 @@ const { title = "Modal", form, showSave = "show" } = Astro.props;
   aria-labelledby="modalTitle"
 >
   <div
-    class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg absolute md:top-[10vh] md:left-[40vh] mt-24 md:max-w-xl"
+    class="w-full absolute mt-2"
   >
-    <h2 id="modalTitle" class="text-md font-bold text-slate-700 sm:text-2xl">
+    <div class="rounded-lg  shadow-lg  bg-white md:m-6 m-2">
+
+      <div class="flex justify-between items-center">
+
+    <h2 id="modalTitle" class="text-md font-bold text-slate-700 sm:text-2xl p-6 pb-4 ">
       {title}
     </h2>
-    <span class="flex items-center">
-      <span class="h-px flex-1 bg-gray-300"></span>
-      <span class="h-px flex-1 bg-gray-300"></span>
-    </span>
-    <div class="mt-8">
+    <button type="button" _="on click remove #modal" class="btn-neutral mr-6">
+      Fechar
+    </button>
+      </div>
+
+    <div class="modal-body pt-2 p-6 border-t bcolor bg-gray-100">
+
+    <div class="mt-4">
       <slot />
     </div>
 
     <footer class="mt-6 flex justify-end w-full gap-2">
-      <button type="button" _="on click remove #modal" class="btn-cancel">
+      <!-- <button type="button" _="on click remove #modal" class="btn-neutral">
         Fechar
-      </button>
+      </button> -->
 
       {
         () => {
@@ -41,6 +48,10 @@ const { title = "Modal", form, showSave = "show" } = Astro.props;
         }
       }
     </footer>
+
+    </div>
+    </div>
+
   </div>
 </div>
 

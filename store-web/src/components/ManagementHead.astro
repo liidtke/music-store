@@ -1,0 +1,40 @@
+---
+const { data } = Astro.props;
+import Link from "@components/Link.astro";
+---
+
+<header
+class="flex bg-hs-800 flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-4 px-4 bg-hs"
+>
+  <nav
+  class="w-full bg-hs-800 mx-auto px-4 sm:flex sm:items-center sm:justify-between"
+  >
+    <a
+    text="white"
+    class="flex-none font-semibold text-xl text-black focus:outline-hidden focus:opacity-80 dark:text-white"
+    href="#"
+    aria-label="Brand"
+    >
+      <div class="flex">
+        <!-- <div class="i-mdi-menu mt-1 mr-4 ml-1" _="on click toggle .hidden on #aside on click call saveMenuState()"></div> -->
+        Music Store Management
+      </div>
+
+      <div
+      text="white"
+      class="flex flex-row items-center gap-5 mt-5 sm:justify-end sm:mt-0 sm:ps-5"
+      >
+        <a text="white" class="nav-item" href="/" aria-current="page">Início</a>
+        <Link cl="nav-item text-white" url="/management/professionals">Profissionais</Link>
+        <Link cl="nav-item text-white" url="/management/products">Produtos</Link>
+        <Link cl="nav-item text-white" url="/management/product-types">Categorias</Link>
+        <a class="nav-item text-white" href="/management/orders">Pedidos</a>
+        <a class="nav-item text-white" href="/management/users">Usuários</a>
+
+        <a class="nav-item text-white" href="/login">Entrar</a>
+        <a class="nav-item text-white" href="#">Sair</a>
+      </div>
+    </a>
+  </nav>
+
+</header>

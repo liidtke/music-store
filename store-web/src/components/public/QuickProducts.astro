@@ -1,0 +1,107 @@
+---
+import AddToBasket from "@components/AddToBasket.astro"
+import Nothing from "@components/placeholders/Nothing.astro";
+import images from "@utils/images"
+
+// ProductGrid.astro
+// Converted from Svelte
+
+export interface Product {
+  id: number | string;
+  name: string;
+  description: string;
+  imageUrl?: string;
+  unitPrice: number;
+  professionalName: string;
+  productType: {
+    imageUrl: string;
+  };
+}
+
+export interface Props {
+  data: Product[];
+  showTitle?: string; // passed as string, e.g. "true" or "false"
+}
+
+const { data, showTitle = "true" } = Astro.props;
+
+// Formatter for Brazilian Real
+const formatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+// Optional server-side debug
+// console.log(showTitle);
+---
+
+<div class="mt-4">
+  {showTitle !== "false" && (
+    <h2 class="text-2xl sm:text-xl font-semibold mb-6 sm:mb-8">Produtos</h2>
+  )}
+
+  { () => {
+  if(data.length == 0){
+  return (
+  <Nothing></Nothing>
+  )
+  }
+
+  }
+
+  }
+
+  <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 sm:gap-1 gap-6">
+    {data.map((item) => (
+      <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-3 flex flex-col justify-between">
+        <button
+          hx-get={`/partials/public/product-modal?id=${item.id}`}
+          hx-target="#details"
+          class="block"
+        >
+          <article class="relative isolate flex flex-col justify-end overflow-hidden rounded-md px-4 pb-4 pt-20 md:mx-auto mt-2">
+            <img
+              src={images.parse(item.imageUrl ?? item.productType.imageUrl)}
+              alt="imagem"
+              class="absolute inset-0 h-full w-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
+            <h3 class="z-10 mt-3 text-3xl font-bold text-white mr-auto">
+              {item.name}
+            </h3>
+            <div class="z-10 gap-y-1 overflow-hidden text-left text-md leading-6 text-gray-300 mr-auto">
+              {item.description}
+            </div>
+          </article>
+        </button>
+
+        <p class="text-slate-600 text-[13px] mt-2 mr-auto">por</p>
+        <div class="flex flex-row items-end gap-10px">
+          <p class="font-lg font-semibold">{item.professionalName}</p>
+        </div>
+
+        <div class="flex gap-2 mt-4">
+          <h5 class="text-base font-semibold text-slate-900">Valor</h5>
+          <h6 class="text-base text-slate-900 font-bold ml-auto">
+            R$ {formatter.format(item.unitPrice)}
+          </h6>
+        </div>
+
+        <div class="flex flex-col items-center gap-2 mt-6 align-bottom">
+          <button
+            hx-get={`/partials/public/product-modal?id=${item.id}`}
+            hx-target="#details"
+            type="button"
+            class="btn-ghost w-full"
+          >
+            Mais Detalhes
+          </button>
+          <AddToBasket id={item.id} cl="btn-primary w-full">Adicionar ao Carrinho</AddToBasket>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Placeholder for HTMX details swap -->
+<div id="details"></div>

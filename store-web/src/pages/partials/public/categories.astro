@@ -1,0 +1,17 @@
+---
+import QuickCategories from "@components/public/QuickCategories.astro";
+
+let data = []
+
+const result = await Astro.locals.fetchWithResult("product-types/");
+if(result.success){
+  data = result.data;
+}
+// Astro.cache.set({
+//   maxAge: 120, // Cache for 2 minutes
+//   swr: 60, // Serve stale for 1 minute while revalidating
+//   tags: ['home'], // Tag for targeted invalidation
+// });
+---
+
+<QuickCategories data={data}></QuickCategories>

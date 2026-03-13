@@ -1,0 +1,26 @@
+---
+export const partial = true;
+let data = [];
+
+if (Astro.request.method === "GET") {
+
+  const response = await Astro.locals.fetchWithResult("users?role=ProfessionalRole");
+  if(response.success) {
+    data = await response.data;
+  }
+  else{
+  }
+}
+
+---
+
+<fieldset class="fieldset">
+  <legend class="fieldset-legend">Usuário</legend>
+  <select class="select outline-none " name="userId" id="user-select" >
+    <option disabled selected value="">Selecione</option>
+    {data.map(cat => (
+    <option value={cat.id}>{cat.name}</option>
+    ))}
+  </select>
+  <p id="user-msg"></p>
+</fieldset>

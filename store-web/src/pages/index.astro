@@ -2,33 +2,44 @@
 import Store from '../layouts/Store.astro';
 import Link from "@components/Link.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+// let number = Math.floor(Math.random() * 15) + 1;
+
+// let image = "image" + number + ".jpg"
+let image = "https://ik.imagekit.io/storee1lpoktk7/image10.jpg"
+
 ---
 
 <Store>
-  <div class="px-4 sm:px-10 py-6">
-        <div class="max-w-screen-xl max-lg:max-w-3xl mx-auto">
-          <div class="grid lg:grid-cols-2 items-center gap-x-12 gap-y-16">
-            <div class="max-lg:text-center">
-              <h1 class="lg:text-5xl text-4xl !leading-tight font-bold text-slate-900 mb-6">
+  <div class="relative md:px-4 lg:px-14vw pt-12 pb-12 py-6  isolate bg-zinc-800">
+        <div class="px-4">
+          <div class="grid lg:grid-cols-1 items-center gap-x-12 gap-y-16">
+            <div class="z-2 max-lg:text-center">
+              <h1 class="lg:text-5xl text-4xl !leading-tight text-shadow-md font-bold border-black text-white mb-6">
                 Conheça o Futuro da Produção Musical</h1>
-              <p class="text-base text-slate-600 leading-relaxed">Discover a smarter way to order, crafted by artificial intelligence. From personalized menu suggestions to lightning-fast delivery, enjoy a dining experience designed just for you.</p>
+              <p class="text-base text-slate-100 text-shadow-md text-left leading-relaxed w-3/4 md:w-1/2">Descubra a melhor forma de contratar serviços para músicos de músicos adventistas. Confira nosso catálogo de serviços e inicie seu projeto musical com os melhores consultores do mercado.</p>
 
               <div class="mt-12 flex flex-wrap max-lg:justify-center gap-4">
-                <Link cl="btn-primary" url="/categories">Categorias</Link>
+                <Link cl="btn-secondary" url="/products">Produtos</Link>
                 <Link cl="btn-ghost" url="/professionals">Profissionais</Link>
-                <Link cl="btn-ghost" url="/mission">Nossa Missão</Link>
               </div>
             </div>
-            <div class="w-full aspect-[12/9]">
-              <img src="https://source.unsplash.com/random/?city,night" class="w-full h-full object-cover rounded-lg shadow-xl" alt="hero-img" />
-            </div>
           </div>
+        <img src={image} class="lg:mr-14vw z-0 shadow-md absolute ml-auto top-8 inset-10 h-full w-2/3 md:w-1/4 object-cover rounded-md" alt="hero-img" />
         </div>
       </div>
 
-      <div id="pr-wrapper" hx-get="/partials/products" hx-trigger="load" ></div>
+      <div class="px-4 md:px-14vw! lg:px-14vw! mt-8" id="pr-wrapper" hx-get="/partials/public/products?limit=8" hx-trigger="load" hx-swap="innerHTML" >
+      </div>
+
+      <div class="px-4 md:px-14vw! lg:px-14vw! mt-8 mb-8" id="pr-wrapper" hx-get="/partials/public/categories?limit=8" hx-trigger="load" hx-swap="innerHTML" ></div>
+
+
+
+
+
+
+
 
 
 </Store>

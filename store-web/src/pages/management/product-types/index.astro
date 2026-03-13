@@ -1,0 +1,90 @@
+---
+export const prerender = false;
+import toaster from '@utils/toaster'
+import Link from '@components/Link.astro';
+import SearchInput from '@components/SearchInput.astro'
+import BreadCrumbs from "@components/BreadCrumbs.svelte";
+import Management from '@layouts/Management.astro';
+
+let data = [];
+
+let add = "";
+let search = Astro.url.searchParams.get('search');
+// console.log('search is ', search)
+if(search){
+  let p = new URLSearchParams({search:search});
+  add = p.toString();
+}
+ const response = await Astro.locals.fetchWithResult("product-types?" + add);
+if(response.success){
+  data = response.data;
+}
+
+---
+<Management>
+
+<div class="page">
+  <BreadCrumbs path="management,management/product-types" name="Gerenciamento,Categorias" />
+
+	<h1 class="text-3xl font-semibold">Categorias</h1>
+
+	<div class="mt-8 grid grid-cols-1 gap-2 md:grid-cols-2">
+      <div>
+        <Link url="/management/product-types/add" cl="btn-primary">
+        Adicionar Categoria
+        </Link>
+      </div>
+
+      <SearchInput
+           get="/management/product-types"
+           trigger="keyup changed delay:500ms queue:last"
+           target="#tb"
+           select="#tb"
+           swap="outerHTML"
+           push="true"
+           name="search"
+           placeholder="Buscar"
+           />
+      </div>
+
+		<table id="tb" class="mt-8 table">
+			<!-- head -->
+			<thead>
+				<tr>
+					<th class="th">Nome</th>
+					<th class="th">Url</th>
+					<th class="th">Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+        {
+() => {if (data.length == 0) return (
+					 <tr class="tr text-center">
+					 	<td class="td" colspan="7">Sem itens para exibir</td>
+					 </tr>
+        )}
+        }
+    {
+      data.map((u) => (
+					<tr class="tr">
+						<td class="td">{u.name}</td>
+						<td class="td">{u.imageUrl}</td>
+						<td class="td">{u.isActive ? 'Ativo': 'Inativo' }</td>
+          <td class="td">
+          <Link url=`/management/product-types/${u.id}` cl="table-action">Editar</Link>
+          </td>
+
+					</tr>
+        )
+
+        )}
+
+			</tbody>
+		</table>
+
+    </div>
+
+
+
+</Management>

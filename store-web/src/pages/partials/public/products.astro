@@ -1,0 +1,22 @@
+---
+import QuickProducts from '@components/public/QuickProducts.astro';
+
+const limit = Astro.url.searchParams.get("limit") || 8;
+const professional = Astro.url.searchParams.get("professional");
+const productTypeId = Astro.url.searchParams.get("product-type");
+const showTitle = Astro.url.searchParams.get("show-title") || "true";
+
+let p = new URLSearchParams({limit,professional,productTypeId});
+let add = p.toString();
+
+let data = []
+
+console.log('pt',productTypeId);
+const result = await Astro.locals.fetchWithResult("products?"+add);
+if(result.success){
+  data = result.data;
+}
+
+---
+
+<QuickProducts data={data} showTitle={showTitle}></QuickProducts>

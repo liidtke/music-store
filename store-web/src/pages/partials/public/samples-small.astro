@@ -1,0 +1,66 @@
+---
+export const prerender = false;
+import toaster from '@utils/toaster'
+import Link from '@components/Link.astro';
+import SearchInput from '@components/SearchInput.astro'
+import BreadCrumbs from "@components/BreadCrumbs.svelte";
+import Management from '@layouts/Management.astro';
+
+let data = [];
+
+let productId = Astro.url.searchParams.get('productId');
+let professionalId = Astro.url.searchParams.get('professionalId');
+
+let p = new URLSearchParams({productId, professionalId});
+let add = p.toString();
+
+const response = await Astro.locals.fetchWithResult("samples?" + add);
+
+if(response.success){
+  data = response.data;
+}
+
+---
+
+
+<div class="grid grid-cols-2 gap-2">
+
+    {
+    () => {if (data.length == 0) return (
+    <div>
+      Sem itens para exibir
+    </div>
+    )}
+    }
+    {
+    data.map((sample) => (
+    <div>
+        {sample.description}
+    </div>
+    <div>
+
+              {sample.sampleType === "Audio" && (
+                <div class="flex items-center gap-3">
+                  <!-- Native HTML5 audio with controls -->
+                  <audio
+                    controls
+                    controlsList="nodownload"
+                    class="h-9">
+                    <source
+                      src={`/api/samples/${sample.id}`}
+                      type="audio/mpeg" />
+                    Seu navegador não suporta áudio.
+                  </audio>
+
+                </div>
+              )}
+
+              {sample.sampleType !== "Audio" && (
+                <span class="text-gray-500 italic">Não é áudio</span>
+              )}
+    </div>
+    )
+
+    )}
+
+</div>

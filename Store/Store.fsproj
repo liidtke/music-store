@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <Compile Include="Security.fs"/>
+        <Compile Include="Utils.fs" />
         <Compile Include="Models.fs"/>
         <Compile Include="Session.fs"/>
         <Compile Include="Context.fs" />
@@ -22,8 +23,16 @@
         <Compile Include="EmailTemplate.fs" />
         <Compile Include="Events.fs" />
         <Compile Include="Endpoints\Models.fs" />
+        <Compile Include="Endpoints\Queries.fs" />
         <Compile Include="Endpoints\Login.fs" />
         <Compile Include="Endpoints\Users.fs" />
+        <Compile Include="Endpoints\ProductTypes.fs" />
+        <Compile Include="Endpoints\Products.fs" />
+        <Compile Include="Endpoints\Professionals.fs" />
+        <Compile Include="Endpoints\Customers.fs" />
+        <Compile Include="Endpoints\Samples.fs" />
+        <Compile Include="Endpoints\Baskets.fs" />
+        <Compile Include="Endpoints\Orders.fs" />
         <Compile Include="Endpoints\Handlers.fs" />
         <Compile Include="Tests.fs"/>
         <Compile Include="Configurations.fs" />
@@ -35,20 +44,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Falco" Version="5.0.0"/>
+        <PackageReference Include="Falco" Version="5.2.0" />
         <PackageReference Include="Falco.Markup" Version="1.4.0" />
         <PackageReference Include="FSharp.SystemTextJson" Version="1.4.36" />
         <PackageReference Include="MemoryPack" Version="1.21.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="4.14.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="4.14.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.10" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
-        <PackageReference Include="WolverineFx" Version="4.12.3" />
-        <PackageReference Include="WolverineFx.MemoryPack" Version="4.12.3" />
-        <PackageReference Include="WolverineFx.RabbitMQ" Version="4.12.3" />
-        <PackageReference Include="xunit" Version="2.9.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+        <PackageReference Include="WolverineFx" Version="5.18.2" />
+        <PackageReference Include="WolverineFx.MemoryPack" Version="5.18.2" />
+        <PackageReference Include="WolverineFx.RabbitMQ" Version="5.18.2" />
+        <PackageReference Include="xunit" Version="2.9.3" />
+        <PackageReference Update="FSharp.Core" Version="11.0.100" />
     </ItemGroup>
 
     <ItemGroup>

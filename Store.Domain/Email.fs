@@ -9,7 +9,6 @@ type EmailSettings() =
     member val EnableSsl: bool = false with get, set
     member val BaseUrl: string = "" with get, set
 
-
 type EmailMessage = {
     from: string
     toMail: string list

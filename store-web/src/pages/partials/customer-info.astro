@@ -1,0 +1,112 @@
+---
+import toaster from '@utils/toaster'
+
+let data = {
+  phone:{}
+};
+
+if (Astro.request.method === "GET") {
+  const response = await Astro.locals.fetchWithResult("customers/current");
+  if(response.success){
+    data = response.data;
+  }
+  else{
+    data.id = "";
+  }
+}
+
+if (Astro.request.method === "POST") {
+  console.log('HEREEE')
+    const form = await Astro.request.formData();
+
+    const body = {
+            id: form.get("id") as string,
+            name: form.get("name"),
+            phone: {
+                number: form.get("phone")
+            },
+            address: {
+                street: form.get("street"),
+                number: form.get("number"),
+                complement: form.get("complement"),
+                zipCode: form.get("zipCode"),
+                city: form.get("city"),
+                state: form.get("state")
+            },
+            document: form.get("document")
+        };
+
+
+    if (!body.name) {
+      return toaster.inputValidation("name-message", "Nome Obrigatório")
+    }
+
+    if (!body.document) {
+      return toaster.inputValidation("document-message", "Documento Obrigatório")
+    }
+    if (!body.phone) {
+       return toaster.inputValidation("phone-message", "Telefone Obrigatório")
+    }
+
+    let method = body.id ? 'PUT' : 'POST';
+    let route = body.id ? 'customers/' + body.id : 'customers';
+
+    try {
+        const response = await Astro.locals.fetchWithResult(route, {
+          method: method,
+          body: JSON.stringify(body)
+        })
+
+        if (!response.success) {
+          return new Response(toaster.error("Erro:" + response.message), {
+            status: 203,
+            headers: { "Content-Type": "text/html" }
+          })
+        }
+      }
+      catch(err){
+        return new Response(toaster.error("Erro:" + err), {
+          status: 203,
+          headers: { "Content-Type": "text/html" }
+        })
+      }
+
+      return new Response(toaster.successObj(""), {
+          status: 200,
+          headers: { "Content-Type": "text/html" }
+        });
+
+}
+
+---
+<div>
+
+<h3 class="text-xl font-semibold text-slate-900 mt-8 mb-2">
+  Dados Pessoais</h3>
+
+<form id="f_customer" hx-post="/partials/customer-info" hx-target="#info" hx-trigger="change"   >
+
+  <input type="hidden" name="id" value={data.id}>
+
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend">Nome Completo</legend>
+    <input type="text" class="input" required name="name" placeholder="Insira o nome" value={data.name} />
+    <p id="name-message"></p>
+  </fieldset>
+
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend">Documento</legend>
+    <input type="text" class="input" required name="document" placeholder="Insira o nome" value={data.document} />
+    <p id="document-message"></p>
+  </fieldset>
+
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend">Telefone para Contato</legend>
+    <input type="text" class="input" required name="phone" placeholder="19-99999999" value={data.phone.number} />
+    <p id="phone-message"></p>
+  </fieldset>
+
+</form>
+
+<p id="info"></p>
+</div>

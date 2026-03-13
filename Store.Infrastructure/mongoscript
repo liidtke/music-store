@@ -1,0 +1,8 @@
+// 1. Create the counters collection (run once)
+db.createCollection("orders")
+
+// 2. Initialize the counter for your collection (run once)
+db.counters.insertOne({
+  _id: "orders",           // or "invoiceId", "ticketId", "userCode" etc.
+  seq: 0
+})

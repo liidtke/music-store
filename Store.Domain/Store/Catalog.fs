@@ -1,11 +1,13 @@
 module Store.Domain.Store.Catalog
 
+open System
+
 type ProductType =
   { id: Id
     name: string
-    pictureUrl: string
-    
-     }
+    description: string option
+    imageUrl: string
+    isActive: bool }
 // gravação, mixagem, produção
 
 // type ComboTemplate =
@@ -14,13 +16,28 @@ type ProductType =
 //     types: ProductType list
 //     createdBy: int }
 
-//portfolio
+type Professional =
+  { id: Id //same as user id
+    name: string
+    title: string
+    document: string
+    bulkDiscount: decimal
+    isActive: bool
+    pixKey: string option //for direct pix payments
+    isManager: bool //for managing delivery
+    imageUrl: string option
+    //json from editor.js
+    profile: string }
+
 type Product =
   { id: Id
+    name: string
     professionalId: Id
+    professionalName: string
     productType: ProductType
-    description: string option //json from editor.js
+    description: string option
     unitPrice: decimal
+    imageUrl: string option
     oldUnitPrice: decimal
     //effort for the completion of the work, est in hours
     effort: int
@@ -28,15 +45,33 @@ type Product =
     minDeadLine: int
     isActive: bool }
 
-type Professional =
+type SampleType =
+  | Audio = 1
+  | Pdf = 2
+  | Video = 3
+  | Image = 4
+
+type Sample =
   { id: Id
-    name: string
-    document: string
-    userId: int
-    bulkDiscount: decimal
-    isDeleted: bool
-    pixKey:string option //for direct pix payments
-    isManager: bool //for managing delivery
-    pictureUrl: string option
-    //json from editor.js
-    profile: string }
+    sampleType: SampleType
+    description: string
+    productId: Id
+    professionalId: Id }
+
+type SampleFile =
+  { id: Id //same as sample
+    fileName: string
+    mimeType: string
+    contents: byte array }
+
+//v1
+type CreatedBy = { userId: string; userName: string }
+
+type QuestionAsked =
+  { id: Id
+    professionalId: Id
+    question: string
+    response: string option
+    isPending: bool
+    occurred: DateTime
+    createdBy: CreatedBy }

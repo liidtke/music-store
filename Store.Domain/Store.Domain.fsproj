@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
@@ -19,12 +19,20 @@
         <Compile Include="Store\Catalog.fs" />
         <Compile Include="Store\Ordering.fs" />
         <Compile Include="Store\PostOrdering.fs" />
+        <Compile Include="Store\Interfaces.fs" />
+        <Compile Include="Store\ProductTypeService.fs" />
+        <Compile Include="Store\ProfessionalService.fs" />
+        <Compile Include="Store\ProductService.fs" />
+        <Compile Include="Store\SampleService.fs" />
+        <Compile Include="Store\CustomerService.fs" />
+        <Compile Include="Store\BasketService.fs" />
+        <Compile Include="Store\OrderService.fs" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Falco.Markup" Version="1.4.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
-        <PackageReference Include="WolverineFx.MemoryPack" Version="4.12.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
+        <PackageReference Include="WolverineFx.MemoryPack" Version="5.18.2" />
     </ItemGroup>
 
 </Project>

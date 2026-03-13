@@ -16,7 +16,7 @@ type User =
     email: string
     password: string option
     role: Role
-    isDeleted: bool
+    isActive: bool
     isVerified: bool }
 
   member this.update user =
@@ -28,7 +28,7 @@ type User =
 type UserVerification =
   { id: string
     userId: string
-    hash: string option
+    hash: string 
     user: User option
     expiresIn: DateTime
     isUsed: bool
@@ -46,6 +46,11 @@ type UserSession =
 module UserSession =
   let anon =
     { userId = ""
+      email = ""
+      name = ""
+      role = Role.Anon }
+  let anonWith guestId =
+    { userId = guestId 
       email = ""
       name = ""
       role = Role.Anon }

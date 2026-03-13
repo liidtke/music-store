@@ -1,5 +1,8 @@
 module Store.Program
 
+open System
+open MongoDB.Bson.Serialization
+open MongoDB.Bson.Serialization.Conventions
 open Store.Configurations
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
@@ -7,6 +10,7 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Hosting
 open Falco
 open Falco.Routing
+open Store.Infrastructure.Serializers
 
 
 let configureCors (corsBuilder: CorsPolicyBuilder) : unit =
@@ -36,6 +40,17 @@ let main args =
   configureServices bldr.Configuration bldr.Services |> ignore
   Configurations.configureEventBus bldr |> ignore
 
+  BsonSerializer.RegisterSerializer(StringOptionSerializer())
+  let pack = ConventionPack()
+  pack.Add(FSharpListConvention())
+  pack.Add(IgnoreExtraElementsConvention(true))     // very useful with F#
+  pack.Add(CamelCaseElementNameConvention())
+
+  ConventionRegistry.Register("F# friendly conventions", pack, System.Func<Type,bool>(fun _ -> true))
+
+
+  
+  
   let wapp = bldr.Build()
 
   // let conf =

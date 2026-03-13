@@ -6,13 +6,14 @@ open Falco
 open Falco.Routing
 open Store
 open Store.Domain
+open Store.Domain.Health
 open Store.Domain.Interfaces
 open Store.Infrastructure
 open Store.Security
 open Store.Session
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.DependencyInjection
-(*
+
 module RequestPasswordConfirm =
   type RequestChangePasswordInput =
     { email: string
@@ -20,14 +21,14 @@ module RequestPasswordConfirm =
       password: string }
 
   let workflow (stx: ServiceContext) (input: RequestChangePasswordInput) =
-    let db = stx.getDbContext ()
-    let salt = Crypto.createSalt
+    let uvRepo = stx.context.Plug<IUserVerificationRepository>()
+    let uRepo = stx.context.Plug<IUserRepository>()
     let genCode = Crypto.sha256 2 32
-    let getUserEffect = UserData.getUserByEmail db
-    let passwordHasher = hashPassword stx.securitySettings
-    let getUvByEmail = UserVerificationData.getByUserEmail db
-    let update = UserVerificationData.updateUserVerification db
-    let saveUser = UserData.save db
+    let getUserEffect = uRepo.FetchByEmail
+    let passwordHasher = hashPassword stx.securitySettings.Iterations
+    let getUvByEmail = uvRepo.FetchByUserEmail
+    let update = uvRepo.Update
+    let saveUser = uRepo.Update
 
     //send mail
     let sender =
@@ -59,11 +60,12 @@ module RequestPasswordReset =
   type RequestPasswordInput = { email: string }
 
   let workflow (stx: ServiceContext) (input: RequestPasswordInput) =
-    let db = stx.getDbContext ()
+    let db = stx.context.Plug<IUserRepository>()
+    let uv = stx.context.Plug<IUserVerificationRepository>()
     let salt = Crypto.createSalt
     let genCode = Crypto.sha256 2 32
-    let getUserEffect = UserData.getUserByEmail db
-    let saveVerificationEffect = UserVerificationData.insertUserVerification db
+    let getUserEffect = db.FetchByEmail
+    let saveVerificationEffect = uv.Add
 
     //send mail
     let sender =
@@ -77,7 +79,7 @@ module RequestPasswordReset =
         UserVerificationService.requestPasswordReset input.email getUserEffect saveVerificationEffect salt genCode
 
       let! sendResult = result ?>< sender
-      return result ?> (fun i -> succeed i.hash.Value)
+      return result ?> (fun i -> succeed i)
     }
 
   let handler: HttpHandler =
@@ -85,7 +87,6 @@ module RequestPasswordReset =
 
   let endpoint = post "/login/password-reset" handler
 
-*)
 type LoginRequest =
   { email: string
     password: string
@@ -111,7 +112,7 @@ let workflow (a: LoginRequest) : HttpHandler =
         else
           config
 
-      if u |> Security.validateUserPassword config a.password then
+      if u |> Security.validateUserPassword config.Iterations a.password then
         Response.ofJson <| Security.generateToken config u
       else
         Response.withStatusCode 401
@@ -132,11 +133,7 @@ let workflow (a: LoginRequest) : HttpHandler =
 
 let formHandler: HttpHandler = Request.mapJson<LoginRequest> workflow
 
-
 let login = post "/login" formHandler
 
 let endpoints =
-  [ login
-    // RequestPasswordReset.endpoint
-    // RequestPasswordConfirm.endpoint
-    ]
+  [ login; RequestPasswordReset.endpoint; RequestPasswordConfirm.endpoint ]

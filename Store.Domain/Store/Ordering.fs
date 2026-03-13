@@ -1,66 +1,110 @@
-module Store.Domain.Store.Entities
+module Store.Domain.Store.Ordering
 
 open System
 
 open Catalog
 open Store.Domain.Store.Catalog
 
+type Phone = {
+  number: string
+}
+
+type Address = {
+  street: string
+  number: string
+  complement: string
+  zipCode: string
+  city: string
+  state: string
+}
+
+type Customer = {
+  //same as userid
+  id: Id
+  name: string //same 
+  phone: Phone
+  address: Address option
+  document:string //cpf or cnpj
+}
+
 type BasketItem = { product: Product; quantity: int }
 
 type Basket =
   { id: Id
-    userId: int
     items: BasketItem list
     occurred: DateTime }
 
 type OrderItem =
   { id: Guid
     product: Product
-    quantity: int }
+    quantity: int
+    price: decimal
+     }
 
 type OrderStatus =
   | Submitted = 1
-  | AwaitingValidation = 2
-  | Confirmed = 3
-  | Paid = 4
-  | InProgress = 5
-  | Fulfilled = 7
-  | Cancelled = 9
+  | Confirmed = 2
+  | InProgress = 3
+  | Fulfilled = 4
+  | Cancelled = 5
 
-type UserOrderData =
-  { userId: int
+type PaymentStatus =
+  | Pending = 1
+  | Paid = 2
+  | Refunded = 3
+  
+type CustomerOrderData =
+  { userId: string
     name: string
+    email: string
     document: string
-    address: string
-    zipCode: string
     phone: string }
 
 type PaymentMethod =
-  | Pix
-  | Money //maybe used in future
-  | CreditCard //maybe used in future
+  | Direct = 0
+  | Pix = 1
+  | CreditCard = 3
+  
+type PaymentProcessor =
+  | Self = 0
+  | Professional = 1
+  | MercadoLivre = 2 
 
+
+type Order =
+  { id: Id
+    number: string
+    occurred: DateTime
+    status: OrderStatus
+    value: decimal
+    items: OrderItem list
+    paymentProcessor: PaymentProcessor
+    // responsibleId: Id
+    customer: CustomerOrderData
+    message:string option
+    deliveryDate: DateTime
+    paymentStatus: PaymentStatus
+    paymentMethod: PaymentMethod
+  }
+
+//v2
 type Invoice =
-  { beneficiary: Professional
+  {
+    id:Id
+    orderId:Id
+    beneficiary: Professional
     paymentMethod: PaymentMethod
     value: decimal
     fileId: Id option } //id for file metadata
 
-type Order =
-  { id: Id
-    occurred: DateTime
-    status: OrderStatus
-    bulkDiscount: int //ex 10%
-    totalValue: decimal
-    items: OrderItem
-    dueDate: DateTime
-    user: UserOrderData
-    invoices: Invoice list
-    receiptId: Id option  //receipt attached by user
-  }
-
+//v2
 type OrderHistory =
   { id: Id
     orderId: Id
     description: string
     status: OrderStatus }
+
+
+//events
+  
+type OrderPlacedEvent = { order: Order }

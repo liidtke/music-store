@@ -3,6 +3,7 @@ module Store.Infrastructure.Context
 open System.Linq
 open System.Threading.Tasks
 open Microsoft.Extensions.Logging
+open MongoDB.Bson
 open MongoDB.Driver
 
 type DatabaseSettings =
@@ -14,7 +15,7 @@ type IMongoContext =
   abstract member Query<'a> : string -> IQueryable<'a>
 
 type MongoContext(settings: DatabaseSettings) =
-  let client: MongoClient = MongoClient(settings.connectionString)
+  let client: MongoClient = new MongoClient(settings.connectionString)
   let database: IMongoDatabase = client.GetDatabase(settings.databaseName)
 
   interface IMongoContext with
@@ -38,7 +39,8 @@ let mapInsert
       return mapperOut data |> succeed 
     with ex ->
       logger.LogError(ex, message) |> ignore
-      return fail message
+      if ex.InnerException <> null && ex.InnerException.Message.ToLower().Contains("duplicate") then return fail "Duplicate Item"
+        else return fail message
   }
 
 let mapUpdate
@@ -53,12 +55,12 @@ let mapUpdate
   async {
     try
       let data = mapperIn input
-      let! result = effect filter data |> Async.AwaitTask
+      let! _ = effect filter data |> Async.AwaitTask
       //later check result.IsAcknowledged
-      if result.ModifiedCount = 0 then
-        return fail message
-      else
-        return succeed input
+      // if result.ModifiedCount = 0 then
+      //   return fail message
+      // else
+      return succeed input
     with ex ->
       logger.LogError(ex, message) |> ignore
       return fail message
@@ -111,3 +113,9 @@ let mapFind (logger: ILogger) (mapperOut: 'data -> 'entity) (errorMessage: strin
       logger.LogError(ex, errorMessage) |> ignore
       return fail errorMessage
   }
+
+let parseExec<'t> (id: string) (effect: BsonObjectId -> Async<ServiceOutput<'t>>) =
+  match ObjectId.TryParse id with
+  | true, objectId -> effect objectId
+  | false, objectId -> async {return validation<'t> "Invalid id"}
+

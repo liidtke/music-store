@@ -4,9 +4,21 @@ open System
 open System.Text
 open Store.Domain
 open Store.Domain.Email
+open Store.Domain.EmailService
 open Store.Domain.Interfaces
+open Store.Domain.Store.Interfaces
+open Store.Endpoints.Queries
+open Store.Events
 open Store.Infrastructure.Access.UserRepository
+open Store.Infrastructure.Access.UserVerificationRepository
 open Store.Infrastructure.Context
+open Store.Infrastructure.Store.BasketRepository
+open Store.Infrastructure.Store.CustomerRepository
+open Store.Infrastructure.Store.OrderRepository
+open Store.Infrastructure.Store.ProductRepository
+open Store.Infrastructure.Store.ProductTypeRepository
+open Store.Infrastructure.Store.ProfessionalRepository
+open Store.Infrastructure.Store.SampleRepository
 open Store.Session
 open Microsoft.AspNetCore.Authentication.JwtBearer
 open Microsoft.AspNetCore.Authorization
@@ -51,8 +63,7 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   let section = configuration.GetSection("Security")
 
   let sec: SecuritySettings =
-    { Salt = section.GetValue<string>("Salt")
-      Iterations = section.GetValue<int>("Iterations")
+    { Iterations = section.GetValue<int>("Iterations")
       JwtSecurityKey = section.GetValue<string>("JwtSecurityKey")
       JwtIssuer = section.GetValue<string>("JwtIssuer")
       JwtAudience = section.GetValue<string>("JwtAudience")
@@ -108,5 +119,19 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
   |> ignore
 
   //events and services
-  services.AddScoped<IUserRepository, UserRepository>()
+  services.AddScoped<IUserRepository, UserRepository>() |> ignore
+
+  services.AddScoped<IUserVerificationRepository, UserVerificationRepository>()
   |> ignore
+
+  services.AddScoped<IProductTypeRepository, ProductTypeRepository>() |> ignore
+  services.AddScoped<IProfessionalRepository, ProfessionalRepository>() |> ignore
+  services.AddScoped<IProductRepository, ProductRepository>() |> ignore
+  services.AddScoped<ISampleRepository, SampleRepository>() |> ignore
+  services.AddScoped<ICustomerRepository, CustomerRepository>() |> ignore
+  services.AddScoped<IBasketRepository, BasketRepository>() |> ignore
+  services.AddScoped<IOrderRepository, OrderRepository>() |> ignore
+  services.AddScoped<ProfessionalQuery>() |> ignore
+  services.AddScoped<OrderQuery>() |> ignore
+  services.AddScoped<OrderPlacedEventHandler>() |> ignore
+  services.AddScoped<EmailService>() |> ignore

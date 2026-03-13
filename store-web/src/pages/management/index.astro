@@ -1,44 +1,20 @@
 ---
 export const prerender = false;
 
-import Layout from '../../layouts/Layout.astro';
-import App from '../../layouts/App.astro';
+import Management from '@layouts/Management.astro';
 import Link from '@components/Link.astro'
 import Modal from '@components/Modal.astro'
 
-
 ---
 
-<App>
+<Management>
 
-<div class="page"> 
-	<div class="breadcrumbs text-sm">
-		<ul>
-			<li><a href="/app">Início</a></li>
-		</ul>
-	</div>
+<div class="page">
 
-	<h1 class="md:text-3xl text-lg font-semibold">Sistema de Gerenciamento</h1>
-<button type="button" class="btn">
-  Small
-</button>
-    <!-- <div class="i-mdi-account-hard-hat-outline"></div> -->
-
-
-
-    <div>
-    </div>
-
+	<h1 class="md:text-3xl text-lg font-semibold">Gerenciamento Loja</h1>
 
     <div class="grid gap-4 mt-8 2xl:grid-cols-2">
 
-     
-      <div class="smooth" id="schedule-next" hx-get="/partials/schedule-next" hx-trigger="load" hx-swap="transition:true">
-      </div>
-
-      <div class="smooth" id="income-report" class="" hx-get="/partials/income-report" hx-trigger="load" hx-swap="transition:true">
-      </div>
     </div>
 
-</App>
-
+</Management>

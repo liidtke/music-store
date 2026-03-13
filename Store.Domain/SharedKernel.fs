@@ -64,7 +64,12 @@ let fromException (ex: Exception) =
       ex = ex |> Some
       errorMessages = [ ex.Message ] }
 
-let validation message = fromError Validation message
+let validation<'t> message =
+  fromError Validation message :> ServiceOutput<'t>
+
+let validationAsync<'t> message =
+  async { return fromError Validation message :> ServiceOutput<'t> }
+
 let notFound message = fromError NotFound message
 
 let formValidation html =
@@ -257,6 +262,17 @@ let raiseOutput (o: 't ServiceOutput) =
     else
       ()
 
+
+let fromString (str: string option) =
+  match str with
+  | None -> None
+  | Some value ->
+    match value with
+    | "" -> None
+    | "undefined" -> None
+    | "null" -> None
+    | _ -> Some value
+
 let stringToDisplay (str: string option) =
   match str with
   | None -> ""
@@ -272,19 +288,19 @@ let maybeMapSo (func: 'a -> 'b) (value: Option<'a>) =
   | None -> None |> succeed
   | Some s -> func s |> Some |> succeed
 
-let optionMap (func: 'a -> 'a option) (value: 'a option) =
+let optionMap (func: 'a -> 'b option) (value: 'a option) =
   match value with
   | None -> None
   | Some item -> func item
 
 
-let optionMapSo func so =
-  match so with
-  | Success s -> optionMap func s |> succeed
-  | Failure e -> failure e
+// let optionMapSo func so =
+//   match so with
+//   | Success s -> optionMap func s |> succeed
+//   | Failure e -> failure e
 
 /// Apply a function to the success values of two service outputs, short-circuiting on the first failure.
-let map2 (f: 'a -> 'b -> ServiceOutput<'c>) (so1: ServiceOutput<'a>) (so2: ServiceOutput<'b>) : ServiceOutput<'c> =
+let may2 (f: 'a -> 'b -> ServiceOutput<'c>) (so1: ServiceOutput<'a>) (so2: ServiceOutput<'b>) : ServiceOutput<'c> =
   match so1, so2 with
   | Success a, Success b -> f a b
   | Success _, Failure e -> Failure e
@@ -344,14 +360,16 @@ let fromOption result =
     | Some value -> value |> succeed)
 
 
-type DomainEvent = | UserChanged
-
-type DomainOutput<'T> =
-  | SendEvent of 'T * DomainEvent
-  | SendEvents of 'T * DomainEvent list
-  | Obj of 'T
-  
 let optionToString (s: string option) =
   match s with
   | None -> ""
   | Some value -> value
+
+type DomainOutput<'T, 'TEvent> =
+  { result: ServiceOutput<'T>
+    event: 'TEvent option }
+  
+  member this.SendEvent = this.result.IsSuccess && this.event.IsSome
+
+module DomainOutput =
+  let from o ev = { result = o; event = ev } 

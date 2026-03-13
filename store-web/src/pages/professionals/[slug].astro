@@ -1,0 +1,92 @@
+---
+import Store from "@layouts/Store.astro"
+import Card from "@components/placeholders/Card.astro";
+
+let data = {};
+
+const { slug } = Astro.params;
+const response = await Astro.locals.fetchWithResult("public/professionals/" + slug );
+console.log(response);
+
+if(response.success){
+  data = response.data;
+}
+
+---
+
+<Store>
+
+  <div class="flex flex-col items-center text-center mt-8">
+      <h1 class="text-3xl md:text-4xl font-semibold mb-4 text-gray-800">Nossos Profissionais</h1>
+      <p class="w-3/5 mb-8 text-gray-500 text-sm">Temos uma pequena seleção de profissionais que irá se expandir a medida que nosso produto for apreciado de forma que o futuro próximo será brevemente breve.</p>
+      <div class="flex flex-wrap gap-6 items-center justify-center">
+      </div>
+  </div>
+
+  <div id="main-prof" class="max-w-6xl w-full max-lg:max-w-2xl mx-auto  mt-4">
+    <div class="p-4 md:p-8 bg-white rounded-md">
+
+    <div class="border-b border-gray-300 pb-4">
+      <div class="flex gap-4">
+        <div>
+          <h3 class="text-2xl font-semibold text-slate-900">{data.name}</h3>
+          <p class="text-[15px] text-slate-500 mt-3">{data.title}</p>
+        </div>
+        <div class="ml-auto">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 ">
+      <img class="w-md rounded-sm" src=`/${data.imageUrl}` alt="image">
+        <div class="quill" set:html={data.profile} ></div>
+    </div>
+    </div>
+
+    <div class="mt-8">
+      <!-- <div class="bg-gray-100 p-6 rounded-md">
+        <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-900">Purchase Date</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">May 05, 2025</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-900">Order id</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">OR981122</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-900">Total Paid</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">$78.00</p>
+          </div>
+          <div class="md:ml-auto">
+            <button type="button" class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full">
+              View Invoice
+            </button>
+          </div>
+        </div>
+      </div> -->
+
+      <div id="s-wrapper" class="p-4 md:p-8 mt-8" hx-get={"/partials/public/samples?limit=12&professionalId=" + slug} hx-trigger="load delay:100ms" hx-swap="innerHTML" >
+         <Card>
+         </Card>
+
+       </div>
+
+      <div id="pr-wrapper" class="p-4 md:p-8 mt-8" hx-get="/partials/public/products?limit=8" hx-trigger="load delay:100ms" hx-swap="innerHTML" >
+        <Card>
+          <h1 class="text-xl font-semibold mb-8">
+            Produtos
+          </h1>
+        </Card>
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+</Store>
+
+</Store>

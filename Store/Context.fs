@@ -8,6 +8,7 @@ open Falco
 open Store.Domain
 open Store.Domain.Email
 open Store.Domain.Health
+open Store.Domain.Interfaces
 open Store.Security
 open Store.Session
 open Microsoft.AspNetCore.Authentication
@@ -26,31 +27,13 @@ type ServiceContext =
     context: HttpContext
     logger: ILogger }
 
-let private getUser
-  (logger: ILogger)
-  (claims: Claim list)
-  (sessionManager: SessionManager)
-  (ctx: HttpContext)
-  =
+let private getUser (logger: ILogger) (claims: Claim list) (sessionManager: SessionManager) (ctx: HttpContext) =
   let headers =
     dict [ for h in ctx.Request.Headers -> h.Key, h.Value.FirstOrDefault() ]
   // let claims = Seq.toList ctx.User.Claims
-  let userId = claims[0].Value 
-
-  let get: UserService.Effects.GetUser =
-    fun i ->
-      async {
-        return
-          { id = ""
-            name = "test"
-            email = "test"
-            password = "test" |> Some
-            role = Role.CustomerRole
-            isDeleted = false
-            isVerified = true }
-          |> succeed
-
-      }
+  let userId = if claims.Length > 0 then claims[0].Value else ""
+  let db = ctx.Plug<IUserRepository>()
+  let get: UserService.Effects.GetUser = db.Find
 
   let loadFrom () =
     async {
@@ -62,20 +45,29 @@ let private getUser
       | _ -> return validation "Não foi possível buscar o usuário"
     }
 
-  async {
-    let! session =
-      match sessionManager.GetSession(userId) with
-      | Some s -> async { return s |> succeed }
-      | None -> loadFrom ()
+  let guest () =
+    { userId =
+        if headers.ContainsKey("X-Guest-Id") then
+          headers["X-Guest-Id"]
+        else
+          ""
+      role = Role.Anon
+      name = ""
+      email = "" }
 
-    match session with
-    | Success s -> return s
-    | Failure f ->
-      return
-        { userId = ""
-          role = Role.Anon
-          name = ""
-          email = "" }
+  async {
+    if String.IsNullOrEmpty userId then
+      return guest ()
+    else
+      let! session =
+        match sessionManager.GetSession(userId) with
+        | Some s -> async { return s |> succeed }
+        | None -> loadFrom ()
+
+      match session with
+      | Success s -> return s
+      | Failure f -> return guest ()
+
 
   }
 
@@ -96,7 +88,9 @@ let getServiceContext isAuthRequired (ctx: HttpContext) =
       []
 
   async {
-    if authenticateResult.Succeeded then
+    if not authenticateResult.Succeeded && isAuthRequired then
+      return validation "Invalid token"
+    else
       let! session = getUser logger claims sessionManager ctx
 
       return
@@ -108,16 +102,4 @@ let getServiceContext isAuthRequired (ctx: HttpContext) =
             context = ctx
             logger = logger
             emailSettings = eSet }
-    elif not isAuthRequired then
-      return
-        succeed
-          { userSession = UserSession.anon
-            securitySettings = secSet
-            context = ctx
-            messageBus = messageBus
-            sessionManager = sessionManager
-            logger = logger
-            emailSettings = eSet }
-    else
-      return validation "Invalid Token"
   }

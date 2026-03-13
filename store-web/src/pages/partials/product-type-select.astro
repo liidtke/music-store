@@ -1,0 +1,28 @@
+---
+export const partial = true;
+let data = [];
+
+const selected = Astro.url.searchParams.get("selected");
+
+if (Astro.request.method === "GET") {
+
+  const response = await Astro.locals.fetchWithResult("product-types/");
+  if(response.success){
+    data = await response.data;
+  }
+  else{
+  }
+}
+
+---
+
+<fieldset class="fieldset">
+  <legend class="fieldset-legend">Categoria</legend>
+  <select class="select outline-none " name="productTypeId" id="pt-select" >
+    <option disabled selected value="">Selecione</option>
+    {data.map(cat => (
+    <option selected={cat.id == selected} value={cat.id}>{cat.name}</option>
+    ))}
+  </select>
+  <p id="pt-msg"></p>
+</fieldset>

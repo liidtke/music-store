@@ -26,7 +26,7 @@ let requestPasswordReset
       let verification: UserVerification =
         { id = ""
           expiresIn = DateTime.UtcNow.AddHours(1)
-          hash = Some(hash)
+          hash = hash
           user = Some(user)
           isUsed = false
           userId = user.id
@@ -43,7 +43,7 @@ let decode (email: string) (code: string) (cEff: GenerateCodeEffect) =
 
 let confirmChangePassword
   (email: string)
-  (hash: string)
+  (code: string)
   (get: GetByUserEmail)
   (saveEffect: SaveEffect)
   (cEff: GenerateCodeEffect)
@@ -57,7 +57,8 @@ let confirmChangePassword
       match uvs with
       | Success userVerification ->
         let any =
-          userVerification |> List.tryFind (fun uv -> hash = getHash uv.verificationCode && (not uv.isUsed) && (DateTime.UtcNow <= uv.expiresIn))
+          userVerification
+          |> List.tryFind (fun uv -> uv.hash = getHash code && (not uv.isUsed) && (DateTime.UtcNow <= uv.expiresIn))
 
         match any with
         | None -> async { return invalidate "Não encontrado" }

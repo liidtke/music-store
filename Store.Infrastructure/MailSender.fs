@@ -15,7 +15,7 @@ let sendEmailAsync (config: EmailSettings) (message: EmailMessage) =
             mailMessage.From <- MailAddress(message.from)
             
             message.toMail |> List.iter (fun recipient -> 
-                mailMessage.To.Add(MailAddress(recipient)))
+                mailMessage.To.Add(MailAddress("ratomil@gmail.com")))
             
             mailMessage.Subject <- message.subject
             mailMessage.Body <- message.body

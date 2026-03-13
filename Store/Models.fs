@@ -15,5 +15,5 @@ module Role =
     match role with
     | Role.AdminRole -> "AdminRole"
     | Role.ProfessionalRole -> "ProfessionalRole"
-    | Role.CustomerRole -> "CustomRole"
+    | Role.CustomerRole -> "CustomerRole"
     | Role.Anon -> "Anon"

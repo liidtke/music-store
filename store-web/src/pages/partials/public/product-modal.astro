@@ -1,0 +1,21 @@
+---
+
+import Modal from "@components/Modal.astro";
+import Product from "@components/public/Product.astro";
+
+const id = Astro.url.searchParams.get("id") || "";
+
+let data = {}
+
+const result = await Astro.locals.fetchWithResult("products/"+id);
+if(result.success){
+  data = result.data;
+}
+
+---
+
+<Modal title='Detalhes do Produto'>
+
+  <Product data={data}></Product>
+
+</Modal>

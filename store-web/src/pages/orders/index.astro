@@ -1,0 +1,223 @@
+---
+import Store from "@layouts/Store.astro"
+import Nothing from "@components/placeholders/Nothing.astro"
+import toaster from '@utils/toaster'
+
+const paymentEmail = "mailto:pagamento@store-m.com.br"
+let data = null;
+let status = "All"
+
+const formatter = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+let c = Astro.cookies.get('auth_token');
+if(!c){
+  return Astro.redirect("/login");
+}
+
+if (Astro.request.method === "GET") {
+  console.log("GETTING orders");
+
+  const orderId = Astro.url.searchParams.get("order") || null;
+  const st = Astro.url.searchParams.get("status") || null;
+  if(st){
+  status = st;
+  }
+
+  let url = "orders?"
+
+  let obj = {order:orderId, status:st}
+
+  let p = new URLSearchParams(obj);
+  let add = p.toString();
+
+  const result = await Astro.locals.fetchWithResult(url+add);
+  if(result.success){
+    data = result.data;
+  }
+  else {
+    // data = null;
+  }
+}
+
+function orderStatusToString(status) {
+  const statusMap = {
+    1: "Criado",
+    2: "Confirmado",
+    3: "Em Andamento",
+    4: "Completo",
+    5: "Cancelado"
+  };
+
+  return statusMap[status] || "Unknown";
+}
+
+function orderStatusToStringSwitch(status) {
+  switch (status) {
+    case 1:  return "Submitted";
+    case 2:  return "Confirmed";
+    case 3:  return "InProgress";
+    case 4:  return "Fulfilled";
+    case 5:  return "Cancelled";
+    default: return "Unknown";
+  }
+}
+
+
+function paymentStatusToShow(status){
+  switch (status){
+    case 1: return "Pendente"
+    case 2: return "Pago"
+    case 3: return "Estornado"
+  }
+}
+
+
+function paymentMethodToShow(status){
+  switch (status){
+    case 0: return "Via profissional"
+    case 1: return "Pix"
+    case 2: return "Cartão"
+    case 3: return ""
+  }
+}
+
+---
+<Store>
+
+  <div class="max-w-6xl max-lg:max-w-2xl mx-auto bg-white p-4 md:p-8 mt-4">
+    <div class="border-b border-gray-300 pb-4">
+      <div class="flex gap-4">
+        <div>
+          <h3 class="text-2xl font-semibold text-slate-900">Pedidos</h3>
+          <p class="text-[15px] text-slate-500 mt-3">Visualizar pedidos</p>
+        </div>
+        <div class="ml-auto">
+          <select autocomplete="off" name="status" hx-get="" hx-target="main" hx-select="main" class="appearance-none cursor-pointer text-sm text-slate-900 bg-gray-100 border border-gray-300 outline-0 px-4 py-2 rounded-md">
+            <option value="All" selected={status == "All"} >Todos</option>
+          <option value="Fulfilled" selected={status == "Fulfilled"}>Completos</option>
+          <option value="Cancelled" selected={status == "Cancelled"} >Cancelados</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    {
+    () => {
+    if(data === null || data.length == 0){
+    return (
+    <div class="mt-8">
+    <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
+
+    <Nothing></Nothing>
+    </div>
+    </div>
+    )
+    }
+
+    }
+
+    }
+
+    {data.map((order) => (
+    <div class="mt-8">
+      <div class="bg-gray-100 p-6 rounded-md">
+        <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6">
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-900">Número</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">{order.number}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-900">Data do Pedido</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">{order.occurred}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4 md:ml-auto">
+            <h6 class="text-[15px] font-medium text-slate-900">Valor Total</h6>
+            <p class="text-sm text-slate-500 font-medium md:mt-2">R$ {formatter.format(order.value)}</p>
+          </div>
+          <!-- <div class="md:ml-auto">
+          <button type="button" class="cursor-pointer text-sm text-slate-900 font-medium bg-gray-200 border border-gray-300 outline-0 px-4 py-2 rounded-md max-md:w-full">
+          View Invoice
+          </button>
+          </div> -->
+        </div>
+      </div>
+        <div class="flex md:items-center max-md:flex-col gap-x-12 gap-y-6 mt-4 p-6 rounded-md bg-hs-secondary ">
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-100">Pagamento</h6>
+            <p
+            text={order.paymentStatus == 1 ? 'red!' : ''}
+            class="text-sm text-slate-300 font-medium md:mt-2">{paymentStatusToShow(order.paymentStatus)}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-100">Status</h6>
+            <p class="text-sm text-slate-300 font-medium md:mt-2">{orderStatusToString(order.status)}</p>
+          </div>
+          <div class="max-md:flex max-md:justify-between max-md:gap-4">
+            <h6 class="text-[15px] font-medium text-slate-100">Forma de Pagamento</h6>
+            <p class="text-sm text-slate-300 font-medium md:mt-2">{paymentMethodToShow(order.paymentMethod)}</p>
+          </div>
+        </div>
+            {
+            () => {
+
+            if (order.paymentMethod == 0)
+            return (
+
+            <p class="p-2 text-md">Entrar em contato com o setor de pagamentos em
+              <a href={paymentEmail}>pagamento@store-m.com.br</a> </p>
+
+            )
+
+            }
+            }
+
+
+
+      <!-- <div>
+      <h6 class="text-sm font-medium text-slate-500">Delivery Date</h6>
+      <p class="text-sm text-slate-900 font-medium mt-2">May 12, 2025</p>
+      </div>
+      <div>
+      <h6 class="text-sm font-medium text-slate-500">Order Status</h6>
+      <p class="bg-green-100 text-[13px] font-medium text-green-600 mt-2 inline-block rounded-md py-1.5 px-3">Completed</p>
+      </div> -->
+
+      <div class="divide-y divide-gray-300 mt-4 mb-16 pb-4 border-b border-gray-300">
+
+        {order.items.map((product) => (
+        <div class="grid grid-cols-5 max-md:grid-cols-2 items-start justify-between gap-6 py-4">
+          <div class="md:col-span-2 flex sm:items-center gap-4 max-sm:flex-col">
+            <div class="bg-gray-100 p-2 rounded-lg w-16 h-16 shrink-0">
+              <img src={product.product.imageUrl} class="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h6 class="text-[15px] font-medium text-slate-900">{product.product.name}</h6>
+            </div>
+          </div>
+          <div>
+            <h6 class="text-sm font-medium text-slate-500">Quantidade</h6>
+            <p class="text-sm text-slate-900 font-medium mt-2">{product.quantity}</p>
+          </div>
+          <div>
+            <h6 class="text-sm font-medium text-slate-500">Valor Unitário</h6>
+            <p class="text-sm text-slate-900 font-medium mt-2">R$ {formatter.format(product.product.unitPrice)}</p>
+          </div>
+          <div class="md:ml-auto">
+            <h6 class="text-sm font-medium text-slate-500">Valor</h6>
+            <p class="text-sm text-slate-900 font-medium mt-2">R$ {formatter.format(product.price)}</p>
+          </div>
+        </div>
+        ))}
+
+
+      </div>
+    </div>
+    ))}
+
+
+  </div>
+
+</Store>

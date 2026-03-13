@@ -16,11 +16,11 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Red Hat Text", sans-serif;
+  font-family: "Montserrat","Red Hat Text", sans-serif;
 }
 
 body {
-  font-family: "Red Hat Text", sans-serif !important;
+  font-family: "Montserrat","Red Hat Text", sans-serif !important;
 }
 
 html {
@@ -230,4 +230,32 @@ select::after {
   border-top: 5px solid #6c757d; /* Creates the down arrow triangle */
   pointer-events: none; /* Ensures it doesn't interfere with clicks */
   transition: border-color 0.2s ease; /* Optional: Smooth color change on focus */
+}
+
+.quill > h1{
+  font-size: 18px;
+  font-weight: 700
+}
+
+.quill > h2{
+  font-size: 16px;
+  font-weight: 600
+}
+
+.quill > h3{
+  font-size: 14px;
+  font-weight: 600
+}
+
+.quill > p {
+  font-size: 13px;
+}
+
+.modal-body{
+  overflow-x: scroll;
+  max-height: 90vh;
+}
+
+#toaster-wrapper{
+  z-index: 4;
 }

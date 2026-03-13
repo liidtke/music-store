@@ -1,0 +1,210 @@
+---
+import Modal from "@components/Modal.astro";
+
+let productId = Astro.url.searchParams.get('productId');
+
+import toaster from '@utils/toaster';
+import Link from "@components/Link.astro";
+
+let message = null;
+let error = null;
+
+// Handle POST submission (file upload)
+if (Astro.request.method === "POST") {
+  try {
+    const formData = await Astro.request.formData();
+
+    const productId = formData.get("productId")?.toString()?.trim();
+    const sampleTypeStr = formData.get("sampleType")?.toString();
+    const description = formData.get("description")?.toString()?.trim() ?? "";
+    const file = formData.get("file") as File;
+
+    // Basic validation
+    if (!productId) {
+      return new Response(toaster.inputValidation("productId-message", "Produto é obrigatório"), {
+        status: 400,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    if (!sampleTypeStr || !["Audio", "Image", "Pdf"].includes(sampleTypeStr)) {
+      return new Response(toaster.inputValidation("sampleType-message", "Tipo de amostra inválido"), {
+        status: 400,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    if (!file || file.size === 0) {
+      return new Response(toaster.inputValidation("file-message", "Selecione um arquivo"), {
+        status: 400,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    // Optional: validate file type based on sampleType
+    const validTypes: Record<string, string[]> = {
+      "Audio": ["audio/mpeg", "audio/wav", "audio/ogg"],
+      "Image": ["image/jpeg", "image/png", "image/webp", "image/gif"],
+      "Pdf": ["application/pdf"]
+    };
+
+    if (!validTypes[sampleTypeStr].includes(file.type)) {
+      return new Response(toaster.inputValidation("file-message", `Tipo de arquivo inválido para ${sampleTypeStr}`), {
+        status: 400,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+    // Forward to your F# backend (adjust endpoint as needed)
+    const response = await Astro.locals.fetchWithResultCrude("samples", {
+      method: "POST",
+      body: formData  // Important: send as FormData to preserve file
+    });
+
+    console.log(response);
+    if (response.success) {
+      const result = response.data;
+      return new Response(toaster.success("/management/samples"), {
+        status: 200,
+        headers: { "Content-Type": "text/html" }
+      });
+    } else {
+      const errText = await response.message;
+      return new Response(toaster.error("Falha ao enviar arquivo: " + errText), {
+        status: 203,
+        headers: { "Content-Type": "text/html" }
+      });
+    }
+
+  } catch (err) {
+    console.error("Upload error:", err);
+    return new Response(toaster.error("Erro interno no servidor"), {
+      status: 500,
+      headers: { "Content-Type": "text/html" }
+    });
+  }
+}
+
+---
+
+
+<Modal title='Adicionar Sample'>
+
+
+    <div class="flex items-center justify-between mb-8">
+      <div></div>
+        <button type="submit" form="uploadForm" class="btn-primary">
+          Salvar
+        </button>
+    </div>
+
+    <form
+      id="uploadForm"
+      hx-post="/management/products/sample-add"
+      hx-encoding="multipart/form-data"
+      hx-target="#uploadMessage"
+      hx-swap="innerHTML"
+      hx-indicator="#uploadProgress"
+      class="space-y-8"
+    >
+      <!-- Product ID -->
+      <!-- <fieldset class="fieldset">
+        <legend class="fieldset-legend">ID do Produto</legend>
+        <input
+          type="text"
+          name="productId"
+          class="input"
+          placeholder="ex: PROD-12345"
+          required
+        />
+        <p id="productId-message" class="text-red-600 text-sm mt-1"></p>
+      </fieldset> -->
+
+      <input type="hidden" name="productId" value={productId}>
+
+      <!-- Sample Type -->
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Tipo de Arquivo</legend>
+        <select name="sampleType" class="input" required>
+          <option value="" disabled selected>Selecione o tipo</option>
+          <option value="Audio">Áudio</option>
+          <!-- <option value="Image">Imagem</option> -->
+          <!-- <option value="Pdf">PDF</option> -->
+        </select>
+        <p id="sampleType-message" class="text-red-600 text-sm mt-1"></p>
+      </fieldset>
+
+      <!-- Description -->
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Descrição (opcional)</legend>
+        <textarea
+          name="description"
+          rows="3"
+          class="input resize-vertical"
+          placeholder="Ex: Foto principal do produto em alta resolução"></textarea>
+      </fieldset>
+
+      <!-- File Upload -->
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">Arquivo</legend>
+
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors">
+          <input
+            type="file"
+            name="file"
+            id="fileInput"
+            accept="audio/*,image/*,.pdf"
+            required
+            class="hidden"
+          />
+          <label for="fileInput" class="cursor-pointer">
+            <div class="text-gray-600 mb-4">
+              <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              </svg>
+              <p class="text-lg font-medium">Clique para selecionar ou arraste o arquivo aqui</p>
+              <p class="text-sm text-gray-500 mt-2">Suporta: MP3, WAV, JPG, PNG, PDF</p>
+            </div>
+          </label>
+
+          <!-- File preview/name -->
+          <div id="fileName" class="mt-4 text-sm text-gray-700"></div>
+        </div>
+        <p id="file-message" class="text-red-600 text-sm mt-1"></p>
+      </fieldset>
+
+      <!-- Progress Bar -->
+      <div id="uploadProgress" class="htmx-indicator">
+        <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div class="bg-primary h-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p class="text-center mt-2 text-sm">Enviando...</p>
+      </div>
+
+      <div id="uploadMessage" class="mt-6"></div>
+    </form>
+
+
+</Modal>
+
+<script>
+  // Show selected file name
+  document.getElementById("fileInput")?.addEventListener("change", function(e) {
+    const fileInput = e.target as HTMLInputElement;
+    const fileNameDiv = document.getElementById("fileName");
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      fileNameDiv!.textContent = `Selecionado: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+      fileNameDiv!.className = "mt-4 text-sm font-medium text-green-600";
+    } else {
+      fileNameDiv!.textContent = "";
+    }
+  });
+
+  // Optional: HTMX progress simulation (real progress requires server events)
+  document.body.addEventListener('htmx:xhr:progress', function(evt: any) {
+    const percent = (evt.detail.loaded / evt.detail.total) * 100;
+    const bar = document.querySelector('#uploadProgress .bg-primary') as HTMLElement;
+    if (bar) bar.style.width = percent + '%';
+  });
+</script>

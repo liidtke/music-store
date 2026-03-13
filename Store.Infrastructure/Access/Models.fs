@@ -11,8 +11,17 @@ type UserData =
     email: string
     password: string option
     role: int
-    isDeleted: bool
+    isActive: bool
     isVerified: bool }
+
+[<CLIMutable>]
+type UserVerificationData =
+  { id: BsonObjectId
+    userId: BsonObjectId
+    hash: string
+    expiresIn: DateTime
+    isUsed: bool
+    verificationCode: string }
 
 module RoleMapping =
   let toInt (role: Role) =
@@ -43,7 +52,7 @@ module UserMapping =
       email = user.email
       password = user.password
       role = RoleMapping.toInt user.role
-      isDeleted = user.isDeleted
+      isActive = user.isActive
       isVerified = user.isVerified }
 
   let toUser (data: UserData) : User =
@@ -52,5 +61,53 @@ module UserMapping =
       email = data.email
       password = data.password
       role = RoleMapping.ofInt data.role
-      isDeleted = data.isDeleted
+      isActive = data.isActive
       isVerified = data.isVerified }
+
+module UserVerificationMapping =
+  let toUserVerificationData (verification: UserVerification) : UserVerificationData =
+    let id =
+      if String.IsNullOrEmpty(verification.id) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(verification.id)
+
+    let userId =
+      if String.IsNullOrEmpty(verification.userId) then
+        BsonObjectId.Empty
+      else
+        BsonObjectId.Create(verification.userId)
+
+    { id = id
+      userId = userId
+      hash = verification.hash
+      expiresIn = verification.expiresIn
+      isUsed = verification.isUsed
+      verificationCode = verification.verificationCode }
+
+  let toUserVerification (data: UserVerificationData) : UserVerification =
+    { id = data.id.ToString()
+      userId = data.userId.ToString()
+      hash = data.hash
+      user = None
+      expiresIn = data.expiresIn
+      isUsed = data.isUsed
+      verificationCode = data.verificationCode }
+
+  let toUserVerificationUser user (data: UserVerificationData) : UserVerification =
+    { id = data.id.ToString()
+      userId = data.userId.ToString()
+      hash = data.hash
+      user = user |> UserMapping.toUser |> Some
+      expiresIn = data.expiresIn
+      isUsed = data.isUsed
+      verificationCode = data.verificationCode }
+
+  let toUserVerificationUserOption user (data: UserVerificationData) : UserVerification =
+    { id = data.id.ToString()
+      userId = data.userId.ToString()
+      hash = data.hash
+      user = user
+      expiresIn = data.expiresIn
+      isUsed = data.isUsed
+      verificationCode = data.verificationCode }
