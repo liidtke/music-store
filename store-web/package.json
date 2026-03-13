@@ -33,6 +33,7 @@
     "@unocss/preset-icons": "^66.5.4",
     "@unocss/preset-wind4": "^66.5.4",
     "kleur": "^4.1.5",
+    "miniflare": "^4.20260312.0",
     "unocss": "^66.5.4"
   }
 }

@@ -1,6 +1,6 @@
 // src/pages/api/samples/[id]/download.ts
 import type { APIRoute } from 'astro';
-const apiUrl = import.meta.env.API_URL;
+import { API_URL } from 'astro:env/server';
 
 export const GET: APIRoute = async ({ params, request }) => {
   const { id } = params;
@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ params, request }) => {
 
   try {
     // Call your existing F# Falco endpoint that serves the raw file
-    const fileResponse = await fetch(`${apiUrl}/samples/${id}`);
+    const fileResponse = await fetch(`${API_URL}/samples/${id}`);
 
     if (!fileResponse.ok) {
       return new Response('Sample not found', { status: 404 });

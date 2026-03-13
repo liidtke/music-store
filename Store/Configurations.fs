@@ -2,6 +2,7 @@ module Store.Configurations
 
 open System
 open System.Text
+open Microsoft.Extensions.Logging
 open Store.Domain
 open Store.Domain.Email
 open Store.Domain.EmailService
@@ -85,6 +86,9 @@ let configureServices (configuration: IConfiguration) (services: IServiceCollect
     { connectionString = configuration.GetConnectionString("MongoDbConnection")
       databaseName = configuration.GetConnectionString("DatabaseName") }
 
+  let logger = services.BuildServiceProvider().GetService<ILogger<MongoContext>>()
+  logger.LogInformation("MongoDb Connection String: {connectionString}", mongoDbSettings.connectionString)
+  
   let mongoContext = MongoContext(mongoDbSettings) :> IMongoContext
 
   services

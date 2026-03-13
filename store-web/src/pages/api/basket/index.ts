@@ -1,6 +1,6 @@
 // src/pages/api/basket/add.ts
 // Astro API Route (server-side endpoint)
-const apiKey = import.meta.env.API_URL;
+import { API_URL } from 'astro:env/server';
 import toaster from '@utils/toaster'
 
 import type { APIRoute } from 'astro';
@@ -28,7 +28,7 @@ export const POST: APIRoute = async ({ url, request, redirect, cookies }) => {
 
   try {
     let part = "my-basket";
-    const url = `${apiKey}/${part}`;
+    const url = `${API_URL}}/${part}`;
     const token = cookies.get('auth_token')?.value;
     const guestId = cookies.get('guest_id')?.value;
 

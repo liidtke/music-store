@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-const apiKey = import.meta.env.API_URL;
+import { API_URL } from 'astro:env/server';
 
 export const POST: APIRoute = async ({ cookies, redirect, request }) => {
   try {
@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ cookies, redirect, request }) => {
     };
 
     // Forward the request to the backend
-    const backendUrl = `${apiKey}/login`;
+    const backendUrl = `${API_URL}/login`;
     const response = await fetch(backendUrl, {
       method: "POST",
       headers: {

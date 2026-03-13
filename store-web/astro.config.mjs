@@ -29,7 +29,7 @@ export default defineConfig({
 
   env: {
     schema: {
-      API_URL: envField.string({ context: "client", access: "public", optional: true }),
+      API_URL: envField.string({ context: "server", access: "public", default: "http://localhost:5263" }),
       // ...
     }
   },

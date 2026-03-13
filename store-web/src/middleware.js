@@ -1,12 +1,12 @@
 import { Result } from "./utils/result";
-const apiKey = import.meta.env.API_URL;
+import { API_URL } from 'astro:env/server';
 
 export async function onRequest(context, next) {
   const { request, locals } = context;
 
   // Configurar interceptador de fetch
   locals.fetchWithAuth = async (part, options = {}) => {
-    const url = `${apiKey}/${part}`;
+    const url = `${API_URL}/${part}`;
     const token = context.cookies.get('auth_token')?.value;
     const guestId = context.cookies.get('guest_id')?.value;
 
@@ -25,7 +25,7 @@ export async function onRequest(context, next) {
 
 
   locals.fetchWithResult = async (part, options = {}) => {
-    const url = `${apiKey}/${part}`;
+    const url = `${API_URL}/${part}`;
     const token = context.cookies.get('auth_token')?.value;
     const guestId = context.cookies.get('guest_id')?.value;
 
@@ -52,7 +52,7 @@ export async function onRequest(context, next) {
   };
 
   locals.fetchWithResultCrude = async (part, options = {}) => {
-    const url = `${apiKey}/${part}`;
+    const url = `${API_URL}/${part}`;
     const token = context.cookies.get('auth_token')?.value;
 
     try {
