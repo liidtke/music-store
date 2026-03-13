@@ -31,36 +31,23 @@ open Microsoft.IdentityModel.Tokens
 open MongoDB.Bson
 open MongoDB.Bson.Serialization
 open MongoDB.Bson.Serialization.Serializers
-
 open Wolverine
 open Wolverine.MemoryPack
-// open Wolverine.RabbitMQ
-open Wolverine.AzureServiceBus
+open Wolverine.RabbitMQ
 
 
-let configureEventBus (host: WebApplicationBuilder) =
-  // let configureRabbitMQ() =
-  //   let rabbitUrl = host.Configuration.GetConnectionString("RabbitMqUrl")
-  //
-  //   host.UseWolverine(fun w ->
-  //     w.UseRabbitMq(Uri(rabbitUrl)).EnableWolverineControlQueues().UseConventionalRouting().AutoProvision()
-  //     |> ignore
-  //
-  //     w.UseMemoryPackSerialization() |> ignore
-  //   )
-    
-  
-  let configureAzureServiceBus() =
-    let url = host.Configuration.GetConnectionString("AzureServiceBusUrl")
+let rec configureEventBus (host: WebApplicationBuilder) =
+  let configureRabbitMQ () =
+    let rabbitUrl = host.Configuration.GetConnectionString("RabbitMqUrl")
 
     host.UseWolverine(fun w ->
-      w.UseAzureServiceBus(url).AutoProvision()
+      w.UseRabbitMq(Uri(rabbitUrl)).EnableWolverineControlQueues().UseConventionalRouting().AutoProvision()
       |> ignore
 
-      w.UseMemoryPackSerialization() |> ignore
-    )
-  
-  configureAzureServiceBus()
+      w.UseMemoryPackSerialization() |> ignore)
+
+  host.UseWolverine(fun w -> w.UseMemoryPackSerialization()) |> ignore
+  //configureRabbitMQ ()
 
 let configureServices (configuration: IConfiguration) (services: IServiceCollection) =
   // let currentUser = CurrentUser.standard
